@@ -8,10 +8,10 @@ varying vec2 v_TexCoord;
 #define EPSILON 0.00001
 #define IPSILON 1. - EPSILON
 
-#define RESET_NO 0
-#define RESET_DEFAULT 1
-#define RESET_UNDO 2
-#define RESET_BLEND 3
+#define CMD_NONE 0
+#define CMD_RESET 1
+#define CMD_UNDO 2
+#define CMD_BLEND 3
 
 #define DRAW_MODE_ERASE 0
 #define DRAW_MODE_PEN 1
@@ -32,7 +32,7 @@ uniform vec2 g_TexelSize;
 uniform vec2 g_PointerPosition;
 uniform vec2 g_PointerPositionLast;
 
-uniform float u_resetInstruction; // {"material":"Reset Texture (None, Default, Undo, Blend)","int":true,"default":0,"range":[0,3]}
+uniform float u_command; // {"material":"Command (None, Reset, Undo, Blend)","int":true,"default":0,"range":[0,3]}
 uniform vec2 u_mouseDown; // {"material":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
 
 uniform float u_drawMode; // {"material":"Draw Mode (Erase, Pen, Smear, Color Copy, Blend)","int":true,"default":0,"range":[0,4]}
@@ -73,9 +73,9 @@ void main() {
 	canvasAlbedo = mix(canvasAlbedo, cursorAlbedo, penInfluence * u_mouseDown.x * modeMatch(u_drawMode, DRAW_MODE_COLOR_CPY));
 
 	// apply reset instructions
-	vec4 nextAlbedo = mix(canvasAlbedo, defaultAlbedo, modeMatch(u_resetInstruction, RESET_DEFAULT));
-	nextAlbedo = mix(nextAlbedo, undoAlbedo, modeMatch(u_resetInstruction, RESET_UNDO));
-	nextAlbedo = mix(nextAlbedo, blendAlbedo, modeMatch(u_resetInstruction, RESET_BLEND));
+	vec4 nextAlbedo = mix(canvasAlbedo, defaultAlbedo, modeMatch(u_command, CMD_RESET));
+	nextAlbedo = mix(nextAlbedo, undoAlbedo, modeMatch(u_command, CMD_UNDO));
+	nextAlbedo = mix(nextAlbedo, blendAlbedo, modeMatch(u_command, CMD_BLEND));
 
 	gl_FragColor = nextAlbedo;
 }
