@@ -1,0 +1,63 @@
+{
+	"dependencies" : 
+	[
+		"materials/effects/paintheightmap_accumulation.json",
+		"materials/effects/paintheightmap_combine.json",
+		"shaders/effects/paintheightmap_accumulation.frag",
+		"shaders/effects/paintheightmap_accumulation.vert",
+		"shaders/effects/paintheightmap_combine.frag",
+		"shaders/effects/paintheightmap_combine.vert"
+	],
+	"editable" : true,
+	"fbos" : 
+	[
+		{
+			"format" : "rgba_backbuffer",
+			"name" : "_rt_FullCompoBuffer1",
+			"scale" : 1,
+			"unique" : true
+		},
+		{
+			"format" : "rgba_backbuffer",
+			"name" : "_rt_FullCompoBuffer2",
+			"scale" : 1
+		}
+	],
+	"group" : "localeffects",
+	"name" : "PaintHeightMap",
+	"passes" : 
+	[
+		{
+			"bind" : 
+			[
+				{
+					"index" : 0,
+					"name" : "previous"
+				},
+				{
+					"index" : 1,
+					"name" : "_rt_FullCompoBuffer1"
+				}
+			],
+			"material" : "materials/effects/paintheightmap_accumulation.json",
+			"target" : "_rt_FullCompoBuffer2"
+		},
+		{
+			"command" : "copy",
+			"source" : "_rt_FullCompoBuffer2",
+			"target" : "_rt_FullCompoBuffer1"
+		},
+		{
+			"bind" : 
+			[
+				{
+					"index" : 0,
+					"name" : "_rt_FullCompoBuffer2"
+				}
+			],
+			"material" : "materials/effects/paintheightmap_combine.json"
+		}
+	],
+	"replacementkey" : "paintheightmap",
+	"version" : 1
+}

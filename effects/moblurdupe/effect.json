@@ -1,0 +1,63 @@
+{
+	"dependencies" : 
+	[
+		"materials/effects/moblurdupe_accumulation.json",
+		"materials/effects/moblurdupe_combine.json",
+		"shaders/effects/moblurdupe_accumulation.frag",
+		"shaders/effects/moblurdupe_accumulation.vert",
+		"shaders/effects/moblurdupe_combine.frag",
+		"shaders/effects/moblurdupe_combine.vert"
+	],
+	"editable" : true,
+	"fbos" : 
+	[
+		{
+			"format" : "rgba_backbuffer",
+			"name" : "_rt_FullCompoBuffer1",
+			"scale" : 1,
+			"unique" : true
+		},
+		{
+			"format" : "rgba_backbuffer",
+			"name" : "_rt_FullCompoBuffer2",
+			"scale" : 1
+		}
+	],
+	"group" : "localeffects",
+	"name" : "moblurdupe",
+	"passes" : 
+	[
+		{
+			"bind" : 
+			[
+				{
+					"index" : 0,
+					"name" : "previous"
+				},
+				{
+					"index" : 1,
+					"name" : "_rt_FullCompoBuffer1"
+				}
+			],
+			"material" : "materials/effects/moblurdupe_accumulation.json",
+			"target" : "_rt_FullCompoBuffer2"
+		},
+		{
+			"command" : "copy",
+			"source" : "_rt_FullCompoBuffer2",
+			"target" : "_rt_FullCompoBuffer1"
+		},
+		{
+			"bind" : 
+			[
+				{
+					"index" : 0,
+					"name" : "_rt_FullCompoBuffer2"
+				}
+			],
+			"material" : "materials/effects/moblurdupe_combine.json"
+		}
+	],
+	"replacementkey" : "moblurdupe",
+	"version" : 1
+}

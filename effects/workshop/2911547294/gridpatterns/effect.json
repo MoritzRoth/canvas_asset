@@ -1,0 +1,18 @@
+{
+	"dependencies" : 
+	[
+		"materials/workshop/2911547294/effects/gridpatterns.json",
+		"shaders/workshop/2911547294/effects/gridpatterns.frag",
+		"shaders/workshop/2911547294/effects/gridpatterns.vert"
+	],
+	"group" : "localeffects",
+	"name" : "Gridpatterns",
+	"passes" : 
+	[
+		{
+			"material" : "materials/workshop/2911547294/effects/gridpatterns.json"
+		}
+	],
+	"replacementkey" : "gridpatterns",
+	"version" : 1
+}

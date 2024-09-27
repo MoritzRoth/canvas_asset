@@ -1,0 +1,19 @@
+{
+	"dependencies" : 
+	[
+		"materials/effects/gradient.json",
+		"shaders/effects/gradient.frag",
+		"shaders/effects/gradient.vert"
+	],
+	"editable" : true,
+	"group" : "localeffects",
+	"name" : "Gradient",
+	"passes" : 
+	[
+		{
+			"material" : "materials/effects/gradient.json"
+		}
+	],
+	"replacementkey" : "gradient",
+	"version" : 1
+}

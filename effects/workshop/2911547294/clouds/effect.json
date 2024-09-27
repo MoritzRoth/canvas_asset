@@ -1,0 +1,37 @@
+{
+	"dependencies" : 
+	[
+		"materials/workshop/2911547294/effects/clouds.json",
+		"shaders/workshop/2911547294/effects/clouds.frag",
+		"shaders/workshop/2911547294/effects/clouds.vert"
+	],
+	"description" : "ui_editor_effect_clouds_description",
+	"gizmos" : 
+	[
+		{
+			"condition" : 
+			{
+				"PERSPECTIVE" : 1
+			},
+			"type" : "EffectPerspectiveUV",
+			"vars" : 
+			{
+				"p0" : "point0",
+				"p1" : "point1",
+				"p2" : "point2",
+				"p3" : "point3"
+			}
+		}
+	],
+	"group" : "colorize",
+	"name" : "ui_editor_effect_clouds_title",
+	"passes" : 
+	[
+		{
+			"material" : "materials/workshop/2911547294/effects/clouds.json"
+		}
+	],
+	"preview" : "preview/project.json",
+	"replacementkey" : "clouds",
+	"version" : 2
+}

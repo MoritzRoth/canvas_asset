@@ -1,0 +1,30 @@
+{
+	"approved" : true,
+	"contentrating" : "Everyone",
+	"description" : "In this wallpaper I used my [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2887371122]cell grid shader[/url] and some other shaders form my [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2912092314]image transition assets[/url] to generate a dynamic heightmap. I then adjusted the normal approximation shader from my [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2863934556]Propulsion Gel[/url] wallpaper to work on heightmaps. Finally, I created a shader that calculates shadows for pointlights and implemented a pysically based rendering system (PBR) to bring everything together.\n\nAs always, I try to make everything as customizable as possible, so this time I added the possibility to import PBR material textures which get applied to the pillars. If you want, you can even deactivate the dynamic heightmap generation and provide your own static heightmap.\n\nIf you want to experiment a little, here are some links to websites providing CC0 free to use PBR materials:\n- [url=https://polyhaven.com/textures]Poly Haven[/url]\n- [url=https://ambientcg.com/list?type=Material]ambientCG[/url]\n- [url=https://pbrmaterials.com/library/]PBR Materials[/url]\n\nUPDATE: Added option to toggle Hard Shadows\nUPDATE 2: Fixed bug in light height calculation. Since this fix has some drawbacks I added a combobox that allows you to deactivate it.\nUPDATE 3: Added a Heightmap Mod 1 option that allows you to paint on your screen.",
+	"file" : "scene.json",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "ui_browse_properties_scheme_color",
+				"type" : "color",
+				"value" : "0 0 0"
+			}
+		},
+		"supportsvideo" : true,
+		"supportsvideoflags" : 2
+	},
+	"preview" : "preview.gif",
+	"ratingsex" : "none",
+	"ratingviolence" : "none",
+	"tags" : [ "Abstract" ],
+	"title" : "Canvas Asset",
+	"type" : "scene",
+	"version" : 5,
+	"visibility" : "public",
+	"workshopurl" : "steam://url/CommunityFilePage/2956598880"
+}

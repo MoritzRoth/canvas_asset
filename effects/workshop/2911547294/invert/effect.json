@@ -1,0 +1,18 @@
+{
+	"dependencies" : 
+	[
+		"materials/workshop/2911547294/effects/invert.json",
+		"shaders/workshop/2911547294/effects/invert.frag",
+		"shaders/workshop/2911547294/effects/invert.vert"
+	],
+	"group" : "localeffects",
+	"name" : "Invert",
+	"passes" : 
+	[
+		{
+			"material" : "materials/workshop/2911547294/effects/invert.json"
+		}
+	],
+	"replacementkey" : "invert",
+	"version" : 1
+}

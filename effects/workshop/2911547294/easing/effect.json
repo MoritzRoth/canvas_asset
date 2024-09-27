@@ -1,0 +1,18 @@
+{
+	"dependencies" : 
+	[
+		"materials/workshop/2911547294/effects/easing.json",
+		"shaders/workshop/2911547294/effects/easing.frag",
+		"shaders/workshop/2911547294/effects/easing.vert"
+	],
+	"group" : "localeffects",
+	"name" : "Easing",
+	"passes" : 
+	[
+		{
+			"material" : "materials/workshop/2911547294/effects/easing.json"
+		}
+	],
+	"replacementkey" : "easing",
+	"version" : 1
+}

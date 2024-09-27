@@ -1,0 +1,18 @@
+{
+	"dependencies" : 
+	[
+		"materials/workshop/2911547294/effects/procedural_noise.json",
+		"shaders/workshop/2911547294/effects/procedural_noise.frag",
+		"shaders/workshop/2911547294/effects/procedural_noise.vert"
+	],
+	"group" : "localeffects",
+	"name" : "Procedural noise",
+	"passes" : 
+	[
+		{
+			"material" : "materials/workshop/2911547294/effects/procedural_noise.json"
+		}
+	],
+	"replacementkey" : "procedural_noise",
+	"version" : 1
+}

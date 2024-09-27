@@ -1,0 +1,18 @@
+{
+	"dependencies" : 
+	[
+		"materials/workshop/2911547294/effects/repeats.json",
+		"shaders/workshop/2911547294/effects/repeats.frag",
+		"shaders/workshop/2911547294/effects/repeats.vert"
+	],
+	"group" : "localeffects",
+	"name" : "Repeats",
+	"passes" : 
+	[
+		{
+			"material" : "materials/workshop/2911547294/effects/repeats.json"
+		}
+	],
+	"replacementkey" : "repeats",
+	"version" : 1
+}

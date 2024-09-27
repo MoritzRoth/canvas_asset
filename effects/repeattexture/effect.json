@@ -1,0 +1,19 @@
+{
+	"dependencies" : 
+	[
+		"materials/effects/repeattexture.json",
+		"shaders/effects/repeattexture.frag",
+		"shaders/effects/repeattexture.vert"
+	],
+	"editable" : true,
+	"group" : "localeffects",
+	"name" : "RepeatTexture",
+	"passes" : 
+	[
+		{
+			"material" : "materials/effects/repeattexture.json"
+		}
+	],
+	"replacementkey" : "repeattexture",
+	"version" : 1
+}

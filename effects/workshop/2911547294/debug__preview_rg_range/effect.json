@@ -1,0 +1,18 @@
+{
+	"dependencies" : 
+	[
+		"materials/workshop/2911547294/effects/debug__preview_rg_range.json",
+		"shaders/workshop/2911547294/effects/debug__preview_rg_range.frag",
+		"shaders/workshop/2911547294/effects/debug__preview_rg_range.vert"
+	],
+	"group" : "localeffects",
+	"name" : "DEBUG: Preview RG Range",
+	"passes" : 
+	[
+		{
+			"material" : "materials/workshop/2911547294/effects/debug__preview_rg_range.json"
+		}
+	],
+	"replacementkey" : "debug__preview_rg_range",
+	"version" : 1
+}
