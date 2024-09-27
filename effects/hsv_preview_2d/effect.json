@@ -1,0 +1,19 @@
+{
+	"dependencies" : 
+	[
+		"materials/effects/hsv_preview_2d.json",
+		"shaders/effects/hsv_preview_2d.frag",
+		"shaders/effects/hsv_preview_2d.vert"
+	],
+	"editable" : true,
+	"group" : "localeffects",
+	"name" : "HSV Preview 2D",
+	"passes" : 
+	[
+		{
+			"material" : "materials/effects/hsv_preview_2d.json"
+		}
+	],
+	"replacementkey" : "hsv_preview_2d",
+	"version" : 1
+}

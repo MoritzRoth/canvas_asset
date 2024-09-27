@@ -1,0 +1,19 @@
+{
+	"dependencies" : 
+	[
+		"materials/workshop/2724636948/effects/my_gradient.json",
+		"shaders/workshop/2724636948/effects/my_gradient.frag",
+		"shaders/workshop/2724636948/effects/my_gradient.vert"
+	],
+	"editable" : false,
+	"group" : "localeffects",
+	"name" : "my_gradient",
+	"passes" : 
+	[
+		{
+			"material" : "materials/workshop/2724636948/effects/my_gradient.json"
+		}
+	],
+	"replacementkey" : "my_gradient",
+	"version" : 1
+}
