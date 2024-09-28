@@ -2,6 +2,7 @@
 // [COMBO] {"material":"Enable blending with extra texture","combo":"ENABLE_BLEND","type":"options","default":0}
 // [COMBO] {"material":"Enable Smearing","combo":"ENABLE_SMEAR","type":"options","default":0}
 // [COMBO] {"material":"Enable Color Copy Brush","combo":"ENABLE_CPY_BRUSH","type":"options","default":0}
+// [COMBO] {"material":"Enable Undo Command","combo":"ENABLE_UNDO_CMD","type":"options","default":0}
 
 varying vec2 v_TexCoord;
 
@@ -48,9 +49,16 @@ float modeMatch(float a, float b) {
 void main() {
 	vec4 defaultAlbedo = texSample2D(g_Texture0, v_TexCoord.xy);
 	vec4 canvasAlbedo = texSample2D(g_Texture1, v_TexCoord.xy);
-	vec4 undoAlbedo = texSample2D(g_Texture2, v_TexCoord.xy);
-	vec4 blendAlbedo = texSample2D(g_Texture3, v_TexCoord.xy);
 	vec4 cursorAlbedo = texSample2D(g_Texture1, g_PointerPosition);
+#if ENABLE_SMEAR
+	vec4 smearAlbedo = texSample2D(g_Texture1, g_PointerPositionLast + (v_TexCoord.xy - g_PointerPosition));
+#endif
+#if ENABLE_UNDO_CMD
+	vec4 undoAlbedo = texSample2D(g_Texture2, v_TexCoord.xy);
+#endif
+#if ENABLE_BLEND
+	vec4 blendAlbedo = texSample2D(g_Texture3, v_TexCoord.xy);
+#endif
 
 	vec2 ratCorr = mix(
 		vec2(1., g_Texture0Resolution.y/g_Texture0Resolution.x),
@@ -66,16 +74,25 @@ void main() {
 	float penRadius = max(pow(u_drawRadius, 2.), EPSILON);
 	float penInfluence = u_drawAlpha * smoothstep(penRadius, penRadius * min(u_drawHardness, IPSILON), length(uv - cursor));
 
-	// apply various pens
-	canvasAlbedo = mix(canvasAlbedo, defaultAlbedo, penInfluence * u_mouseDown.x * modeMatch(u_drawMode, DRAW_MODE_ERASE));
-	canvasAlbedo = mix(canvasAlbedo, vec4(u_drawColor, 1.), penInfluence * u_mouseDown.x * modeMatch(u_drawMode, DRAW_MODE_PEN));
-	canvasAlbedo = mix(canvasAlbedo, blendAlbedo, penInfluence * u_mouseDown.x * modeMatch(u_drawMode, DRAW_MODE_BLEND));
-	canvasAlbedo = mix(canvasAlbedo, cursorAlbedo, penInfluence * u_mouseDown.x * modeMatch(u_drawMode, DRAW_MODE_COLOR_CPY));
+	// apply strokes in various draw modes
+	vec4 nextAlbedo = mix(canvasAlbedo, defaultAlbedo, penInfluence * u_mouseDown.x * modeMatch(u_drawMode, DRAW_MODE_ERASE));
+	nextAlbedo = mix(nextAlbedo, vec4(u_drawColor, 1.), penInfluence * u_mouseDown.x * modeMatch(u_drawMode, DRAW_MODE_PEN));
+#if ENABLE_BLEND
+	nextAlbedo = mix(nextAlbedo, blendAlbedo, penInfluence * u_mouseDown.x * modeMatch(u_drawMode, DRAW_MODE_BLEND));
+#endif
+#if ENABLE_SMEAR
+	nextAlbedo = mix(nextAlbedo, smearAlbedo, penInfluence * u_mouseDown.x * modeMatch(u_drawMode, DRAW_MODE_SMEAR));
+#endif
+	nextAlbedo = mix(nextAlbedo, cursorAlbedo, penInfluence * u_mouseDown.x * modeMatch(u_drawMode, DRAW_MODE_COLOR_CPY));
 
-	// apply reset instructions
-	vec4 nextAlbedo = mix(canvasAlbedo, defaultAlbedo, modeMatch(u_command, CMD_RESET));
+	// apply commands
+	nextAlbedo = mix(nextAlbedo, defaultAlbedo, modeMatch(u_command, CMD_RESET));
+#if ENABLE_UNDO_CMD
 	nextAlbedo = mix(nextAlbedo, undoAlbedo, modeMatch(u_command, CMD_UNDO));
+#endif
+#if ENABLE_BLEND
 	nextAlbedo = mix(nextAlbedo, blendAlbedo, modeMatch(u_command, CMD_BLEND));
+#endif
 
 	gl_FragColor = nextAlbedo;
 }

@@ -86,7 +86,6 @@
 		},
 		{
 			"castshadow" : false,
-			"dependencies" : [ 288 ],
 			"effects" : 
 			[
 				{
@@ -139,6 +138,11 @@
 							"id" : 161
 						},
 						{
+							"combos" : 
+							{
+								"ENABLE_SMEAR" : 1,
+								"ENABLE_UNDO_CMD" : 1
+							},
 							"constantshadervalues" : 
 							{
 								"Command (None, Reset, Undo, Blend)" : 
@@ -200,124 +204,10 @@
 							"id" : 62
 						},
 						{
-							"id" : 52
+							"id" : 27
 						}
 					],
 					"visible" : true
-				},
-				{
-					"file" : "effects/paintheightmap/effect.json",
-					"id" : 152,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"constantshadervalues" : 
-							{
-								"Copy Below (Dont, Reset, Noise)" : 
-								{
-									"script" : "'use strict';\n\n\n/**\n * @param {Number} value - for property 'Copy Below (Dont, Reset, Noise)'\n * @return {Number} - update current property value\n */\nexport function init(value) {\n\tshared[\"reset\"] = \"no\";\n\treturn value;\n}\n\n\n/**\n * @param {Number} value - for property 'Copy Below (Reset)'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tif(shared[\"locked\"]) {\n\t\tif(shared[\"reset\"] != \"no\") {\n\t\t\tshared[\"reset\"] = \"no\";\n\t\t}\n\t\treturn 0.;\n\t}\n\n\tswitch(shared[\"reset\"]) {\n\t\tcase \"yes\":\n\t\t\tshared[\"reset\"] = \"no\";\n\t\t\treturn 1.;\n\t\tcase \"noise\":\n\t\t\tshared[\"reset\"] = \"no\";\n\t\t\treturn 2.;\n\t\tcase \"no\":\n\t\t\treturn 0.;\n\t\tdefault:\n\t\t\tshared[\"reset\"] = \"no\";\n\t\t\treturn 0.;\n\t}\n}",
-									"value" : 0
-								},
-								"Copy Below (Reset)" : 
-								{
-									"script" : "'use strict';\n\n/**\n * @param {Number} value - for property 'Copy Below (Reset)'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tif(shared[\"reset\"] == true) {\n\t\tshared[\"reset\"] = false;\n\t\treturn 1.;\n\t}\n\treturn 0.;\n}\n",
-									"value" : 0
-								},
-								"Draw Alpha" : 
-								{
-									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",
-									"scriptproperties" : 
-									{
-										"key" : "penAlpha"
-									},
-									"value" : 1
-								},
-								"Draw Color" : 
-								{
-									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tvar v = shared[scriptProperties['key']];\n\treturn new Vec3(v,v,v);\n}\n",
-									"scriptproperties" : 
-									{
-										"key" : "penColor"
-									},
-									"value" : "1.00000 1.00000 1.00000"
-								},
-								"Draw Feather" : 1,
-								"Draw Hardness" : 
-								{
-									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",
-									"scriptproperties" : 
-									{
-										"key" : "penFeather"
-									},
-									"value" : 0.18000001
-								},
-								"Draw Mode (Erase, Pen)" : 
-								{
-									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tswitch(shared[scriptProperties['key']]) {\n\t\tcase \"pen\":\n\t\t\treturn 1.;\n\t\tcase \"erase\":\n\t\tdefault:\n\t\t\treturn 0.;\n\t}\n}\n",
-									"scriptproperties" : 
-									{
-										"key" : "pen"
-									},
-									"value" : 0
-								},
-								"Draw Mode (Erase, Pen, Brush)" : 
-								{
-									"script" : "'use strict';\n\n/**\n * @param {Number} value - for property 'Draw Mode (Erase, Pen, Brush)'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tswitch(shared[\"pen\"]) {\n\t\tcase \"pen\":\n\t\t\treturn 1.;\n\t\tcase \"brush\":\n\t\t\treturn 2.;\n\t\tcase \"erase\":\n\t\tdefault:\n\t\t\treturn 0.;\n\t}\n\treturn value;\n}\n",
-									"value" : 0
-								},
-								"Draw Mode (Erase, Pen, Noise)" : 
-								{
-									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tswitch(shared[scriptProperties['key']]) {\n\t\tcase \"pen\":\n\t\t\treturn 1.;\n\t\tcase \"noise\":\n\t\t\treturn 2.;\n\t\tcase \"level\":\n\t\t\treturn 3.;\n\t\tcase \"erase\":\n\t\tdefault:\n\t\t\treturn 0.;\n\t}\n}\n",
-									"scriptproperties" : 
-									{
-										"key" : "pen"
-									},
-									"value" : 0
-								},
-								"Draw Radius" : 
-								{
-									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",
-									"scriptproperties" : 
-									{
-										"key" : "penSize"
-									},
-									"value" : 0.30000001
-								},
-								"Mouse Down" : 
-								{
-									"script" : "'use strict';\n\nvar mouseDown = false;\n\n/**\n * @param {Number} value - for property 'Mouse Down'\n * @return {Number} - update current property value\n */\nexport function init(value) {\n\tmouseDown = false;\n\tshared[\"cursorOnUi\"] = false;\n\treturn 0;\n}\n\n/**\n * @param {Number} value - for property 'Mouse Down'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\t\n\treturn (mouseDown && !shared[\"cursorOnUi\"] && !shared[\"locked\"]) ? 1 : 0;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tmouseDown = false;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tmouseDown = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tmouseDown = false;\n}\n",
-									"value" : 0
-								},
-								"Pointer Pos 2 Frames ago" : "0.50000 0.50000"
-							},
-							"id" : 153,
-							"textures" : [ null, null, "_rt_imageLayerComposite_288_a" ]
-						},
-						{
-							"id" : 65
-						}
-					],
-					"visible" : false
-				},
-				{
-					"file" : "effects/moblurdupe/effect.json",
-					"id" : 181,
-					"name" : "",
-					"passes" : 
-					[
-						{
-							"constantshadervalues" : 
-							{
-								"rate" : 0.80000001
-							},
-							"id" : 182
-						},
-						{
-							"id" : 71
-						}
-					],
-					"visible" : false
 				}
 			],
 			"id" : 16,
@@ -408,6 +298,29 @@
 			"image" : "models/NoiseBrush@0.5x.json",
 			"name" : "Blend Brush",
 			"origin" : "0.00000 -200.00000 0.00000",
+			"parent" : 171,
+			"scale" : "0.50000 0.50000 1.00000",
+			"size" : "256.00000 256.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : 
+			{
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.addCheckbox({\n\t\tname: 'isDefault',\n\t\tlabel: 'Default Option on Startup',\n\t\tvalue: false\n\t})\n\t.addCheckbox({\n\t\tname: 'persistent',\n\t\tlabel: 'Persistent',\n\t\tvalue: false\n\t})\n\t.finish();\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tif(scriptProperties[\"persistent\"]) {\n\t\t\n\t\tvar val = localStorage.get(scriptProperties[\"key\"]);\n\t\tif(typeof val === 'undefined') {\n\t\t\tif(scriptProperties[\"isDefault\"]) {\n\t\t\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t\t\t}\n\t\t}else {\n\t\t\tshared[scriptProperties[\"key\"]] = val;\n\t\t}\n\n\t}else if(scriptProperties[\"isDefault\"]) {\n\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties[\"key\"]] == scriptProperties[\"val\"] ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\tif(scriptProperties[\"persistent\"]) {\n\t\tlocalStorage.set(scriptProperties[\"key\"], scriptProperties[\"val\"]);\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"scriptproperties" : 
+				{
+					"isDefault" : false,
+					"key" : "drawMode",
+					"persistent" : true,
+					"val" : "smear"
+				},
+				"value" : "1.00000 1.00000 1.00000"
+			},
+			"id" : 257,
+			"image" : "models/NoiseBrush@0.5x.json",
+			"name" : "Blend Brush",
+			"origin" : "-195.04883 -200.00000 0.00000",
 			"parent" : 171,
 			"scale" : "0.50000 0.50000 1.00000",
 			"size" : "256.00000 256.00000"
