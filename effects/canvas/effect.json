@@ -24,7 +24,13 @@
 			"format" : "rgba_backbuffer",
 			"name" : "_u_undoMemoryCanv",
 			"scale" : 1,
-			"unique" : true
+			"unique" : true,
+			"conditions" :
+			[
+				{
+					"ENABLE_UNDO_CMD" : 1
+				}
+			]
 		},
 		{
 			"format" : "rgba_backbuffer",
@@ -34,7 +40,13 @@
 		{
 			"format" : "rgba_backbuffer",
 			"name" : "_u_undoCanv",
-			"scale" : 1
+			"scale" : 1,
+			"conditions" :
+			[
+				{
+					"ENABLE_UNDO_CMD" : 1
+				}
+			]
 		}
 	],
 	"group" : "localeffects",
@@ -54,7 +66,13 @@
 				}
 			],
 			"material" : "materials/effects/canvas_prepare_undo.json",
-			"target" : "_u_undoCanv"
+			"target" : "_u_undoCanv",
+			"conditions" :
+			[
+				{
+					"ENABLE_UNDO_CMD" : 1
+				}
+			]
 		},
 		{
 			"bind" : 
@@ -69,7 +87,13 @@
 				},
 				{
 					"index" : 2,
-					"name" : "_u_undoCanv"
+					"name" : "_u_undoCanv",
+					"conditions" :
+					[
+						{
+							"ENABLE_UNDO_CMD" : 1
+						}
+					]
 				}
 			],
 			"material" : "materials/effects/canvas_paint.json",
@@ -83,7 +107,13 @@
 		{
 			"command" : "copy",
 			"source" : "_u_undoCanv",
-			"target" : "_u_undoMemoryCanv"
+			"target" : "_u_undoMemoryCanv",
+			"conditions":
+			[
+				{
+					"ENABLE_UNDO_CMD" : 1
+				}
+			]
 		},
 		{
 			"bind" : 
