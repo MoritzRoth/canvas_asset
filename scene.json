@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "106.11683 215.24417 -1.00000",
-		"eye" : "106.11683 215.24417 0.00000",
+		"center" : "-490.62967 341.95404 -1.00000",
+		"eye" : "-490.62967 341.95404 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -142,6 +142,44 @@
 							"id" : 161
 						},
 						{
+							"constantshadervalues" : 
+							{
+								"Draw Alpha" : 
+								{
+									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",
+									"scriptproperties" : 
+									{
+										"key" : "drawAlpha"
+									},
+									"value" : 1
+								},
+								"Draw Hardness" : 
+								{
+									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",
+									"scriptproperties" : 
+									{
+										"key" : "drawFeather"
+									},
+									"value" : 1
+								},
+								"Draw Radius" : 
+								{
+									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",
+									"scriptproperties" : 
+									{
+										"key" : "drawSize"
+									},
+									"value" : 0.22
+								},
+								"Mouse Down (X = This Frame, Y = Last Frame)" : 
+								{
+									"script" : "'use strict';\n\nvar lastFrame;\nvar mouseDown;\n\n/**\n * @param {Number} value - for property 'Mouse Down'\n * @return {Number} - update current property value\n */\nexport function init(value) {\n\tlastFrame = 0;\n\tmouseDown = false;\n\tshared[\"cursorOnUi\"] = false;\n\treturn 0;\n}\n\n/**\n * @param {Vec2} value - for property 'Mouse Down (X = This Frame, Y = Last Frame)'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar vec = new Vec2((mouseDown && !shared[\"cursorOnUi\"] && !shared[\"locked\"]) ? 1 : 0, lastFrame);\n\tlastFrame = vec.x;\n\treturn vec;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tmouseDown = false;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tmouseDown = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tmouseDown = false;\n}\n",
+									"value" : "0.00000 0.00000"
+								}
+							},
+							"id" : 64
+						},
+						{
 							"combos" : 
 							{
 								"ENABLE_SMEAR" : 1,
@@ -208,7 +246,7 @@
 							"id" : 62
 						},
 						{
-							"id" : 63
+							"id" : 67
 						}
 					],
 					"visible" : true

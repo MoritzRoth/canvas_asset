@@ -4,12 +4,15 @@
 		"materials/effects/canvas_paint.json",
 		"materials/effects/canvas_present.json",
 		"materials/effects/canvas_prepare_undo.json",
+		"materials/effects/canvas_pen_influence.json",
 		"shaders/effects/canvas_paint.frag",
 		"shaders/effects/canvas_paint.vert",
 		"shaders/effects/canvas_present.frag",
 		"shaders/effects/canvas_present.vert",
 		"shaders/effects/canvas_prepare_undo.frag",
-		"shaders/effects/canvas_prepare_undo.vert"
+		"shaders/effects/canvas_prepare_undo.vert",
+		"shaders/effects/canvas_pen_influence.frag",
+		"shaders/effects/canvas_pen_influence.vert"
 	],
 	"editable" : true,
 	"fbos" : 
@@ -31,6 +34,19 @@
 					"ENABLE_UNDO_CMD" : 1
 				}
 			]
+		},
+		{
+			"format" : "r16f_backbuffer",
+			"name" : "_u_memoryPenInfluence",
+			"scale" : 1,
+			"unique" : true,
+			"conditions" : []
+		},
+		{
+			"format" : "r16f_backbuffer",
+			"name" : "_u_penInfluence",
+			"scale" : 1,
+			"conditions" : []
 		},
 		{
 			"format" : "rgba_backbuffer",
@@ -75,6 +91,20 @@
 			]
 		},
 		{
+			"bind" :
+			[
+				{
+					"index" : 0,
+					"name" : "_u_memoryPenInfluence"
+				}
+			],
+			"material" : "materials/effects/canvas_pen_influence.json",
+			"target" : "_u_penInfluence",
+			"conditions" :
+			[
+			]
+		},
+		{
 			"bind" : 
 			[
 				{
@@ -94,6 +124,11 @@
 							"ENABLE_UNDO_CMD" : 1
 						}
 					]
+				},
+				{
+					"index" : 3,
+					"name" : "_u_penInfluence",
+					"conditions" : []
 				}
 			],
 			"material" : "materials/effects/canvas_paint.json",
@@ -116,11 +151,22 @@
 			]
 		},
 		{
+			"command" : "copy",
+			"source" : "_u_penInfluence",
+			"target" : "_u_memoryPenInfluence",
+			"conditions": []
+		},
+		{
 			"bind" : 
 			[
 				{
 					"index" : 0,
 					"name" : "_u_paintedCanv"
+				},
+				{
+					"index" : 1,
+					"name" : "_u_memoryPenInfluence",
+					"conditions" : []
 				}
 			],
 			"material" : "materials/effects/canvas_present.json"

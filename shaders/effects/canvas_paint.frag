@@ -26,7 +26,9 @@ uniform sampler2D g_Texture0; // {"hidden":true}
 uniform sampler2D g_Texture1; // {"hidden":true}
 // undo canvas
 uniform sampler2D g_Texture2; // {"hidden":true}
-uniform sampler2D g_Texture3; // {"material":"blendTex","label":"Blend Texture", "default":"util/black"}
+// pen influence texture
+uniform sampler2D g_Texture3; // {"hidden":true}
+uniform sampler2D g_Texture4; // {"material":"blendTex","label":"Blend Texture", "default":"util/black"}
 
 uniform vec4 g_Texture0Resolution;
 uniform vec2 g_TexelSize;
@@ -57,7 +59,7 @@ void main() {
 	vec4 undoAlbedo = texSample2D(g_Texture2, v_TexCoord.xy);
 #endif
 #if ENABLE_BLEND
-	vec4 blendAlbedo = texSample2D(g_Texture3, v_TexCoord.xy);
+	vec4 blendAlbedo = texSample2D(g_Texture4, v_TexCoord.xy);
 #endif
 
 	vec2 ratCorr = mix(
