@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "-490.62967 341.95404 -1.00000",
-		"eye" : "-490.62967 341.95404 0.00000",
+		"center" : "0.00000 0.00000 -1.00000",
+		"eye" : "0.00000 0.00000 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -118,6 +118,7 @@
 				{
 					"combos" : 
 					{
+						"ENABLE_LINE_INFLUENCE" : 1,
 						"ENABLE_UNDO_CMD" : 1
 					},
 					"file" : "effects/canvas/effect.json",
@@ -175,7 +176,8 @@
 								{
 									"script" : "'use strict';\n\nvar lastFrame;\nvar mouseDown;\n\n/**\n * @param {Number} value - for property 'Mouse Down'\n * @return {Number} - update current property value\n */\nexport function init(value) {\n\tlastFrame = 0;\n\tmouseDown = false;\n\tshared[\"cursorOnUi\"] = false;\n\treturn 0;\n}\n\n/**\n * @param {Vec2} value - for property 'Mouse Down (X = This Frame, Y = Last Frame)'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar vec = new Vec2((mouseDown && !shared[\"cursorOnUi\"] && !shared[\"locked\"]) ? 1 : 0, lastFrame);\n\tlastFrame = vec.x;\n\treturn vec;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tmouseDown = false;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tmouseDown = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tmouseDown = false;\n}\n",
 									"value" : "0.00000 0.00000"
-								}
+								},
+								"My new slider" : 2.4200001
 							},
 							"id" : 64
 						},
@@ -187,6 +189,7 @@
 							},
 							"constantshadervalues" : 
 							{
+								"Air Brush - Connected Lines" : 1,
 								"Command (None, Reset, Undo, Blend)" : 
 								{
 									"script" : "'use strict';\n\n\n/**\n * @param {Number} value - for property 'Copy Below (Dont, Reset, Noise)'\n * @return {Number} - update current property value\n */\nexport function init(value) {\n\t\n\treturn value;\n}\n\n\n/**\n * @param {Number} value - for property 'Copy Below (Reset)'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tif(shared[\"locked\"]) {\n\t\tif(shared[\"cmd\"] != \"none\") {\n\t\t\tshared[\"cmd\"] = \"none\";\n\t\t}\n\t\treturn 0.;\n\t}\n\n\tswitch(shared[\"cmd\"]) {\n\t\tcase \"reset\":\n\t\t\tshared[\"cmd\"] = \"none\";\n\t\t\treturn 1.;\n\t\tcase \"undo\":\n\t\t\tshared[\"cmd\"] = \"none\";\n\t\t\treturn 2.;\n\t\tcase \"blend\":\n\t\t\tshared[\"cmd\"] = \"none\";\n\t\t\treturn 3.;\n\t\tcase \"none\":\n\t\t\treturn 0.;\n\t\tdefault:\n\t\t\tshared[\"cmd\"] = \"none\";\n\t\t\treturn 0.;\n\t}\n}",
@@ -219,9 +222,9 @@
 									},
 									"value" : 1
 								},
-								"Draw Mode (Erase, Pen, Smear, Color Copy, Blend)" : 
+								"Draw Mode (Erase, Brush, Smear, Color Copy, Blend)" : 
 								{
-									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tswitch(shared[scriptProperties['key']]) {\n\t\tcase \"pen\":\n\t\t\treturn 1.;\n\t\tcase \"smear\":\n\t\t\treturn 2.;\n\t\tcase \"colorCpy\":\n\t\t\treturn 3.;\n\t\tcase \"blend\":\n\t\t\treturn 4.;\n\t\tcase \"erase\":\n\t\tdefault:\n\t\t\treturn 0.;\n\t}\n}\n",
+									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tswitch(shared[scriptProperties['key']]) {\n\t\tcase \"brush\":\n\t\t\treturn 1.;\n\t\tcase \"smear\":\n\t\t\treturn 2.;\n\t\tcase \"colorCpy\":\n\t\t\treturn 3.;\n\t\tcase \"blend\":\n\t\t\treturn 4.;\n\t\tcase \"erase\":\n\t\tdefault:\n\t\t\treturn 0.;\n\t}\n}\n",
 									"scriptproperties" : 
 									{
 										"key" : "drawMode"
@@ -246,6 +249,11 @@
 							"id" : 62
 						},
 						{
+							"constantshadervalues" : 
+							{
+								"Draw Color Duplicate" : "1 0 0",
+								"Draw Mode Duplicate" : 0.0
+							},
 							"id" : 67
 						}
 					],
@@ -287,7 +295,7 @@
 					"isDefault" : true,
 					"key" : "drawMode",
 					"persistent" : true,
-					"val" : "pen"
+					"val" : "brush"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -550,7 +558,7 @@
 				"scriptproperties" : 
 				{
 					"key" : "drawMode",
-					"val" : "pen"
+					"val" : "brush"
 				},
 				"value" : true
 			}

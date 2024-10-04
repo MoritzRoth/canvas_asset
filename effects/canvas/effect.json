@@ -40,13 +40,13 @@
 			"name" : "_u_memoryPenInfluence",
 			"scale" : 1,
 			"unique" : true,
-			"conditions" : []
+			"conditions" : [{"ENABLE_LINE_INFLUENCE":1}]
 		},
 		{
 			"format" : "r16f_backbuffer",
 			"name" : "_u_penInfluence",
 			"scale" : 1,
-			"conditions" : []
+			"conditions" : [{"ENABLE_LINE_INFLUENCE":1}]
 		},
 		{
 			"format" : "rgba_backbuffer",
@@ -100,9 +100,7 @@
 			],
 			"material" : "materials/effects/canvas_pen_influence.json",
 			"target" : "_u_penInfluence",
-			"conditions" :
-			[
-			]
+			"conditions" : [{"ENABLE_LINE_INFLUENCE":1}]
 		},
 		{
 			"bind" : 
@@ -128,7 +126,7 @@
 				{
 					"index" : 3,
 					"name" : "_u_penInfluence",
-					"conditions" : []
+					"conditions" : [{"ENABLE_LINE_INFLUENCE":1}]
 				}
 			],
 			"material" : "materials/effects/canvas_paint.json",
@@ -154,7 +152,7 @@
 			"command" : "copy",
 			"source" : "_u_penInfluence",
 			"target" : "_u_memoryPenInfluence",
-			"conditions": []
+			"conditions": [{"ENABLE_LINE_INFLUENCE":1}]
 		},
 		{
 			"bind" : 
@@ -166,7 +164,12 @@
 				{
 					"index" : 1,
 					"name" : "_u_memoryPenInfluence",
-					"conditions" : []
+					"conditions" : [{"ENABLE_LINE_INFLUENCE":1}]
+				},
+				{
+					"index" : 2,
+					"name" : "previous",
+					"conditions" : [{"ENABLE_LINE_INFLUENCE":1}]
 				}
 			],
 			"material" : "materials/effects/canvas_present.json"
