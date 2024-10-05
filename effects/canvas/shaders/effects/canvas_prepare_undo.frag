@@ -11,7 +11,7 @@ uniform sampler2D g_Texture0; // {"hidden":true}
 uniform sampler2D g_Texture1; // {"hidden":true}
 
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
-uniform float u_command; // {"material":"Command Duplicate","int":true,"default":0,"range":[0,3]}
+uniform float u_command; // {"material":"cmd2","label":"Command Duplicate","int":true,"default":0,"range":[0,3]}
 
 float modeMatch(float a, float b) {
 	return step(abs(a-b), 0.1);

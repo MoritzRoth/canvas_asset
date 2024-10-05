@@ -36,7 +36,7 @@ uniform vec2 g_TexelSize;
 uniform vec2 g_PointerPosition;
 uniform vec2 g_PointerPositionLast;
 
-uniform float u_command; // {"material":"Command (None, Reset, Undo, Blend)","int":true,"default":0,"range":[0,3]}
+uniform float u_command; // {"material":"cmd","label":"Command (None, Reset, Undo, Blend)","int":true,"default":0,"range":[0,3]}
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
 uniform float u_drawMode; // {"material":"drawMode","label":"Draw Mode (Erase, Brush, Smear, Color Copy, Blend)","int":true,"default":0,"range":[0,4]}
 uniform float u_preferredInfluence; // {"material":"influenceMode","label":"Air Brush - Connected Lines","int":true,"default":0,"range":[0,1]}
