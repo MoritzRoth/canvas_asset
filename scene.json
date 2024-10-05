@@ -132,7 +132,7 @@
 								"cmd2" : 
 								{
 									"script" : "'use strict';\n\n\n/**\n * @param {Number} value - for property 'Copy Below (Dont, Reset, Noise)'\n * @return {Number} - update current property value\n */\nexport function init(value) {\n\t\n\treturn value;\n}\n\n\n/**\n * @param {Number} value - for property 'Copy Below (Reset)'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tif(shared[\"locked\"]) {\n\t\tif(shared[\"reset\"] != \"no\") {\n\t\t\t\n\t\t}\n\t\treturn 0.;\n\t}\n\n\tswitch(shared[\"cmd\"]) {\n\t\tcase \"reset\":\n\t\t\treturn 1.;\n\t\tcase \"undo\":\n\t\t\treturn 2.;\n\t\tcase \"blend\":\n\t\t\treturn 3.;\n\t\tcase \"none\":\n\t\tdefault:\n\t\t\treturn 0.;\n\t}\n}",
-									"value" : 0
+									"value" : 1
 								},
 								"mouseDown" : 
 								{
@@ -193,7 +193,7 @@
 								"cmd" : 
 								{
 									"script" : "'use strict';\n\n\n/**\n * @param {Number} value - for property 'Copy Below (Dont, Reset, Noise)'\n * @return {Number} - update current property value\n */\nexport function init(value) {\n\t\n\treturn value;\n}\n\n\n/**\n * @param {Number} value - for property 'Copy Below (Reset)'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tif(shared[\"locked\"]) {\n\t\tif(shared[\"cmd\"] != \"none\") {\n\t\t\tshared[\"cmd\"] = \"none\";\n\t\t}\n\t\treturn 0.;\n\t}\n\n\tswitch(shared[\"cmd\"]) {\n\t\tcase \"reset\":\n\t\t\tshared[\"cmd\"] = \"none\";\n\t\t\treturn 1.;\n\t\tcase \"undo\":\n\t\t\tshared[\"cmd\"] = \"none\";\n\t\t\treturn 2.;\n\t\tcase \"blend\":\n\t\t\tshared[\"cmd\"] = \"none\";\n\t\t\treturn 3.;\n\t\tcase \"none\":\n\t\t\treturn 0.;\n\t\tdefault:\n\t\t\tshared[\"cmd\"] = \"none\";\n\t\t\treturn 0.;\n\t}\n}",
-									"value" : 0
+									"value" : 1
 								},
 								"drawAlpha" : 
 								{
@@ -262,16 +262,7 @@
 							"constantshadervalues" : 
 							{
 								"drawCol" : "1 1 1",
-								"drawMode" : 
-								{
-									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tswitch(shared[scriptProperties['key']]) {\n\t\tcase \"brush\":\n\t\t\treturn 1.;\n\t\tcase \"smear\":\n\t\t\treturn 2.;\n\t\tcase \"colorCpy\":\n\t\t\treturn 3.;\n\t\tcase \"blend\":\n\t\t\treturn 4.;\n\t\tcase \"erase\":\n\t\tdefault:\n\t\t\treturn 0.;\n\t}\n}\n",
-									"scriptproperties" : 
-									{
-										"key" : "drawMode"
-									},
-									"value" : 0
-								},
-								"mouseDown" : "0 0"
+								"drawMode" : 0.0
 							},
 							"id" : 73
 						}
