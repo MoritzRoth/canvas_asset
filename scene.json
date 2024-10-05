@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "216.78508 271.63928 -1.00000",
-		"eye" : "216.78508 271.63928 0.00000",
+		"center" : "0.00000 0.00000 -1.00000",
+		"eye" : "0.00000 0.00000 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -81,11 +81,11 @@
 			"name" : "Cloud Noise",
 			"origin" : "1280.00000 720.00000 0.00000",
 			"parallaxDepth" : "0.00000 0.00000",
-			"size" : "2560.00000 1440.00000",
-			"visible" : false
+			"size" : "2560.00000 1440.00000"
 		},
 		{
 			"castshadow" : false,
+			"dependencies" : [ 288 ],
 			"effects" : 
 			[
 				{
@@ -183,6 +183,8 @@
 						{
 							"combos" : 
 							{
+								"ENABLE_BLEND" : 1,
+								"ENABLE_CPY_BRUSH" : 1,
 								"ENABLE_SMEAR" : 1,
 								"ENABLE_UNDO_CMD" : 1
 							},
@@ -253,13 +255,22 @@
 									"value" : "0.00000 0.00000"
 								}
 							},
-							"id" : 62
+							"id" : 62,
+							"textures" : [ null, null, null, null, "_rt_imageLayerComposite_288_a" ]
 						},
 						{
 							"constantshadervalues" : 
 							{
 								"drawCol" : "1 1 1",
-								"drawMode" : 0.0,
+								"drawMode" : 
+								{
+									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tswitch(shared[scriptProperties['key']]) {\n\t\tcase \"brush\":\n\t\t\treturn 1.;\n\t\tcase \"smear\":\n\t\t\treturn 2.;\n\t\tcase \"colorCpy\":\n\t\t\treturn 3.;\n\t\tcase \"blend\":\n\t\t\treturn 4.;\n\t\tcase \"erase\":\n\t\tdefault:\n\t\t\treturn 0.;\n\t}\n}\n",
+									"scriptproperties" : 
+									{
+										"key" : "drawMode"
+									},
+									"value" : 0
+								},
 								"mouseDown" : "0 0"
 							},
 							"id" : 73
