@@ -46,6 +46,6 @@ void main() {
 	previewColor += texSample2D(g_Texture4, v_TexCoord.xy) * modeMatch(u_drawMode, DRAW_MODE_BLEND);
 #endif
 
-	gl_FragColor = mix(canvas, vec4(previewColor, 1.), lineInfluence * u_mouseDown.x);
+	gl_FragColor = mix(canvas, vec4(previewColor, 1.), lineInfluence /** u_mouseDown.x*/);
 #endif
 }
