@@ -23,7 +23,7 @@
 	"ratingviolence" : "none",
 	"tags" : [ "Abstract" ],
 	"title" : "Canvas Asset",
-	"type" : "scene",
+	"type" : "Scene",
 	"version" : 5,
 	"visibility" : "public",
 	"workshopurl" : "steam://url/CommunityFilePage/2956598880"

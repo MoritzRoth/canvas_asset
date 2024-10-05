@@ -37,14 +37,14 @@ uniform vec2 g_PointerPosition;
 uniform vec2 g_PointerPositionLast;
 
 uniform float u_command; // {"material":"Command (None, Reset, Undo, Blend)","int":true,"default":0,"range":[0,3]}
-uniform vec2 u_mouseDown; // {"material":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
-uniform float u_drawMode; // {"material":"Draw Mode (Erase, Brush, Smear, Color Copy, Blend)","int":true,"default":0,"range":[0,4]}
-uniform float u_preferredInfluence; // {"material":"Air Brush - Connected Lines","int":true,"default":0,"range":[0,1]}
+uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
+uniform float u_drawMode; // {"material":"drawMode","label":"Draw Mode (Erase, Brush, Smear, Color Copy, Blend)","int":true,"default":0,"range":[0,4]}
+uniform float u_preferredInfluence; // {"material":"influenceMode","label":"Air Brush - Connected Lines","int":true,"default":0,"range":[0,1]}
 
-uniform vec3 u_drawColor; // {"material":"Draw Color","type":"color","default":"1 1 1"}
-uniform float u_drawAlpha; // {"material":"Draw Alpha","default":1,"range":[0,1]}
-uniform float u_drawRadius; // {"material":"Draw Radius","default":1,"range":[0,1]}
-uniform float u_drawHardness; // {"material":"Draw Hardness","default":1,"range":[0,1]}
+uniform vec3 u_drawColor; // {"material":"drawCol","label":"Draw Color","type":"color","default":"1 1 1"}
+uniform float u_drawAlpha; // {"material": "drawAlpha","label":"Draw Alpha","default":1,"range":[0,1]}
+uniform float u_drawRadius; // {"material":"drawRadius","label":"Draw Radius","default":1,"range":[0,1]}
+uniform float u_drawHardness; // {"material":"drawHardness","label":"Draw Hardness","default":1,"range":[0,1]}
 
 float modeMatch(float a, float b) {
 	return step(abs(a-b), 0.1);

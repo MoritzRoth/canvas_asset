@@ -10,11 +10,11 @@ uniform vec4 g_Texture0Resolution;
 uniform vec2 g_PointerPosition;
 uniform vec2 g_PointerPositionLast;
 
-uniform float u_drawRadius; // {"material":"Draw Radius","default":1,"range":[0,1]}
-uniform float u_drawHardness; // {"material":"Draw Hardness","default":1,"range":[0,1]}
-uniform float u_drawAlpha; // {"material":"Draw Alpha","default":1,"range":[0,1]}
+uniform float u_drawRadius; // {"material":"drawRadius","label":"Draw Radius","default":1,"range":[0,1]}
+uniform float u_drawHardness; // {"material":"drawHardness","label":"Draw Hardness","default":1,"range":[0,1]}
+uniform float u_drawAlpha; // {"material":"drawAlpha","label":"Draw Alpha","default":1,"range":[0,1]}
 
-uniform vec2 u_mouseDown; // {"material":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
+uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
 
 float NOT(float v) {
 	return 1.-v;
