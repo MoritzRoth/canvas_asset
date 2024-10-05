@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "292.63834 70.44998 -1.00000",
-		"eye" : "292.63834 70.44998 0.00000",
+		"center" : "-30.75220 41.08980 -1.00000",
+		"eye" : "-30.75220 41.08980 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -254,7 +254,7 @@
 								"drawMode" : 0.0,
 								"mouseDown" : "0 0"
 							},
-							"id" : 67
+							"id" : 73
 						}
 					],
 					"visible" : true
@@ -300,9 +300,32 @@
 				"value" : "1.00000 1.00000 1.00000"
 			},
 			"id" : 208,
-			"image" : "models/Pen_small.json",
-			"name" : "Pen",
+			"image" : "models/Brush_small.json",
+			"name" : "Brush",
 			"origin" : "0.00000 200.00000 0.00000",
+			"parent" : 171,
+			"scale" : "0.50000 0.50000 1.00000",
+			"size" : "256.00000 256.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : 
+			{
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.addCheckbox({\n\t\tname: 'isDefault',\n\t\tlabel: 'Default Option on Startup',\n\t\tvalue: false\n\t})\n\t.addCheckbox({\n\t\tname: 'persistent',\n\t\tlabel: 'Persistent',\n\t\tvalue: false\n\t})\n\t.finish();\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tif(scriptProperties[\"persistent\"]) {\n\t\t\n\t\tvar val = localStorage.get(scriptProperties[\"key\"]);\n\t\tif(typeof val === 'undefined') {\n\t\t\tif(scriptProperties[\"isDefault\"]) {\n\t\t\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t\t\t}\n\t\t}else {\n\t\t\tshared[scriptProperties[\"key\"]] = val;\n\t\t}\n\n\t}else if(scriptProperties[\"isDefault\"]) {\n\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties[\"key\"]] == scriptProperties[\"val\"] ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\tif(scriptProperties[\"persistent\"]) {\n\t\tlocalStorage.set(scriptProperties[\"key\"], scriptProperties[\"val\"]);\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"scriptproperties" : 
+				{
+					"isDefault" : true,
+					"key" : "drawMode",
+					"persistent" : true,
+					"val" : "brush"
+				},
+				"value" : "1.00000 1.00000 1.00000"
+			},
+			"id" : 109,
+			"image" : "models/Spray@0.5x.json",
+			"name" : "Spray",
+			"origin" : "-175.00000 200.00000 0.00000",
 			"parent" : 171,
 			"scale" : "0.50000 0.50000 1.00000",
 			"size" : "256.00000 256.00000"
@@ -368,9 +391,9 @@
 				"value" : "1.00000 1.00000 1.00000"
 			},
 			"id" : 257,
-			"image" : "models/NoiseBrush@0.5x.json",
-			"name" : "Blend Brush",
-			"origin" : "-195.04883 -200.00000 0.00000",
+			"image" : "models/smear@0.5x.json",
+			"name" : "Smear",
+			"origin" : "-175.00000 0.00000 0.00000",
 			"parent" : 171,
 			"scale" : "0.50000 0.50000 1.00000",
 			"size" : "256.00000 256.00000"
@@ -413,9 +436,31 @@
 				"value" : "1.00000 1.00000 1.00000"
 			},
 			"id" : 287,
-			"image" : "models/Shuffle@0.5x.json",
+			"image" : "models/Undo@0.5x.json",
 			"name" : "Undo",
 			"origin" : "0.00000 -600.00000 0.00000",
+			"parent" : 171,
+			"scale" : "0.50000 0.50000 1.00000",
+			"size" : "256.00000 256.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : 
+			{
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.addCheckbox({\n\t\tname: 'isDefault',\n\t\tlabel: 'Default Option on Startup',\n\t\tvalue: false\n\t})\n\t.finish();\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tif(scriptProperties[\"isDefault\"]) {\n\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t}\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties[\"key\"]] == scriptProperties[\"val\"] ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"scriptproperties" : 
+				{
+					"isDefault" : false,
+					"key" : "cmd",
+					"val" : "undo"
+				},
+				"value" : "1.00000 1.00000 1.00000"
+			},
+			"id" : 233,
+			"image" : "models/Shuffle@0.5x.json",
+			"name" : "Blend",
+			"origin" : "-175.00000 -600.00000 0.00000",
 			"parent" : 171,
 			"scale" : "0.50000 0.50000 1.00000",
 			"size" : "256.00000 256.00000"
