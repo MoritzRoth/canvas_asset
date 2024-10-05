@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "-30.75220 41.08980 -1.00000",
-		"eye" : "-30.75220 41.08980 0.00000",
+		"center" : "216.78508 271.63928 -1.00000",
+		"eye" : "216.78508 271.63928 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -238,7 +238,15 @@
 									},
 									"value" : 0.22
 								},
-								"influenceMode" : 1,
+								"influenceMode" : 
+								{
+									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tswitch(shared[scriptProperties['key']]) {\n\t\tcase \"line\":\n\t\t\treturn 1.;\n\t\tcase \"spray\":\n\t\tdefault:\n\t\t\treturn 0.;\n\t}\n}\n",
+									"scriptproperties" : 
+									{
+										"key" : "drawInfluence"
+									},
+									"value" : 0
+								},
 								"mouseDown" : 
 								{
 									"script" : "'use strict';\n\nvar lastFrame;\nvar mouseDown;\n\n/**\n * @param {Number} value - for property 'Mouse Down'\n * @return {Number} - update current property value\n */\nexport function init(value) {\n\tlastFrame = 0;\n\tmouseDown = false;\n\tshared[\"cursorOnUi\"] = false;\n\treturn 0;\n}\n\n/**\n * @param {Vec2} value - for property 'Mouse Down (X = This Frame, Y = Last Frame)'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar vec = new Vec2((mouseDown && !shared[\"cursorOnUi\"] && !shared[\"locked\"]) ? 1 : 0, lastFrame);\n\tlastFrame = vec.x;\n\treturn vec;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tmouseDown = false;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tmouseDown = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tmouseDown = false;\n}\n",
@@ -289,13 +297,15 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.addCheckbox({\n\t\tname: 'isDefault',\n\t\tlabel: 'Default Option on Startup',\n\t\tvalue: false\n\t})\n\t.addCheckbox({\n\t\tname: 'persistent',\n\t\tlabel: 'Persistent',\n\t\tvalue: false\n\t})\n\t.finish();\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tif(scriptProperties[\"persistent\"]) {\n\t\t\n\t\tvar val = localStorage.get(scriptProperties[\"key\"]);\n\t\tif(typeof val === 'undefined') {\n\t\t\tif(scriptProperties[\"isDefault\"]) {\n\t\t\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t\t\t}\n\t\t}else {\n\t\t\tshared[scriptProperties[\"key\"]] = val;\n\t\t}\n\n\t}else if(scriptProperties[\"isDefault\"]) {\n\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties[\"key\"]] == scriptProperties[\"val\"] ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\tif(scriptProperties[\"persistent\"]) {\n\t\tlocalStorage.set(scriptProperties[\"key\"], scriptProperties[\"val\"]);\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.addText({\n\t\tname: 'key2',\n\t\tlabel: 'Property 2',\n\t\tvalue: 'baz'\n\t})\n\t.addText({\n\t\tname: 'val2',\n\t\tlabel: 'Value 2',\n\t\tvalue: 'qux'\n\t})\n\t.addCheckbox({\n\t\tname: 'isDefault',\n\t\tlabel: 'Default Option on Startup',\n\t\tvalue: false\n\t})\n\t.addCheckbox({\n\t\tname: 'persistent',\n\t\tlabel: 'Persistent',\n\t\tvalue: false\n\t})\n\t.finish();\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tif(scriptProperties[\"persistent\"]) {\n\t\t\n\t\tvar val = localStorage.get(scriptProperties[\"key\"]);\n\t\tvar val2 = localStorage.get(scriptProperties[\"key2\"]);\n\t\tif(typeof val === 'undefined') {\n\t\t\tif(scriptProperties[\"isDefault\"]) {\n\t\t\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t\t\t\tshared[scriptProperties[\"key2\"]] = scriptProperties[\"val2\"];\n\t\t\t}\n\t\t}else {\n\t\t\tshared[scriptProperties[\"key\"]] = val;\n\t\t\tshared[scriptProperties[\"key2\"]] = val2;\n\t\t}\n\n\t}else if(scriptProperties[\"isDefault\"]) {\n\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t\tshared[scriptProperties[\"key2\"]] = scriptProperties[\"val2\"];\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\treturn (shared[scriptProperties[\"key\"]] == scriptProperties[\"val\"] && shared[scriptProperties[\"key2\"]] == scriptProperties[\"val2\"]) ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\tshared[scriptProperties[\"key2\"]] = scriptProperties[\"val2\"];\n\tif(scriptProperties[\"persistent\"]) {\n\t\tlocalStorage.set(scriptProperties[\"key\"], scriptProperties[\"val\"]);\n\t\tlocalStorage.set(scriptProperties[\"key2\"], scriptProperties[\"val2\"]);\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
 				"scriptproperties" : 
 				{
-					"isDefault" : true,
+					"isDefault" : false,
 					"key" : "drawMode",
+					"key2" : "drawInfluence",
 					"persistent" : true,
-					"val" : "brush"
+					"val" : "brush",
+					"val2" : "line"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -312,13 +322,15 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.addCheckbox({\n\t\tname: 'isDefault',\n\t\tlabel: 'Default Option on Startup',\n\t\tvalue: false\n\t})\n\t.addCheckbox({\n\t\tname: 'persistent',\n\t\tlabel: 'Persistent',\n\t\tvalue: false\n\t})\n\t.finish();\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tif(scriptProperties[\"persistent\"]) {\n\t\t\n\t\tvar val = localStorage.get(scriptProperties[\"key\"]);\n\t\tif(typeof val === 'undefined') {\n\t\t\tif(scriptProperties[\"isDefault\"]) {\n\t\t\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t\t\t}\n\t\t}else {\n\t\t\tshared[scriptProperties[\"key\"]] = val;\n\t\t}\n\n\t}else if(scriptProperties[\"isDefault\"]) {\n\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties[\"key\"]] == scriptProperties[\"val\"] ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\tif(scriptProperties[\"persistent\"]) {\n\t\tlocalStorage.set(scriptProperties[\"key\"], scriptProperties[\"val\"]);\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.addText({\n\t\tname: 'key2',\n\t\tlabel: 'Property 2',\n\t\tvalue: 'baz'\n\t})\n\t.addText({\n\t\tname: 'val2',\n\t\tlabel: 'Value 2',\n\t\tvalue: 'qux'\n\t})\n\t.addCheckbox({\n\t\tname: 'isDefault',\n\t\tlabel: 'Default Option on Startup',\n\t\tvalue: false\n\t})\n\t.addCheckbox({\n\t\tname: 'persistent',\n\t\tlabel: 'Persistent',\n\t\tvalue: false\n\t})\n\t.finish();\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tif(scriptProperties[\"persistent\"]) {\n\t\t\n\t\tvar val = localStorage.get(scriptProperties[\"key\"]);\n\t\tvar val2 = localStorage.get(scriptProperties[\"key2\"]);\n\t\tif(typeof val === 'undefined') {\n\t\t\tif(scriptProperties[\"isDefault\"]) {\n\t\t\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t\t\t\tshared[scriptProperties[\"key2\"]] = scriptProperties[\"val2\"];\n\t\t\t}\n\t\t}else {\n\t\t\tshared[scriptProperties[\"key\"]] = val;\n\t\t\tshared[scriptProperties[\"key2\"]] = val2;\n\t\t}\n\n\t}else if(scriptProperties[\"isDefault\"]) {\n\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t\tshared[scriptProperties[\"key2\"]] = scriptProperties[\"val2\"];\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\treturn (shared[scriptProperties[\"key\"]] == scriptProperties[\"val\"] && shared[scriptProperties[\"key2\"]] == scriptProperties[\"val2\"]) ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\tshared[scriptProperties[\"key2\"]] = scriptProperties[\"val2\"];\n\tif(scriptProperties[\"persistent\"]) {\n\t\tlocalStorage.set(scriptProperties[\"key\"], scriptProperties[\"val\"]);\n\t\tlocalStorage.set(scriptProperties[\"key2\"], scriptProperties[\"val2\"]);\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
 				"scriptproperties" : 
 				{
 					"isDefault" : true,
 					"key" : "drawMode",
+					"key2" : "drawInfluence",
 					"persistent" : true,
-					"val" : "brush"
+					"val" : "brush",
+					"val2" : "spray"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
