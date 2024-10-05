@@ -24,6 +24,7 @@ uniform float u_drawMode; // {"material":"drawMode","label":"Draw Mode Duplicate
 uniform vec3 u_drawColor; // {"material":"drawCol","label":"Draw Color","type":"color","default":"1 1 1"}
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
 // asdfasdfasd uniform vec3 u_drawColor; // {"material":"Draw Color Duplicate","type":"color","default":"1 1 1"}
+uniform vec3 u_testTint; // {"material":"testTint","label":"Test Tint","type":"color","default":"0 0 0"}
 
 float modeMatch(float a, float b) {
 	return step(abs(a-b), 0.1);
@@ -46,6 +47,6 @@ void main() {
 	previewColor += texSample2D(g_Texture4, v_TexCoord.xy) * modeMatch(u_drawMode, DRAW_MODE_BLEND);
 #endif
 
-	gl_FragColor = mix(canvas, vec4(previewColor, 1.), lineInfluence /** u_mouseDown.x*/);
+	gl_FragColor = mix(canvas, vec4(previewColor, 1.), lineInfluence /** u_mouseDown.x*/) + vec4(u_testTint, 0.);
 #endif
 }

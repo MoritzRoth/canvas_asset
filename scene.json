@@ -262,7 +262,8 @@
 							"constantshadervalues" : 
 							{
 								"drawCol" : "1 1 1",
-								"drawMode" : 0.0
+								"drawMode" : 0.0,
+								"testTint" : "0 0 0"
 							},
 							"id" : 73
 						}
