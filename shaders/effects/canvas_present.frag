@@ -23,7 +23,7 @@ uniform sampler2D g_Texture4; // {"material":"blendTex","label":"Blend Texture",
 uniform float u_drawMode; // {"material":"drawMode","label":"Draw Mode Duplicate","int":true,"default":0,"range":[0,4]}
 uniform vec3 u_drawColor; // {"material":"drawCol","label":"Draw Color","type":"color","default":"1 1 1"}
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
-// asdfasdfasd uniform vec3 u_drawColor; // {"material":"Draw Color Duplicate","type":"color","default":"1 1 1"}
+uniform float u_preferredInfluence; // {"material":"influenceMode","label":"Air Brush - Connected Lines","int":true,"default":0,"range":[0,1]}
 
 float modeMatch(float a, float b) {
 	return step(abs(a-b), 0.1);
@@ -41,11 +41,11 @@ void main() {
 	vec4 defaultAlbedo = texSample2D(g_Texture0, v_TexCoord.xy);
 
 	vec3 previewColor = defaultAlbedo * modeMatch(u_drawMode, DRAW_MODE_ERASE)
-						+ u_drawColor /** modeMatch(u_drawMode, DRAW_MODE_BRUSH)*/;
+						+ u_drawColor * modeMatch(u_drawMode, DRAW_MODE_BRUSH);
 #if ENABLE_BLEND
 	previewColor += texSample2D(g_Texture4, v_TexCoord.xy) * modeMatch(u_drawMode, DRAW_MODE_BLEND);
 #endif
 
-	gl_FragColor = mix(canvas, vec4(previewColor, 1.), lineInfluence /** u_mouseDown.x*/);
+	gl_FragColor = mix(canvas, vec4(previewColor, 1.), lineInfluence * u_mouseDown.x * u_preferredInfluence);
 #endif
 }

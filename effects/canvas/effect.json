@@ -133,6 +133,26 @@
 			"target" : "_u_paintedCanv"
 		},
 		{
+			"bind" : 
+			[
+				{
+					"index" : 0,
+					"name" : "_u_paintedCanv"
+				},
+				{
+					"index" : 1,
+					"name" : "_u_penInfluence",
+					"conditions" : [{"ENABLE_LINE_INFLUENCE":1}]
+				},
+				{
+					"index" : 2,
+					"name" : "previous",
+					"conditions" : [{"ENABLE_LINE_INFLUENCE":1}]
+				}
+			],
+			"material" : "materials/effects/canvas_present.json"
+		},
+		{
 			"command" : "copy",
 			"source" : "_u_paintedCanv",
 			"target" : "_u_memoryCanv"
@@ -153,26 +173,6 @@
 			"source" : "_u_penInfluence",
 			"target" : "_u_memoryPenInfluence",
 			"conditions": [{"ENABLE_LINE_INFLUENCE":1}]
-		},
-		{
-			"bind" : 
-			[
-				{
-					"index" : 0,
-					"name" : "_u_paintedCanv"
-				},
-				{
-					"index" : 1,
-					"name" : "_u_memoryPenInfluence",
-					"conditions" : [{"ENABLE_LINE_INFLUENCE":1}]
-				},
-				{
-					"index" : 2,
-					"name" : "previous",
-					"conditions" : [{"ENABLE_LINE_INFLUENCE":1}]
-				}
-			],
-			"material" : "materials/effects/canvas_present.json"
 		}
 	],
 	"replacementkey" : "canvas",

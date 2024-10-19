@@ -261,8 +261,38 @@
 						{
 							"constantshadervalues" : 
 							{
-								"drawCol" : "1 1 1",
-								"drawMode" : 0.0
+								"drawCol" : 
+								{
+									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",
+									"scriptproperties" : 
+									{
+										"key" : "drawColor"
+									},
+									"value" : "1.00000 1.00000 1.00000"
+								},
+								"drawMode" : 
+								{
+									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tswitch(shared[scriptProperties['key']]) {\n\t\tcase \"brush\":\n\t\t\treturn 1.;\n\t\tcase \"smear\":\n\t\t\treturn 2.;\n\t\tcase \"colorCpy\":\n\t\t\treturn 3.;\n\t\tcase \"blend\":\n\t\t\treturn 4.;\n\t\tcase \"erase\":\n\t\tdefault:\n\t\t\treturn 0.;\n\t}\n}\n",
+									"scriptproperties" : 
+									{
+										"key" : "drawMode"
+									},
+									"value" : 0
+								},
+								"influenceMode" : 
+								{
+									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tswitch(shared[scriptProperties['key']]) {\n\t\tcase \"line\":\n\t\t\treturn 1.;\n\t\tcase \"spray\":\n\t\tdefault:\n\t\t\treturn 0.;\n\t}\n}\n",
+									"scriptproperties" : 
+									{
+										"key" : "drawInfluence"
+									},
+									"value" : 0
+								},
+								"mouseDown" : 
+								{
+									"script" : "'use strict';\n\nvar lastFrame;\nvar mouseDown;\n\n/**\n * @param {Number} value - for property 'Mouse Down'\n * @return {Number} - update current property value\n */\nexport function init(value) {\n\tlastFrame = 0;\n\tmouseDown = false;\n\tshared[\"cursorOnUi\"] = false;\n\treturn 0;\n}\n\n/**\n * @param {Vec2} value - for property 'Mouse Down (X = This Frame, Y = Last Frame)'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar vec = new Vec2((mouseDown && !shared[\"cursorOnUi\"] && !shared[\"locked\"]) ? 1 : 0, lastFrame);\n\tlastFrame = vec.x;\n\treturn vec;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tmouseDown = false;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tmouseDown = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tmouseDown = false;\n}\n",
+									"value" : "0.00000 0.00000"
+								}
 							},
 							"id" : 73
 						}
