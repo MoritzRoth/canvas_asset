@@ -618,6 +618,16 @@
 		{
 			"angles" : "0.00000 -0.00000 0.00000",
 			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 120,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Solid",
+			"parent" : 191,
+			"size" : "250.00000 2.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
 			"id" : 154,
 			"image" : "models/Scale@0.15x.json",
 			"name" : "Scale@0.15x",
@@ -649,6 +659,16 @@
 		{
 			"angles" : "0.00000 -0.00000 0.00000",
 			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 199,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Solid",
+			"parent" : 207,
+			"size" : "250.00000 2.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
 			"id" : 158,
 			"image" : "models/Hardness@0.15x.json",
 			"name" : "Hardness@0.15x",
@@ -676,6 +696,16 @@
 			"origin" : "800.00000 0.00000 0.00000",
 			"parent" : 345,
 			"size" : "256.00000 8.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 255,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Solid",
+			"parent" : 615,
+			"size" : "250.00000 2.00000"
 		},
 		{
 			"angles" : "0.00000 -0.00000 0.00000",
@@ -728,6 +758,16 @@
 		{
 			"angles" : "0.00000 -0.00000 0.00000",
 			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 261,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Solid",
+			"parent" : 346,
+			"size" : "250.00000 2.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
 			"id" : 211,
 			"image" : "models/Height@0.15x.json",
 			"name" : "Height@0.15x",
@@ -764,8 +804,18 @@
 		{
 			"angles" : "0.00000 -0.00000 0.00000",
 			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 266,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Solid",
+			"parent" : 213,
+			"size" : "506.00000 2.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
 			"id" : 214,
-			"image" : "models/Alpha@0.15x.json",
+			"image" : "models/Brightness@0.15x.json",
 			"name" : "Alpha@0.15x",
 			"origin" : 
 			{
