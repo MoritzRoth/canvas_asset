@@ -1,5 +1,5 @@
 // [COMBO] {"material":"Enable Connected Lines","combo":"ENABLE_LINE_INFLUENCE","type":"options","default":1}
-// [COMBO] {"material":"Enable blending with extra texture","combo":"ENABLE_BLEND","type":"options","default":0}
+// [COMBO] {"material":"Enable blending with pattern texture","combo":"ENABLE_BLEND","type":"options","default":0}
 
 varying vec2 v_TexCoord;
 
@@ -19,7 +19,7 @@ uniform sampler2D g_Texture1; // {"hidden":true}
 uniform sampler2D g_Texture2; // {"hidden":true}
 
 // blend texture
-uniform sampler2D g_Texture4; // {"material":"blendTex","label":"Blend Texture", "default":"util/black"}
+uniform sampler2D g_Texture4; // {"material":"blendTex","label":"Pattern Texture", "default":"util/black"}
 
 uniform float u_drawMode; // {"material":"drawMode","label":"Draw Mode Duplicate","int":true,"default":0,"range":[0,4]}
 uniform vec3 u_drawColor; // {"material":"drawCol","label":"Draw Color","type":"color","default":"1 1 1"}

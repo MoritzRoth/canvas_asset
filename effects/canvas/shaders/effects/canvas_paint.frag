@@ -1,7 +1,7 @@
 
 // [COMBO] {"material":"Enable Connected Lines","combo":"ENABLE_LINE_INFLUENCE","type":"options","default":1}
 // [COMBO] {"material":"Enable Undo Command","combo":"ENABLE_UNDO_CMD","type":"options","default":0}
-// [COMBO] {"material":"Enable blending with extra texture","combo":"ENABLE_BLEND","type":"options","default":0}
+// [COMBO] {"material":"Enable blending with pattern texture","combo":"ENABLE_BLEND","type":"options","default":0}
 // [COMBO] {"material":"Enable Smearing","combo":"ENABLE_SMEAR","type":"options","default":0}
 // [COMBO] {"material":"Enable Color Copy Brush","combo":"ENABLE_CPY_BRUSH","type":"options","default":0}
 
@@ -29,7 +29,7 @@ uniform sampler2D g_Texture1; // {"hidden":true}
 uniform sampler2D g_Texture2; // {"hidden":true}
 // line influence texture
 uniform sampler2D g_Texture3; // {"hidden":true}
-uniform sampler2D g_Texture4; // {"material":"blendTex","label":"Blend Texture", "default":"util/black"}
+uniform sampler2D g_Texture4; // {"material":"blendTex","label":"Pattern Texture", "default":"util/black"}
 
 uniform vec4 g_Texture0Resolution;
 uniform vec2 g_TexelSize;

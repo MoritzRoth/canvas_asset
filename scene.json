@@ -78,7 +78,7 @@
 			],
 			"id" : 288,
 			"image" : "models/util/projectlayer.json",
-			"name" : "Cloud Noise",
+			"name" : "Pattern Texture",
 			"origin" : "1280.00000 720.00000 0.00000",
 			"parallaxDepth" : "0.00000 0.00000",
 			"size" : "2560.00000 1440.00000"
@@ -91,7 +91,7 @@
 				{
 					"file" : "effects/repeattexture/effect.json",
 					"id" : 309,
-					"name" : "",
+					"name" : "Reset Texture",
 					"passes" : 
 					[
 						{
@@ -566,7 +566,7 @@
 			},
 			"id" : 233,
 			"image" : "models/UsePattern@0.5x.json",
-			"name" : "Blend",
+			"name" : "UsePattern",
 			"origin" : "-175.00000 -800.00000 0.00000",
 			"parent" : 171,
 			"scale" : "0.50000 0.50000 1.00000",
