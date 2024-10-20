@@ -82,12 +82,13 @@ void main() {
 	float penRadius = max(pow(u_drawRadius, 2.), EPSILON);
 	float penInfluence = u_drawAlpha * smoothstep(penRadius, penRadius * min(u_drawHardness, IPSILON), length(uv - cursor));
 
-	// line influence is only added to the canvas when the mouse is released, until then the present shader will show a preview of how the line looks
-	// this way we avoid stacking brush influence when drawing line segments 
-	lineInfluence *= u_mouseDown.y * NOT(u_mouseDown.x);	// draws entire stroke (connected lines) on mouse release, relies on "present" shader to show a preview in the meantime
+	// Line influence is only added to the canvas when the mouse is released, until then the present shader will show a preview of how the line looks.
+	// This way we avoid stacking brush influence when drawing line segments.
+	lineInfluence *= u_mouseDown.y * NOT(u_mouseDown.x);	// draws entire stroke (connected lines) on mouse release
 	float sprayInfluence = penInfluence * u_mouseDown.x;	// draws while mouse down in an area around the cursor
 	float stampInfluence = penInfluence * u_mouseDown.x * NOT(u_mouseDown.y);	// draws in an area around the cursor on mouse press
 #if ENABLE_LINE_INFLUENCE
+	// for draw modes that make sense with both spray and line influence use this and let the user decide which one to use
 	float generalInfluence = mix(sprayInfluence, lineInfluence, u_preferredInfluence);
 #endif
 #if !ENABLE_LINE_INFLUENCE

@@ -118,6 +118,7 @@
 				{
 					"combos" : 
 					{
+						"ENABLE_BLEND" : 1,
 						"ENABLE_LINE_INFLUENCE" : 1,
 						"ENABLE_UNDO_CMD" : 1
 					},
@@ -259,6 +260,13 @@
 							"textures" : [ null, null, null, null, "_rt_imageLayerComposite_288_a" ]
 						},
 						{
+							"combos" : 
+							{
+								"ENABLE_BLEND" : 1,
+								"ENABLE_CPY_BRUSH" : 1,
+								"ENABLE_SMEAR" : 1,
+								"ENABLE_UNDO_CMD" : 1
+							},
 							"constantshadervalues" : 
 							{
 								"drawCol" : 
@@ -294,7 +302,8 @@
 									"value" : "0.00000 0.00000"
 								}
 							},
-							"id" : 73
+							"id" : 73,
+							"textures" : [ null, null, null, null, "_rt_imageLayerComposite_288_a" ]
 						}
 					],
 					"visible" : true
@@ -497,7 +506,7 @@
 				{
 					"isDefault" : false,
 					"key" : "cmd",
-					"val" : "undo"
+					"val" : "blend"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
