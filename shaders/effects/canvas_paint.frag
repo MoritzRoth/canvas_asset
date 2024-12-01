@@ -124,7 +124,7 @@ float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor
 	}
 	vec2 start = pCursor + interval * (1. - spacingOffset);
 	if(pts == 1.) {
-		return calcInfluence(radius, uv, start) + calcInfluence(radius * 0.1, uv, start);
+		return calcInfluence(radius, uv, start);
 	}
 	float rpts = pts - 1.;	// no mathematical meaning; term just appeared a bunch in calcs below, so i just pulled it into its own var
 	vec2 end = start + interval * rpts;
@@ -136,21 +136,18 @@ float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor
 	float sampleStartPtIdx = ceil(fringePtT * rpts);
 	float sampleStartPtT = sampleStartPtIdx / rpts;
 	float ptT = sampleStartPtT;
-	//float ptT = ceil((projPxT - radius / length(stroke)) * pts) / pts;	// this shift to get the first pt influencing current uv seems to be bugged
 
 	float influence = 0.;
 	float maxSamples = min(ceil(1./brushSpacing), MAX_BRUSH_SAMPLES_PER_PIXEL);
 	for(float s = 0.; s < maxSamples; s+=1., ptT += intervalT) {
 		vec2 pt = mix(start, end, ptT);
 		influence += max(0.,
-					step(length(uv - pt), radius)	// no contrib if out of pt radius
+					step(length(uv - pt), radius)					// no contrib if out of pt radius
 					* step(-EPSILON, ptT) * step(ptT, 1. + EPSILON) // no contrib if outside stroke range
 					* calcInfluence(radius, uv, pt)
 				);
-		influence += calcInfluence(radius * 0.025, uv, pt) * step(EPSILON, ptT) * step(ptT, 1. + EPSILON) * 2.;
 	}
 
-	influence += (calcInfluence(radius * 0.1, uv, start) + calcInfluence(radius * 0.05, uv, end))*2.;
 	return min(influence, 1.);
 }
 
