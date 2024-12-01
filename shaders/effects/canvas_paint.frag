@@ -46,12 +46,56 @@ uniform float u_drawAlpha; // {"material": "drawAlpha","label":"Draw Alpha","def
 uniform float u_drawRadius; // {"material":"drawRadius","label":"Draw Radius","default":1,"range":[0,1]}
 uniform float u_drawHardness; // {"material":"drawHardness","label":"Draw Hardness","default":1,"range":[0,1]}
 
+uniform float u_brushSpacing; // {"material":"brushSpacing","label":"Brush Spacing","default":0.125,"range":[0,1]}
+uniform float u_brushSpacingOffset; // {"material":"brushSpacingOffset","label":"Brush Spacing Offset","default":0,"range":[0,1]}
+
 float modeMatch(float a, float b) {
 	return step(abs(a-b), 0.1);
 }
 
 float NOT(float v) {
 	return 1.-v;
+}
+
+float calcInfluence(float penRadius, vec2 uv, vec2 cursor) {
+	return u_drawAlpha * smoothstep(penRadius, penRadius * min(u_drawHardness, IPSILON), length(uv - cursor));
+}
+
+float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor, vec2 pCursor) {
+	float brushSpacing = max(u_brushSpacing, 1./16.);
+	float ptDist = 2. * radius * brushSpacing;
+
+	vec2 stroke = cursor - pCursor;
+	vec2 dir = normalize(stroke);
+	vec2 interval = dir * ptDist;
+
+	// redefine stroke with new start & end (first and last pts we draw)
+	float pts = floor(
+		length(stroke) / ptDist
+		//+ spacingOffset * step(length(stroke), ptDist)
+	);
+	if(pts <= 0) {
+		return 0.;
+	}
+	vec2 start = pCursor + interval * spacingOffset;
+	vec2 end = start + interval * pts;
+	stroke = end - start;
+
+	float intervalT = 1./pts;
+	float projT = dot(stroke, uv - start) / dot(stroke, stroke);
+	float ptT = ceil((projT - radius / length(stroke)) * pts) / pts;	// this shift to get the first pt influencing current uv seems to be bugged
+
+	float influence = 0.;
+	float maxSamples = min(ceil(1./brushSpacing),100.);
+	for(float s = 0.; s < maxSamples; s+=1., ptT += intervalT) {
+		vec2 pt = mix(start, end, ptT);
+		influence += max(0.,
+					step(length(uv - pt), radius)	// no contrib if out of pt radius
+					* step(0., ptT) * step(ptT, 1.) // no contrib if outside stroke range
+					* calcInfluence(radius, uv, pt)
+				);
+	}
+	return min(influence, 1.);
 }
 
 void main() {
@@ -78,21 +122,26 @@ void main() {
 	);
 	vec2 uv = v_TexCoord.xy * ratCorr;
 	vec2 cursor = g_PointerPosition * ratCorr;
+	vec2 pCursor = g_PointerPositionLast * ratCorr;
 
 	float penRadius = max(pow(u_drawRadius, 2.), EPSILON);
-	float penInfluence = u_drawAlpha * smoothstep(penRadius, penRadius * min(u_drawHardness, IPSILON), length(uv - cursor));
+	float penInfluence = calcInfluence(penRadius, uv, cursor);
 
 	// Line influence is only added to the canvas when the mouse is released, until then the present shader will show a preview of how the line looks.
 	// This way we avoid stacking brush influence when drawing line segments.
 	lineInfluence *= u_mouseDown.y * NOT(u_mouseDown.x);	// draws entire stroke (connected lines) on mouse release
 	float sprayInfluence = penInfluence * u_mouseDown.x;	// draws while mouse down in an area around the cursor
 	float stampInfluence = penInfluence * u_mouseDown.x * NOT(u_mouseDown.y);	// draws in an area around the cursor on mouse press
+	float brushInfluence = 0.;
+	if(u_mouseDown.x) {	// since brush influence calc is VERY expensive we want to skip it if possible
+		brushInfluence = calcBrushInfluence(penRadius, u_brushSpacingOffset, uv, cursor, pCursor);
+	}
 #if ENABLE_LINE_INFLUENCE
 	// for draw modes that make sense with both spray and line influence use this and let the user decide which one to use
-	float generalInfluence = mix(sprayInfluence, lineInfluence, u_preferredInfluence);
+	float generalInfluence = mix(brushInfluence, lineInfluence, u_preferredInfluence);
 #endif
 #if !ENABLE_LINE_INFLUENCE
-	float generalInfluence = sprayInfluence;
+	float generalInfluence = brushInfluence;
 #endif
 
 	// apply strokes in various draw modes
