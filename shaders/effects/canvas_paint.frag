@@ -21,6 +21,8 @@ varying vec2 v_TexCoord;
 #define DRAW_MODE_COLOR_CPY 3
 #define DRAW_MODE_BLEND 4
 
+#define MAX_BRUSH_SAMPLES_PER_PIXEL 16.
+
 // below texture
 uniform sampler2D g_Texture0; // {"hidden":true}
 // last frame canvas
@@ -61,8 +63,51 @@ float calcInfluence(float penRadius, vec2 uv, vec2 cursor) {
 	return u_drawAlpha * smoothstep(penRadius, penRadius * min(u_drawHardness, IPSILON), length(uv - cursor));
 }
 
+/**
+ * Tries to emulate a brush similar to how affinity photo 2 seems to do it
+ * We have a brush texture which is pasted in fixed distance intervals along the
+ * brush stroke, with random rotation/scale etc. Brush spacing controls this fixed
+ * distance between the pasted brush textures. A brush spacing of 1 means the
+ * textures are spaced as far apart as the diameter of the pen, so they won't
+ * overlap at all. Spacing of 0.5 means half of that distance, so for every pixel
+ * along the brush stroke two brush samples must be made. As the spacing goes
+ * towards 0 the stroke looks more and more like that of a brush, but we must also
+ * sample the brush texture more often. So to keep the shader performant I added a
+ * lower limit to the brush spacing.
+ * 
+ * So how do we know where to sample the brush texture for each pixel? A naive
+ * implementation would take the line between the last-, and the current
+ * cursor position, and iterate over evenly spaced points along the line, pasting
+ * the brush texture at every point. We run into issues with this approach if we
+ * want to draw a long line with a small pen radius. This is because we get a lot
+ * of points along this line, and every point means an extra brush texture sample
+ * for ALL pixels in our canvas. Now we know that not every pixel is affected by
+ * every point along the line. In fact, from above, we even know how many points
+ * can (at max) affect a pixel, based on the brush spacing. So we could check for
+ * each point if the current pixel is by it before sampling the brush texture.
+ * This does reduce the brush samples per pixel to the minimum, but it also
+ * introduces branching paths to our shader. And the last time I checked, GPUs
+ * hated branching shader code with a passion.
+ * 
+ * To get around this issue we want to find the first of those evenly spaced
+ * points (lets call it the sampleStartPt) along the line that can affect our
+ * current pixel and iterate from this sampleStartPt on for as many points as can
+ * at max affect our pixel. To do this we first project the current pixel onto the
+ * line, and from this position move a length of pen radius towards the previous
+ * cursor position. This point we just found is just at the fringe of impacting
+ * the projected pixel position, any point further than that definitely can't
+ * affect our pixel. We can now round the point we found up to closest of the
+ * evenly spaced points to get our sampleStartPt.
+ * 
+ * Now we only have to deal with some minor inconveniences: The bursh texture
+ * should be pasted with even spacing over multiple frames, so we need to track
+ * the distance of the last of the evenly spaced points to our current cursor
+ * position, so we can apply it as negative offset for all evenly spaced points in
+ * the next frame. This is what the spacingOffset parameter is for.
+ * 
+ */
 float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor, vec2 pCursor) {
-	float brushSpacing = max(u_brushSpacing, 1./16.);
+	float brushSpacing = max(u_brushSpacing, 1./MAX_BRUSH_SAMPLES_PER_PIXEL);
 	float ptDist = 2. * radius * brushSpacing;
 
 	vec2 stroke = cursor - pCursor;
@@ -72,29 +117,40 @@ float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor
 	// redefine stroke with new start & end (first and last pts we draw)
 	float pts = floor(
 		length(stroke) / ptDist
-		//+ spacingOffset * step(length(stroke), ptDist)
+		+ spacingOffset
 	);
-	if(pts <= 0) {
+	if(pts <= 0.) {
 		return 0.;
 	}
-	vec2 start = pCursor + interval * spacingOffset;
-	vec2 end = start + interval * pts;
+	vec2 start = pCursor + interval * (1. - spacingOffset);
+	if(pts == 1.) {
+		return calcInfluence(radius, uv, start) + calcInfluence(radius * 0.1, uv, start);
+	}
+	float rpts = pts - 1.;	// no mathematical meaning; term just appeared a bunch in calcs below, so i just pulled it into its own var
+	vec2 end = start + interval * rpts;
 	stroke = end - start;
 
-	float intervalT = 1./pts;
-	float projT = dot(stroke, uv - start) / dot(stroke, stroke);
-	float ptT = ceil((projT - radius / length(stroke)) * pts) / pts;	// this shift to get the first pt influencing current uv seems to be bugged
+	float intervalT = 1./ rpts;
+	float projPxT = dot(stroke, uv - start) / dot(stroke, stroke);
+	float fringePtT = projPxT - radius / length(stroke);
+	float sampleStartPtIdx = ceil(fringePtT * rpts);
+	float sampleStartPtT = sampleStartPtIdx / rpts;
+	float ptT = sampleStartPtT;
+	//float ptT = ceil((projPxT - radius / length(stroke)) * pts) / pts;	// this shift to get the first pt influencing current uv seems to be bugged
 
 	float influence = 0.;
-	float maxSamples = min(ceil(1./brushSpacing),100.);
+	float maxSamples = min(ceil(1./brushSpacing), MAX_BRUSH_SAMPLES_PER_PIXEL);
 	for(float s = 0.; s < maxSamples; s+=1., ptT += intervalT) {
 		vec2 pt = mix(start, end, ptT);
 		influence += max(0.,
 					step(length(uv - pt), radius)	// no contrib if out of pt radius
-					* step(0., ptT) * step(ptT, 1.) // no contrib if outside stroke range
+					* step(-EPSILON, ptT) * step(ptT, 1. + EPSILON) // no contrib if outside stroke range
 					* calcInfluence(radius, uv, pt)
 				);
+		influence += calcInfluence(radius * 0.025, uv, pt) * step(EPSILON, ptT) * step(ptT, 1. + EPSILON) * 2.;
 	}
+
+	influence += (calcInfluence(radius * 0.1, uv, start) + calcInfluence(radius * 0.05, uv, end))*2.;
 	return min(influence, 1.);
 }
 
