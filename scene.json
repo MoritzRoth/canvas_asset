@@ -191,7 +191,11 @@
 							},
 							"constantshadervalues" : 
 							{
-								"brushRotJitter" : 0.2,
+								"brushAProb" : 0,
+								"brushBProb" : 0,
+								"brushGProb" : 1,
+								"brushRProb" : 1.0,
+								"brushRotJitter" : 1,
 								"brushSizeJitter" : 0.2,
 								"brushSpacing" : 
 								{
@@ -277,7 +281,7 @@
 								null,
 								"_rt_imageLayerComposite_288_a",
 								null,
-								"TestBrush"
+								"combined_test_brush2"
 							]
 						},
 						{

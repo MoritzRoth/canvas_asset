@@ -16,7 +16,7 @@ uniform float u_drawRadius; // {"material":"drawRadius","label":"Draw Radius","d
 
 #define EPSILON 0.00001
 #define IPSILON 1. - EPSILON
-#define MAX_BRUSH_SAMPLES_PER_PIXEL 16.
+#define MAX_BRUSH_SAMPLES_PER_PIXEL 32.
 
 float calcBrushSpacingOffset(float radius, float lastSpacingOffset, vec2 cursor, vec2 pCursor) {
 	float brushSpacing = max(u_brushSpacing, 1./MAX_BRUSH_SAMPLES_PER_PIXEL);

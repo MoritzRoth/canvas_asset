@@ -22,7 +22,7 @@ varying vec2 v_TexCoord;
 #define DRAW_MODE_COLOR_CPY 3
 #define DRAW_MODE_BLEND 4
 
-#define MAX_BRUSH_SAMPLES_PER_PIXEL 16.
+#define MAX_BRUSH_SAMPLES_PER_PIXEL 32.
 
 // below texture
 uniform sampler2D g_Texture0; // {"hidden":true}
@@ -57,6 +57,12 @@ uniform float u_brushSpacing; // {"material":"brushSpacing","label":"Brush Spaci
 uniform float u_brushRotJitter; // {"material":"brushRotJitter","label":"Brush Rotation Jitter","default":0.125,"range":[0,1]}
 uniform float u_brushSizeJitter; // {"material":"brushSizeJitter","label":"Brush Size Jitter","default":0.125,"range":[0,1]}
 
+uniform float u_brushRProb; // {"material":"brushRProb","label":"Brush Channel Frequency R","default":1,"range":[0,1]}
+uniform float u_brushGProb; // {"material":"brushGProb","label":"Brush Channel Frequency G","default":0,"range":[0,1]}
+uniform float u_brushBProb; // {"material":"brushBProb","label":"Brush Channel Frequency B","default":0,"range":[0,1]}
+uniform float u_brushAProb; // {"material":"brushAProb","label":"Brush Channel Frequency A","default":0,"range":[0,1]}
+
+
 float modeMatch(float a, float b) {
 	return step(abs(a-b), 0.1);
 }
@@ -83,13 +89,22 @@ float calcInfluence(float penRadius, vec2 uv, vec2 cursor, vec2 dir, float id) {
 	//return u_drawAlpha * smoothstep(penRadius, penRadius * min(u_drawHardness, IPSILON), length(uv - cursor));
 	vec4 rnd = hash44(vec4(cursor,id, g_Time));
 
+	vec4 cThreshMin = vec4(0, u_brushRProb, u_brushRProb + u_brushGProb, u_brushRProb + u_brushGProb + u_brushBProb);
+	vec4 cThreshMax = vec4(cThreshMin.gba, cThreshMin.a + u_brushAProb);
+	cThreshMin /= cThreshMax.a;
+	cThreshMax /= cThreshMax.a;
+	vec4 selectedChannel = step(cThreshMin, CAST4(rnd.z)) * step(CAST4(rnd.z), cThreshMax);
+
 	float rot = atan2(dir.x, dir.y) - M_PI / 2.;
 	rot += (rnd.x * 2. - 1.) * u_brushRotJitter * M_PI;
 
 	vec2 sampleSpot =  (uv - cursor) / (penRadius * 2);
 	sampleSpot = mul(rMat(rot), sampleSpot) / mix(1. - u_brushSizeJitter, 1., rnd.y);
 
-	return u_drawAlpha * (1. - texSample2D(g_Texture6, sampleSpot + CAST2(0.5)).r) * step(length(sampleSpot), 1.);
+	float sample = dot(texSample2D(g_Texture6, sampleSpot + CAST2(0.5)), selectedChannel);
+	float sampleMask = step(length(sampleSpot), 1.);
+
+	return u_drawAlpha * (1. - sample) * sampleMask;
 }
 
 float calcInfluence(float penRadius, vec2 uv, vec2 cursor) {
