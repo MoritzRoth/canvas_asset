@@ -1,14 +1,14 @@
 {
 	"camera" : 
 	{
-		"center" : "0.00000 0.00000 -1.00000",
-		"eye" : "0.00000 0.00000 0.00000",
+		"center" : "186.34979 138.73477 -1.00000",
+		"eye" : "186.34979 138.73477 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
 	{
 		"ambientcolor" : "0.30000 0.30000 0.30000",
-		"bloom" : true,
+		"bloom" : false,
 		"bloomhdrfeather" : 0.1,
 		"bloomhdriterations" : 8,
 		"bloomhdrscatter" : 1.619,
@@ -31,7 +31,7 @@
 		"clearenabled" : true,
 		"farz" : 10000.0,
 		"fov" : 50.0,
-		"hdr" : true,
+		"hdr" : false,
 		"nearz" : 0.0099999998,
 		"orthogonalprojection" : 
 		{
@@ -191,6 +191,8 @@
 							},
 							"constantshadervalues" : 
 							{
+								"brushRotJitter" : 0.2,
+								"brushSizeJitter" : 0.2,
 								"brushSpacing" : 
 								{
 									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",
@@ -267,7 +269,16 @@
 								}
 							},
 							"id" : 62,
-							"textures" : [ null, null, null, null, "_rt_imageLayerComposite_288_a", null ]
+							"textures" : 
+							[
+								null,
+								null,
+								null,
+								null,
+								"_rt_imageLayerComposite_288_a",
+								null,
+								"TestBrush"
+							]
 						},
 						{
 							"constantshadervalues" : 

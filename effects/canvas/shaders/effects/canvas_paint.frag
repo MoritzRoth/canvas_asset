@@ -9,6 +9,7 @@ varying vec2 v_TexCoord;
 
 #define EPSILON 0.00001
 #define IPSILON 1. - EPSILON
+#define M_PI 3.1415926535897932384626433832795
 
 #define CMD_NONE 0
 #define CMD_RESET 1
@@ -34,11 +35,13 @@ uniform sampler2D g_Texture3; // {"hidden":true}
 uniform sampler2D g_Texture4; // {"material":"blendTex","label":"Pattern Texture", "default":"util/black"}
 // storage texture
 uniform sampler2D g_Texture5; // {"hidden":true}
+uniform sampler2D g_Texture6; // {"material":"brushTex","label":"Brush Texture", "default":"util/black"}
 
 uniform vec4 g_Texture0Resolution;
 uniform vec2 g_TexelSize;
 uniform vec2 g_PointerPosition;
 uniform vec2 g_PointerPositionLast;
+uniform float g_Time;
 
 uniform float u_command; // {"material":"cmd","label":"Command (None, Reset, Undo, Blend)","int":true,"default":0,"range":[0,3]}
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
@@ -51,6 +54,8 @@ uniform float u_drawRadius; // {"material":"drawRadius","label":"Draw Radius","d
 uniform float u_drawHardness; // {"material":"drawHardness","label":"Draw Hardness","default":1,"range":[0,1]}
 
 uniform float u_brushSpacing; // {"material":"brushSpacing","label":"Brush Spacing","default":0.125,"range":[0,1]}
+uniform float u_brushRotJitter; // {"material":"brushRotJitter","label":"Brush Rotation Jitter","default":0.125,"range":[0,1]}
+uniform float u_brushSizeJitter; // {"material":"brushSizeJitter","label":"Brush Size Jitter","default":0.125,"range":[0,1]}
 
 float modeMatch(float a, float b) {
 	return step(abs(a-b), 0.1);
@@ -60,8 +65,35 @@ float NOT(float v) {
 	return 1.-v;
 }
 
+mat2 rMat(float angle) {
+    float s = sin(angle);
+    float c = cos(angle);
+    return mat2(c, -s, s, c);
+}
+
+// 4 out, 4 in...
+vec4 hash44(vec4 p4)
+{
+	p4 = frac(p4  * vec4(.1031, .1030, .0973, .1099));
+    p4 += dot(p4, p4.wzxy+33.33);
+    return frac((p4.xxyz+p4.yzzw)*p4.zywx);
+}
+
+float calcInfluence(float penRadius, vec2 uv, vec2 cursor, vec2 dir, float id) {
+	//return u_drawAlpha * smoothstep(penRadius, penRadius * min(u_drawHardness, IPSILON), length(uv - cursor));
+	vec4 rnd = hash44(vec4(cursor,id, g_Time));
+
+	float rot = atan2(dir.x, dir.y) - M_PI / 2.;
+	rot += (rnd.x * 2. - 1.) * u_brushRotJitter * M_PI;
+
+	vec2 sampleSpot =  (uv - cursor) / (penRadius * 2);
+	sampleSpot = mul(rMat(rot), sampleSpot) / mix(1. - u_brushSizeJitter, 1., rnd.y);
+
+	return u_drawAlpha * (1. - texSample2D(g_Texture6, sampleSpot + CAST2(0.5)).r) * step(length(sampleSpot), 1.);
+}
+
 float calcInfluence(float penRadius, vec2 uv, vec2 cursor) {
-	return u_drawAlpha * smoothstep(penRadius, penRadius * min(u_drawHardness, IPSILON), length(uv - cursor));
+	return calcInfluence(penRadius, uv, cursor, vec2(1.,0.), 0.);
 }
 
 /**
@@ -125,7 +157,7 @@ float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor
 	}
 	vec2 start = pCursor + interval * (1. - spacingOffset);
 	if(pts == 1.) {
-		return calcInfluence(radius, uv, start);
+		return calcInfluence(radius, uv, start, dir, 0.);
 	}
 	float rpts = pts - 1.;	// no mathematical meaning; term just appeared a bunch in calcs below, so i just pulled it into its own var
 	vec2 end = start + interval * rpts;
@@ -145,7 +177,7 @@ float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor
 		influence += max(0.,
 					step(length(uv - pt), radius)					// no contrib if out of pt radius
 					* step(-EPSILON, ptT) * step(ptT, 1. + EPSILON) // no contrib if outside stroke range
-					* calcInfluence(radius, uv, pt)
+					* calcInfluence(radius, uv, pt, dir, sampleStartPtIdx + s)
 				);
 	}
 
