@@ -68,13 +68,13 @@
 			]
 		},
 		{
-			"format" : "rg1616f",
+			"format" : "rgba16161616",
 			"name": "_u_storage",
 			"scale": 64,
 			"unique": true
 		},
 		{
-			"format" : "rg1616f",
+			"format" : "rgba16161616",
 			"name": "_u_storageMemory",
 			"scale": 64,
 			"unique":true

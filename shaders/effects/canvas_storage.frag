@@ -9,6 +9,7 @@ uniform sampler2D g_Texture1; // {"hidden":true}
 uniform vec4 g_Texture0Resolution;
 uniform vec2 g_PointerPosition;
 uniform vec2 g_PointerPositionLast;
+uniform float g_Frametime;
 
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
 uniform float u_brushSpacing; // {"material":"brushSpacing","label":"Brush Spacing","default":0.125,"range":[0,1]}
@@ -61,5 +62,5 @@ void main() {
 	nextOffset = mix(1.,min(nextOffset, IPSILON), u_mouseDown.x);
 
 	// update undo frame only if we start a new pen stroke this frame
-	gl_FragColor = vec4(nextOffset, u_mouseDown.x, 0., 0.);
+	gl_FragColor = vec4(nextOffset, g_Frametime, g_PointerPositionLast);
 }
