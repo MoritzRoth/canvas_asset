@@ -32,6 +32,8 @@ uniform sampler2D g_Texture2; // {"hidden":true}
 // line influence texture
 uniform sampler2D g_Texture3; // {"hidden":true}
 uniform sampler2D g_Texture4; // {"material":"blendTex","label":"Pattern Texture", "default":"util/black"}
+// storage texture
+uniform sampler2D g_Texture5; // {"hidden":true}
 
 uniform vec4 g_Texture0Resolution;
 uniform vec2 g_TexelSize;
@@ -49,7 +51,6 @@ uniform float u_drawRadius; // {"material":"drawRadius","label":"Draw Radius","d
 uniform float u_drawHardness; // {"material":"drawHardness","label":"Draw Hardness","default":1,"range":[0,1]}
 
 uniform float u_brushSpacing; // {"material":"brushSpacing","label":"Brush Spacing","default":0.125,"range":[0,1]}
-uniform float u_brushSpacingOffset; // {"material":"brushSpacingOffset","label":"Brush Spacing Offset","default":0,"range":[0,1]}
 
 float modeMatch(float a, float b) {
 	return step(abs(a-b), 0.1);
@@ -187,7 +188,7 @@ void main() {
 	float stampInfluence = penInfluence * u_mouseDown.x * NOT(u_mouseDown.y);	// draws in an area around the cursor on mouse press
 	float brushInfluence = 0.;
 	if(u_mouseDown.x) {	// since brush influence calc is VERY expensive we want to skip it if possible
-		brushInfluence = calcBrushInfluence(penRadius, u_brushSpacingOffset, uv, cursor, pCursor);
+		brushInfluence = calcBrushInfluence(penRadius, texSample2D(g_Texture5, vec2(0.5, 0.5)).r, uv, cursor, pCursor);
 	}
 #if ENABLE_LINE_INFLUENCE
 	// for draw modes that make sense with both spray and line influence use this and let the user decide which one to use

@@ -5,6 +5,7 @@
 		"materials/effects/canvas_present.json",
 		"materials/effects/canvas_prepare_undo.json",
 		"materials/effects/canvas_pen_influence.json",
+		"materials/effects/canvas_storage.json",
 		"shaders/effects/canvas_paint.frag",
 		"shaders/effects/canvas_paint.vert",
 		"shaders/effects/canvas_present.frag",
@@ -12,7 +13,9 @@
 		"shaders/effects/canvas_prepare_undo.frag",
 		"shaders/effects/canvas_prepare_undo.vert",
 		"shaders/effects/canvas_pen_influence.frag",
-		"shaders/effects/canvas_pen_influence.vert"
+		"shaders/effects/canvas_pen_influence.vert",
+		"shaders/effects/canvas_storage.frag",
+		"shaders/effects/canvas_storage.vert"
 	],
 	"editable" : true,
 	"fbos" : 
@@ -63,6 +66,18 @@
 					"ENABLE_UNDO_CMD" : 1
 				}
 			]
+		},
+		{
+			"format" : "rg1616f",
+			"name": "_u_storage",
+			"scale": 64,
+			"unique": true
+		},
+		{
+			"format" : "rg1616f",
+			"name": "_u_storageMemory",
+			"scale": 64,
+			"unique":true
 		}
 	],
 	"group" : "localeffects",
@@ -127,10 +142,28 @@
 					"index" : 3,
 					"name" : "_u_penInfluence",
 					"conditions" : [{"ENABLE_LINE_INFLUENCE":1}]
+				},
+				{
+					"index":5,
+					"name": "_u_storageMemory"
 				}
 			],
 			"material" : "materials/effects/canvas_paint.json",
 			"target" : "_u_paintedCanv"
+		},
+		{
+			"bind":[
+				{
+					"index":0,
+					"name": "_u_paintedCanv"
+				},
+				{
+					"index":1,
+					"name": "_u_storageMemory"
+				}
+			],
+			"target" : "_u_storage",
+			"material": "materials/effects/canvas_storage.json"
 		},
 		{
 			"bind" : 
@@ -151,6 +184,11 @@
 				}
 			],
 			"material" : "materials/effects/canvas_present.json"
+		},
+		{
+			"command": "copy",
+			"source": "_u_storage",
+			"target": "_u_storageMemory"
 		},
 		{
 			"command" : "copy",

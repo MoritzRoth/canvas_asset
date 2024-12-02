@@ -8,7 +8,7 @@
 	"general" : 
 	{
 		"ambientcolor" : "0.30000 0.30000 0.30000",
-		"bloom" : false,
+		"bloom" : true,
 		"bloomhdrfeather" : 0.1,
 		"bloomhdriterations" : 8,
 		"bloomhdrscatter" : 1.619,
@@ -31,7 +31,7 @@
 		"clearenabled" : true,
 		"farz" : 10000.0,
 		"fov" : 50.0,
-		"hdr" : false,
+		"hdr" : true,
 		"nearz" : 0.0099999998,
 		"orthogonalprojection" : 
 		{
@@ -267,7 +267,36 @@
 								}
 							},
 							"id" : 62,
-							"textures" : [ null, null, null, null, "_rt_imageLayerComposite_288_a" ]
+							"textures" : [ null, null, null, null, "_rt_imageLayerComposite_288_a", null ]
+						},
+						{
+							"constantshadervalues" : 
+							{
+								"brushSpacing" : 
+								{
+									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",
+									"scriptproperties" : 
+									{
+										"key" : "brushSpacing"
+									},
+									"value" : 0.25
+								},
+								"drawRadius" : 
+								{
+									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",
+									"scriptproperties" : 
+									{
+										"key" : "drawSize"
+									},
+									"value" : 0.22
+								},
+								"mouseDown" : 
+								{
+									"script" : "'use strict';\n\nvar lastFrame;\nvar mouseDown;\n\n/**\n * @param {Number} value - for property 'Mouse Down'\n * @return {Number} - update current property value\n */\nexport function init(value) {\n\tlastFrame = 0;\n\tmouseDown = false;\n\tshared[\"cursorOnUi\"] = false;\n\treturn 0;\n}\n\n/**\n * @param {Vec2} value - for property 'Mouse Down (X = This Frame, Y = Last Frame)'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar vec = new Vec2((mouseDown && !shared[\"cursorOnUi\"] && !shared[\"locked\"]) ? 1 : 0, lastFrame);\n\tlastFrame = vec.x;\n\treturn vec;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tmouseDown = false;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tmouseDown = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tmouseDown = false;\n}\n",
+									"value" : "0.00000 0.00000"
+								}
+							},
+							"id" : 18
 						},
 						{
 							"combos" : 
