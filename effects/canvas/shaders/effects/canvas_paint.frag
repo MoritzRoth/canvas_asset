@@ -127,6 +127,9 @@ float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 p
 
 float getT(vec2 lineStart, vec2 lineEnd, vec2 projPt) {
 	vec2 dir = lineEnd - lineStart;
+	if(length(dir) == 0.) {
+		return 1.;
+	}
 	return dot(dir, projPt - lineStart) / dot(dir, dir);
 }
 
@@ -178,7 +181,7 @@ float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor
 	float ptDist = 2. * radius * brushSpacing;
 
 	vec2 stroke = cursor - pCursor;
-	vec2 dir = normalize(stroke);
+	vec2 dir = length(stroke) > 0 ? normalize(stroke) : stroke;
 	vec2 interval = dir * ptDist;
 
 	// redefine stroke with new start & end (first and last pts we draw)
