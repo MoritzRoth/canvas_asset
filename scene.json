@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "0.00000 0.00000 -1.00000",
-		"eye" : "0.00000 0.00000 0.00000",
+		"center" : "386.64523 61.04924 -1.00000",
+		"eye" : "386.64523 61.04924 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -191,13 +191,28 @@
 							},
 							"constantshadervalues" : 
 							{
-								"brush0RProb" : 0,
-								"brush1GProb" : 1,
+								"brush0RProb" : 1,
+								"brush0Spacing" : 
+								{
+									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",
+									"scriptproperties" : 
+									{
+										"key" : "brushSpacing"
+									},
+									"value" : 0.125
+								},
+								"brush1GProb" : 0.5,
+								"brush1Prob" : "1 0.5 0 0",
 								"brush2BProb" : 0.0,
-								"brush3AProb" : 0.0,
+								"brush2Factor" : "0.5 1 1 1",
+								"brush3AProb" : "0 0 0 0",
 								"brushAlphaJitter" : 0,
-								"brushRotJitter" : 1,
+								"brushAlphaVelMod" : "0 0 0 0",
+								"brushProb" : "1 1 0 0",
+								"brushRotJitter" : "0.23 1 0 0",
+								"brushSizeFactor" : "0.75 1 1 1",
 								"brushSizeJitter" : 0,
+								"brushSizeVelMod" : "0 0 0 0",
 								"brushSpacing" : 
 								{
 									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",
@@ -285,7 +300,7 @@
 								null,
 								"_rt_imageLayerComposite_288_a",
 								null,
-								"combined_test_brush2"
+								"watercolor3"
 							]
 						},
 						{
@@ -817,9 +832,9 @@
 				"script" : "'use strict';\n\nimport * as WEMath from 'WEMath';\n\nexport var scriptProperties = createScriptProperties()\n\t.addSlider({\n\t\tname: 'leftVal',\n\t\tlabel: 'Left Value',\n\t\tvalue: 0,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'rightVal',\n\t\tlabel: 'Right Value',\n\t\tvalue: 1,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'default',\n\t\tlabel: 'Start Value',\n\t\tvalue: 0.5,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Setting Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\nvar grabbed = false;\nvar pxSize;\n\nfunction clamp(val, a, b) {\n\treturn Math.min(\n\t\tMath.max(\n\t\t\tval,\n\t\t\tMath.min(a,b)\n\t\t),\n\t\tMath.max(a,b)\n\t);\n}\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tshared[scriptProperties['key']] = clamp(scriptProperties['default'], scriptProperties['leftVal'], scriptProperties['rightVal']);\n\tpxSize = thisLayer.getParent().size.x;\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tvar val = shared[scriptProperties['key']];\n\tvar minV = scriptProperties['leftVal'];\n\tvar maxV = scriptProperties['rightVal'];\n\n\tval = clamp(val, minV, maxV);\n\tshared[scriptProperties['key']] = val;\n\n\tvar range01 = (val - minV) / (maxV - minV);\n\n\treturn new Vec3(\n\t\t(range01 - 0.5) * pxSize,\n\t\tvalue.y,\n\t\tvalue.z\n\t);\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!thisLayer.visible || !thisLayer.getParent().visible) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!thisLayer.visible || !thisLayer.getParent().visible) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tif(!thisLayer.visible || !thisLayer.getParent().visible) {return;}\n\tgrabbed = true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorMove(event) {\n\tif(!thisLayer.visible || !thisLayer.getParent().visible) {return;}\n\tif(grabbed) {\n\t\tif(!input.cursorLeftDown) {\n\t\t\tgrabbed = false;\n\t\t\treturn;\n\t\t}\n\n\t\tvar xpos = clamp(thisLayer.origin.x - thisLayer.size.x / 2. + event.localPosition.x, pxSize/2., -pxSize/2.);\n\t\t\n\n\t\tshared[scriptProperties['key']] = WEMath.mix(\n\t\t\tscriptProperties['leftVal'],\n\t\t\tscriptProperties['rightVal'],\n\t\t\t(xpos / pxSize) + 0.5\n\t\t);\n\t}\n}\n",
 				"scriptproperties" : 
 				{
-					"default" : 0.5,
+					"default" : 0.1,
 					"key" : "brushSpacing",
-					"leftVal" : 0.0625,
+					"leftVal" : 0,
 					"rightVal" : 1
 				},
 				"value" : "0.00000 0.00000 0.00000"

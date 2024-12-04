@@ -54,19 +54,18 @@ uniform float u_drawAlpha; // {"material": "drawAlpha","label":"Draw Alpha","def
 uniform float u_drawRadius; // {"material":"drawRadius","label":"Draw Radius","default":1,"range":[0,1]}
 uniform float u_drawHardness; // {"material":"drawHardness","label":"Draw Hardness","default":1,"range":[0,1]}
 
-uniform float u_brushSpacing; // {"material":"brushSpacing","label":"Brush Spacing","default":0.125,"range":[0,1]}
-uniform float u_brushRotJitter; // {"material":"brushRotJitter","label":"Brush Rotation Jitter","default":0.125,"range":[0,1]}
-uniform float u_brushSizeJitter; // {"material":"brushSizeJitter","label":"Brush Size Jitter","default":0.125,"range":[0,1]}
-uniform float u_brushAlphaJitter; // {"material":"brushAlphaJitter","label":"Brush Alpha Jitter","default":0,"range":[0,1]}
-
-uniform float u_brushVelSizeMod; // {"material":"brushVelSizeMod","label":"Brush Velocity Size Modifier","default":0,"range":[-1,1]}
-uniform float u_brushVelAlphaMod; // {"material":"brushVelAlphaMod","label":"Brush Velocity Alpha Modifier","default":0,"range":[-1,1]}
+uniform float u_brushSpacing; // {"material":"brush0Spacing","label":"Brush Spacing","default":0.125,"range":[0,1]}
+uniform vec4 u_brushProb; // {"material":"brush1Prob","label":"Brush Channel Frequency RGBA","default":"1 0 0 0","range":[0,1]}
+uniform vec4 u_brushInfluence; // {"material":"brush2Factor","label":"Brush Channel Influence","default":"1 1 1 1","range":[-2,2]}
+uniform vec4 u_brushSizeFactor; // {"material":"brushSizeFactor","label":"Brush Size Modifier","default":"1 1 1 1","range":[0,1]}
 uniform float u_brushVelMax; // {"material":"brushVelMax","label":"Brush Velocity Cap","default":5,"range":[0,10]}
 
-uniform float u_brushRProb; // {"material":"brush0RProb","label":"Brush Channel Frequency R","default":1,"range":[0,1]}
-uniform float u_brushGProb; // {"material":"brush1GProb","label":"Brush Channel Frequency G","default":0,"range":[0,1]}
-uniform float u_brushBProb; // {"material":"brush2BProb","label":"Brush Channel Frequency B","default":0,"range":[0,1]}
-uniform float u_brushAProb; // {"material":"brush3AProb","label":"Brush Channel Frequency A","default":0,"range":[0,1]}
+uniform vec4 u_brushRotJitter; // {"material":"brushRotJitter","label":"Brush Rotation Jitter","default":"0.125 0 0 0","range":[0,1]}
+uniform vec4 u_brushSizeJitter; // {"material":"brushSizeJitter","label":"Brush Size Jitter","default":"0.125 0 0 0","range":[0,1]}
+uniform vec4 u_brushAlphaJitter; // {"material":"brushAlphaJitter","label":"Brush Alpha Jitter","default":"0 0 0 0","range":[0,1]}
+
+uniform vec4 u_brushVelSizeMod; // {"material":"brushSizeVelMod","label":"Brush Size Velocity Modifier","default":"0 0 0 0","range":[-1,1]}
+uniform vec4 u_brushVelAlphaMod; // {"material":"brushAlphaVelMod","label":"Brush Alpha Velocity Modifier","default":"0 0 0 0","range":[-1,1]}
 
 
 float modeMatch(float a, float b) {
@@ -95,34 +94,53 @@ float calcProcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, fl
 	return u_drawAlpha * smoothstep(penRadius, penRadius * min(u_drawHardness, IPSILON), length(uv - center));
 }
 
+/** \brief Calculates a velocity modification factor in range [1 - abs(modifier),1]
+ *
+ * \param modifier [-1,1] if 0 velocity makes no difference; if positive the factor rises with increasing velocity; vice versa if negative
+ * \param velocity the current velocity
+ */
+float velMod(float modifier, float velocity) {
+	return mix(1. - max(0., modifier), 1. + min(0., modifier), velocity);
+}
+
 float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 pVelocity, float t) {
-	
+	// get random values to incorporate for jitter / brush texture selection
 	vec4 rnd = hash44(vec4(center, t, g_Time));
 
+	// interpolate cursor velocities from current & previous frame so we have smooth transitions
 	float velRat = min(1., length(velocity) / u_brushVelMax);
 	float pVelRat = min(1., length(pVelocity) / u_brushVelMax);
 	float velR = mix(pVelRat, velRat, t);
 
-	vec4 cThreshMin = vec4(0, u_brushRProb, u_brushRProb + u_brushGProb, u_brushRProb + u_brushGProb + u_brushBProb);
-	vec4 cThreshMax = vec4(cThreshMin.gba, cThreshMin.a + u_brushAProb);
+	// select brush texture, different textures may have different brush properties so we need to get this early on
+	vec4 cThreshMin = vec4(0, u_brushProb.r, dot(u_brushProb.rg, CAST2(1.)), dot(u_brushProb.rgb, CAST3(1.)));
+	vec4 cThreshMax = vec4(cThreshMin.gba, cThreshMin.a + u_brushProb.a);
 	cThreshMin /= cThreshMax.a;
 	cThreshMax /= cThreshMax.a;
 	vec4 selectedChannel = step(cThreshMin, CAST4(rnd.x)) * step(CAST4(rnd.x), cThreshMax);
 
+	// calc brush rotation jitter
 	float rot = atan2(velocity.x, velocity.y) - M_PI / 2.;
-	rot += (rnd.y * 2. - 1.) * u_brushRotJitter * M_PI;
+	rot += (rnd.y * 2. - 1.) * dot(u_brushRotJitter, selectedChannel) * M_PI;
 
-	vec2 sampleSpot = (uv - center) / (penRadius * 2);
-	float sizeModifier = mix(1. - u_brushSizeJitter, 1., rnd.z);
-	sizeModifier *= mix(1. - max(0., u_brushVelSizeMod), 1. + min(0., u_brushVelSizeMod), velR);
+	// calc brush size jitter & velocity variation
+	float sizeModifier = dot(u_brushSizeFactor, selectedChannel) * mix(1. - dot(u_brushSizeJitter, selectedChannel), 1., rnd.z);
+	sizeModifier *= velMod(dot(u_brushVelSizeMod, selectedChannel), velR);
+
+	// calc alpha jitter & velocity variation
+	float alpha = u_drawAlpha * mix(1. - dot(u_brushAlphaJitter, selectedChannel), 1., rnd.w);
+	alpha *= velMod(dot(u_brushVelAlphaMod, selectedChannel), velR);
+
+	// get influence factor
+	float influence = dot(u_brushInfluence, selectedChannel);
+
+	// sample brush texture & calc mask
+	vec2 sampleSpot = (uv - center) / (penRadius * 2.);
 	sampleSpot = mul(rMat(rot), sampleSpot) / sizeModifier;
-
 	float sample = 1. - dot(texSample2D(g_Texture6, sampleSpot + CAST2(0.5)), selectedChannel);
 	float sampleMask = step(length(sampleSpot), 1.);
-	float alpha = u_drawAlpha * mix(1. - u_brushAlphaJitter, 1., rnd.w);
-	alpha *= mix(1. - max(0., u_brushVelAlphaMod), 1. + min(0., u_brushVelAlphaMod), velR);
 
-	return alpha * sample * sampleMask;
+	return alpha * influence * sample * sampleMask;
 }
 
 float getT(vec2 lineStart, vec2 lineEnd, vec2 projPt) {
@@ -194,7 +212,7 @@ float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor
 	}
 	vec2 start = pCursor + interval * (1. - spacingOffset);
 	if(pts == 1.) {
-		return calcInfluence(radius, uv, start, velocity, pVelocity, getT(pCursor, cursor, start));
+		return clamp(calcInfluence(radius, uv, start, velocity, pVelocity, getT(pCursor, cursor, start)) * step(length(uv - start), radius), 0., 1.);
 	}
 	float rpts = pts - 1.;	// no mathematical meaning; term just appeared a bunch in calcs below, so i just pulled it into its own var
 	vec2 end = start + interval * rpts;
@@ -211,14 +229,14 @@ float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor
 	float maxSamples = min(ceil(1./brushSpacing), MAX_BRUSH_SAMPLES_PER_PIXEL);
 	for(float s = 0.; s < maxSamples; s+=1., ptT += intervalT) {
 		vec2 pt = mix(start, end, ptT);
-		influence += max(0.,
+		influence += clamp(
 					step(length(uv - pt), radius)					// no contrib if out of pt radius
 					* step(-EPSILON, ptT) * step(ptT, 1. + EPSILON) // no contrib if outside stroke range
 					* calcInfluence(radius, uv, pt, velocity, pVelocity, getT(pCursor, cursor, pt))
-				);
+				,-1.,1.);
 	}
 
-	return min(influence, 1.);
+	return clamp(influence, 0., 1.);
 }
 
 void main() {
