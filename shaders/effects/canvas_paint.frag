@@ -54,6 +54,7 @@ uniform float u_drawAlpha; // {"material": "drawAlpha","label":"Draw Alpha","def
 uniform float u_drawRadius; // {"material":"drawRadius","label":"Draw Radius","default":1,"range":[0,1]}
 uniform float u_drawHardness; // {"material":"drawHardness","label":"Draw Hardness","default":1,"range":[0,1]}
 
+uniform float u_useTextures;  // {"material":"brush0Texture","label":"Use Brush Texture","int":true,"default":1,"range":[0,1]}
 uniform float u_brushSpacing; // {"material":"brush0Spacing","label":"Brush Spacing","default":0.125,"range":[0,1]}
 uniform vec4 u_brushProb; // {"material":"brush1Prob","label":"Brush Channel Frequency RGBA","default":"1 0 0 0","range":[0,1]}
 uniform vec4 u_brushInfluence; // {"material":"brush2Factor","label":"Brush Channel Influence","default":"1 1 1 1","range":[-2,2]}
@@ -91,6 +92,8 @@ vec4 hash44(vec4 p4)
 }
 
 float calcProcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, float t) {
+	vec4 rnd = hash44(vec4(center, t, g_Time));
+
 	return u_drawAlpha * smoothstep(penRadius, penRadius * min(u_drawHardness, IPSILON), length(uv - center));
 }
 
@@ -137,7 +140,12 @@ float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 p
 	// sample brush texture & calc mask
 	vec2 sampleSpot = (uv - center) / (penRadius * 2.);
 	sampleSpot = mul(rMat(rot), sampleSpot) / sizeModifier;
-	float sample = 1. - dot(texSample2D(g_Texture6, sampleSpot + CAST2(0.5)), selectedChannel);
+	float sample;
+	if(u_useTextures > 0.5) {
+		 sample = 1. - dot(texSample2D(g_Texture6, sampleSpot + CAST2(0.5)), selectedChannel);
+	}else {
+		sample = smoothstep(1., min(u_drawHardness, IPSILON), length(sampleSpot));
+	}
 	float sampleMask = step(length(sampleSpot), 1.);
 
 	return alpha * influence * sample * sampleMask;
