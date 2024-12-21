@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "-9.84284 -84.44160 -1.00000",
-		"eye" : "-9.84284 -84.44160 0.00000",
+		"center" : "0.00000 0.00000 -1.00000",
+		"eye" : "0.00000 0.00000 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -200,19 +200,20 @@
 									},
 									"value" : 0.125
 								},
-								"brush0Texture" : 0,
+								"brush0Texture" : 1,
 								"brush1GProb" : 0.5,
-								"brush1Prob" : "1 0 0 0",
+								"brush1Prob" : "1 1 0",
 								"brush2BProb" : 0.0,
 								"brush2Factor" : "1 1 1 1",
 								"brush3AProb" : "0 0 0 0",
 								"brushAlphaJitter" : 0,
 								"brushAlphaVelMod" : "0 0 0 0",
+								"brushPositionJitter" : "0.2 0.4 0",
 								"brushProb" : "1 1 0 0",
 								"brushRotJitter" : "1 1 0 0",
 								"brushSizeFactor" : "1 1 1 1",
 								"brushSizeJitter" : 0,
-								"brushSizeVelMod" : "-0.7 0 0 0",
+								"brushSizeVelMod" : "-0.7 -0.7 0",
 								"brushSpacing" : 
 								{
 									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",

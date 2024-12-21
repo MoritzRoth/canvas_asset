@@ -56,17 +56,18 @@ uniform float u_drawHardness; // {"material":"drawHardness","label":"Draw Hardne
 
 uniform float u_useTextures;  // {"material":"brush0Texture","label":"Use Brush Texture","int":true,"default":1,"range":[0,1]}
 uniform float u_brushSpacing; // {"material":"brush0Spacing","label":"Brush Spacing","default":0.125,"range":[0,1]}
-uniform vec4 u_brushProb; // {"material":"brush1Prob","label":"Brush Channel Frequency RGBA","default":"1 0 0 0","range":[0,1]}
-uniform vec4 u_brushInfluence; // {"material":"brush2Factor","label":"Brush Channel Influence","default":"1 1 1 1","range":[-2,2]}
-uniform vec4 u_brushSizeFactor; // {"material":"brushSizeFactor","label":"Brush Size Modifier","default":"1 1 1 1","range":[0,1]}
+uniform vec3 u_brushProb; // {"material":"brush1Prob","label":"Brush Channel Frequency RGBA","default":"1 0 0","range":[0,1]}
+uniform vec3 u_brushInfluence; // {"material":"brush2Factor","label":"Brush Channel Influence","default":"1 1 1","range":[-2,2]}
+uniform vec3 u_brushSizeFactor; // {"material":"brushSizeFactor","label":"Brush Size Modifier","default":"1 1 1","range":[0,1]}
 uniform float u_brushVelMax; // {"material":"brushVelMax","label":"Brush Velocity Cap","default":5,"range":[0,10]}
 
-uniform vec4 u_brushRotJitter; // {"material":"brushRotJitter","label":"Brush Rotation Jitter","default":"0.125 0 0 0","range":[0,1]}
-uniform vec4 u_brushSizeJitter; // {"material":"brushSizeJitter","label":"Brush Size Jitter","default":"0.125 0 0 0","range":[0,1]}
-uniform vec4 u_brushAlphaJitter; // {"material":"brushAlphaJitter","label":"Brush Alpha Jitter","default":"0 0 0 0","range":[0,1]}
+uniform vec3 u_brushRotJitter; // {"material":"brushRotJitter","label":"Brush Rotation Jitter","default":"0.125 0 0","range":[0,1]}
+uniform vec3 u_brushSizeJitter; // {"material":"brushSizeJitter","label":"Brush Size Jitter","default":"0.125 0 0","range":[0,1]}
+uniform vec3 u_brushAlphaJitter; // {"material":"brushAlphaJitter","label":"Brush Alpha Jitter","default":"0 0 0","range":[0,1]}
+uniform vec3 u_brushPosJitter; // {"material":"brushPositionJitter","label":"Brush Position Jitter","default":"0 0 0","range":[0,1]}
 
-uniform vec4 u_brushVelSizeMod; // {"material":"brushSizeVelMod","label":"Brush Size Velocity Modifier","default":"0 0 0 0","range":[-1,1]}
-uniform vec4 u_brushVelAlphaMod; // {"material":"brushAlphaVelMod","label":"Brush Alpha Velocity Modifier","default":"0 0 0 0","range":[-1,1]}
+uniform vec3 u_brushVelSizeMod; // {"material":"brushSizeVelMod","label":"Brush Size Velocity Modifier","default":"0 0 0","range":[-1,1]}
+uniform vec3 u_brushVelAlphaMod; // {"material":"brushAlphaVelMod","label":"Brush Alpha Velocity Modifier","default":"0 0 0","range":[-1,1]}
 
 
 float modeMatch(float a, float b) {
@@ -109,6 +110,9 @@ float velMod(float modifier, float velocity) {
 float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 pVelocity, float t) {
 	// get random values to incorporate for jitter / brush texture selection
 	vec4 rnd = hash44(vec4(center, t, g_Time));
+	vec4 rnd2 = hash44(vec4(g_Time, t, center));
+	// originally i wanted to seed rng2 with rng, but that introduced artifacts for some reason...
+	// seems like the seed for rng is not 100% uniform for each call and hashing twice reeveals the error?
 
 	// interpolate cursor velocities from current & previous frame so we have smooth transitions
 	float velRat = min(1., length(velocity) / u_brushVelMax);
@@ -116,11 +120,11 @@ float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 p
 	float velR = mix(pVelRat, velRat, t);
 
 	// select brush texture, different textures may have different brush properties so we need to get this early on
-	vec4 cThreshMin = vec4(0, u_brushProb.r, dot(u_brushProb.rg, CAST2(1.)), dot(u_brushProb.rgb, CAST3(1.)));
-	vec4 cThreshMax = vec4(cThreshMin.gba, cThreshMin.a + u_brushProb.a);
-	cThreshMin /= cThreshMax.a;
-	cThreshMax /= cThreshMax.a;
-	vec4 selectedChannel = step(cThreshMin, CAST4(rnd.x)) * step(CAST4(rnd.x), cThreshMax);
+	vec3 cThreshMin = vec3(0, u_brushProb.r, dot(u_brushProb.rg, CAST2(1.)));
+	vec3 cThreshMax = vec3(cThreshMin.gb, cThreshMin.b + u_brushProb.b);
+	cThreshMin /= cThreshMax.b;
+	cThreshMax /= cThreshMax.b;
+	vec3 selectedChannel = step(cThreshMin, CAST3(rnd.x)) * step(CAST3(rnd.x), cThreshMax);
 
 	// calc brush rotation jitter
 	float rot = atan2(velocity.x, velocity.y) - M_PI / 2.;
@@ -137,16 +141,22 @@ float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 p
 	// get influence factor
 	float influence = dot(u_brushInfluence, selectedChannel);
 
+	// calc pos jitter offset (only in perpendicular fashion to the brush stroke direction)
+	vec2 jitter = CAST2(0.);
+	if(length(velocity) > 0.) {
+		jitter = normalize(velocity).yx * vec2(1.,-1.) * (rnd2.x * 2. - 1.) * 2. * penRadius * sizeModifier * dot(u_brushPosJitter, selectedChannel);
+	}
+
 	// sample brush texture & calc mask
-	vec2 sampleSpot = (uv - center) / (penRadius * 2.);
+	vec2 sampleSpot = (uv - (center + jitter)) / (penRadius * 2.);
 	sampleSpot = mul(rMat(rot), sampleSpot) / sizeModifier;
 	float sample;
 	if(u_useTextures > 0.5) {
 		 sample = 1. - dot(texSample2D(g_Texture6, sampleSpot + CAST2(0.5)), selectedChannel);
 	}else {
-		sample = smoothstep(1., min(u_drawHardness, IPSILON), length(sampleSpot));
+		sample = smoothstep(1., min(u_drawHardness, IPSILON), length(sampleSpot) * 2.);
 	}
-	float sampleMask = step(length(sampleSpot), 1.);
+	float sampleMask = step(length(sampleSpot) * 2., 1.);
 
 	return alpha * influence * sample * sampleMask;
 }
@@ -220,7 +230,7 @@ float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor
 	}
 	vec2 start = pCursor + interval * (1. - spacingOffset);
 	if(pts == 1.) {
-		return clamp(calcInfluence(radius, uv, start, velocity, pVelocity, getT(pCursor, cursor, start)) * step(length(uv - start), radius), 0., 1.);
+		return clamp(calcInfluence(radius, uv, start, velocity, pVelocity, getT(pCursor, cursor, start)), 0., 1.);
 	}
 	float rpts = pts - 1.;	// no mathematical meaning; term just appeared a bunch in calcs below, so i just pulled it into its own var
 	vec2 end = start + interval * rpts;
@@ -238,8 +248,7 @@ float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor
 	for(float s = 0.; s < maxSamples; s+=1., ptT += intervalT) {
 		vec2 pt = mix(start, end, ptT);
 		influence += clamp(
-					step(length(uv - pt), radius)					// no contrib if out of pt radius
-					* step(-EPSILON, ptT) * step(ptT, 1. + EPSILON) // no contrib if outside stroke range
+					step(-EPSILON, ptT) * step(ptT, 1. + EPSILON) // no contrib if outside stroke range
 					* calcInfluence(radius, uv, pt, velocity, pVelocity, getT(pCursor, cursor, pt))
 				,-1.,1.);
 	}
