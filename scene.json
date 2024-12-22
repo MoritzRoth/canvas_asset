@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "0.00000 0.00000 -1.00000",
-		"eye" : "0.00000 0.00000 0.00000",
+		"center" : "237.93262 315.95331 -1.00000",
+		"eye" : "237.93262 315.95331 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -204,7 +204,7 @@
 								"brush1GProb" : 0.5,
 								"brush1Prob" : "1 1 0",
 								"brush2BProb" : 0.0,
-								"brush2Factor" : "1 1 1 1",
+								"brush2Factor" : "1 1 1",
 								"brush3AProb" : "0 0 0 0",
 								"brushAlphaJitter" : 0,
 								"brushAlphaVelMod" : "0 0 0 0",
@@ -391,7 +391,674 @@
 			"size" : "2560.00000 1440.00000"
 		},
 		{
+			"angles" : 
+			{
+				"script" : "'use strict';\n\n// SETUP & EVENT HANDLING SCRIPT\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tshared['brushEditor'] = {};\n\tshared['brushEditor']['brush'] = {};\n\treturn value;\n}\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['changed']) {\n\t\tshared['brushEditor']['hasChanged'] = true;\n\t\tshared['brushEditor']['changed'] = false;\n\t}else {\n\t\tshared['brushEditor']['hasChanged'] = false;\n\t}\n\treturn value;\n}\n",
+				"value" : "0.00000 -0.00000 0.00000"
+			},
+			"castshadow" : false,
+			"color" : "0.96471 0.96471 0.96471",
+			"id" : 293,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Brush Designer",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\n// Created by Rusty\n\nexport var scriptProperties = createScriptProperties()\n    .addCheckbox({\n        name: 'isMovable',\n        label: 'Is movable',\n        value: false\n    })\n    .finish();\n\nconst storageName = \"storedPosOldSquareMIC\";\nlet isDragging = false;\nlet dragOffset;\n\nexport function cursorDown(event) {\n    isDragging = true;\n    dragOffset = thisLayer.origin.subtract(event.worldPosition);\n}\n\nexport function cursorUp(event) {\n    isDragging = false;\n    localStorage.set(storageName, thisLayer.origin);\n}\n\nexport function cursorMove(event) {\n    if (isDragging && scriptProperties.isMovable) {\n        thisLayer.origin = event.worldPosition.add(dragOffset);\n    }\n}\n\nexport function init() {\n    return localStorage.get(storageName) || thisLayer.origin;\n} \n",
+				"scriptproperties" : 
+				{
+					"isMovable" : true
+				},
+				"value" : "1480.00000 1304.15625 0.00000"
+			},
+			"size" : "1060.00000 60.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 418,
+			"image" : "models/Window.json",
+			"name" : "Background",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\t\n\treturn value;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"value" : "-0.00012 -304.15112 0.00000"
+			},
+			"parent" : 293,
+			"scale" : "0.60001 0.59999 0.60000",
+			"size" : "2030.00000 1256.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : "0.96471 0.96471 0.96471",
+			"id" : 304,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Move Bar Visual",
+			"origin" : "0.00012 0.00000 0.00000",
+			"parent" : 293,
+			"scale" : "4.14173 0.23501 0.60000",
+			"size" : "256.00000 256.00000"
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "1.00000 1.00000 1.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "left",
+			"id" : 295,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "Window Title",
+			"opaquebackground" : false,
+			"origin" : "-125.50398 0.00000 0.00000",
+			"padding" : 32,
+			"parent" : 304,
+			"pointsize" : 8.0,
+			"scale" : "0.24144 4.25508 1.66667",
+			"size" : "393.00000 38.00000",
+			"text" : "Editing Custom Brush X / Y",
+			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"id" : 358,
+			"name" : "Settings",
+			"origin" : "-529.28687 -86.08411 0.00000",
+			"parent" : 293
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "left",
+			"id" : 307,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "Draw Mode",
+			"opaquebackground" : false,
+			"padding" : 0,
+			"parent" : 358,
+			"pointsize" : 5.0,
+			"size" : "107.00000 24.00000",
+			"text" : "Draw Mode:",
+			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : 
+			{
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"scriptproperties" : 
+				{
+					"key" : "draw_mode",
+					"val" : "paint"
+				},
+				"value" : "1.00000 1.00000 1.00000"
+			},
+			"id" : 357,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Paint",
+			"origin" : "131.72186 -2.20166 0.00000",
+			"parent" : 307,
+			"scale" : "0.70000 0.70000 0.70000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 359,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Dot",
+			"parent" : 357,
+			"scale" : "0.50000 0.50000 0.50000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "left",
+			"id" : 361,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "",
+			"opaquebackground" : false,
+			"origin" : "26.59912 3.66943 0.00000",
+			"padding" : 0,
+			"parent" : 357,
+			"pointsize" : 5.0,
+			"scale" : "1.50000 1.50000 1.50000",
+			"size" : "45.00000 24.00000",
+			"text" : "Paint",
+			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : 
+			{
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"scriptproperties" : 
+				{
+					"key" : "draw_mode",
+					"val" : "erase"
+				},
+				"value" : "1.00000 1.00000 1.00000"
+			},
+			"id" : 322,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Erase",
+			"origin" : "235.12225 -2.20166 0.00000",
+			"parent" : 307,
+			"scale" : "0.70000 0.70000 0.70000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 323,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Dot",
+			"parent" : 322,
+			"scale" : "0.50000 0.50000 0.50000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "left",
+			"id" : 324,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "",
+			"opaquebackground" : false,
+			"origin" : "26.59912 3.66943 0.00000",
+			"padding" : 0,
+			"parent" : 322,
+			"pointsize" : 5.0,
+			"scale" : "1.50000 1.50000 1.50000",
+			"size" : "51.00000 24.00000",
+			"text" : "Erase",
+			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : 
+			{
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"scriptproperties" : 
+				{
+					"key" : "draw_mode",
+					"val" : "blend"
+				},
+				"value" : "1.00000 1.00000 1.00000"
+			},
+			"id" : 329,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Blend",
+			"origin" : "346.47638 -2.20166 0.00000",
+			"parent" : 307,
+			"scale" : "0.70000 0.70000 0.70000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 330,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Dot",
+			"parent" : 329,
+			"scale" : "0.50000 0.50000 0.50000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "left",
+			"id" : 331,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "",
+			"opaquebackground" : false,
+			"origin" : "26.59912 3.66943 0.00000",
+			"padding" : 0,
+			"parent" : 329,
+			"pointsize" : 5.0,
+			"scale" : "1.50000 1.50000 1.50000",
+			"size" : "50.00000 24.00000",
+			"text" : "Blend",
+			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : 
+			{
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"scriptproperties" : 
+				{
+					"key" : "draw_mode",
+					"val" : "smear"
+				},
+				"value" : "1.00000 1.00000 1.00000"
+			},
+			"id" : 335,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Smear",
+			"origin" : "453.49213 -2.20166 0.00000",
+			"parent" : 307,
+			"scale" : "0.70000 0.70000 0.70000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 336,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Dot",
+			"parent" : 335,
+			"scale" : "0.50000 0.50000 0.50000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "left",
+			"id" : 337,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "",
+			"opaquebackground" : false,
+			"origin" : "26.59912 3.66943 0.00000",
+			"padding" : 0,
+			"parent" : 335,
+			"pointsize" : 5.0,
+			"scale" : "1.50000 1.50000 1.50000",
+			"size" : "60.00000 24.00000",
+			"text" : "Smear",
+			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : 
+			{
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"scriptproperties" : 
+				{
+					"key" : "draw_mode",
+					"val" : "flatten"
+				},
+				"value" : "1.00000 1.00000 1.00000"
+			},
+			"id" : 341,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Flatten",
+			"origin" : "565.56940 -2.20166 0.00000",
+			"parent" : 307,
+			"scale" : "0.70000 0.70000 0.70000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 342,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Dot",
+			"parent" : 341,
+			"scale" : "0.50000 0.50000 0.50000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "left",
+			"id" : 343,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "",
+			"opaquebackground" : false,
+			"origin" : "26.59912 3.66943 0.00000",
+			"padding" : 0,
+			"parent" : 341,
+			"pointsize" : 5.0,
+			"scale" : "1.50000 1.50000 1.50000",
+			"size" : "59.00000 24.00000",
+			"text" : "Flatten",
+			"verticalalign" : "center"
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "left",
+			"id" : 360,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "Stroke Type",
+			"opaquebackground" : false,
+			"origin" : "0.00000 -35.00000 0.00000",
+			"padding" : 0,
+			"parent" : 358,
+			"pointsize" : 5.0,
+			"size" : "109.00000 24.00000",
+			"text" : "Stroke Type:",
+			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : 
+			{
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn shared['brushEditor']['brush']['draw_mode'] != 'smear';;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"scriptproperties" : 
+				{
+					"key" : "stroke_type",
+					"val" : "stamp"
+				},
+				"value" : "1.00000 1.00000 1.00000"
+			},
+			"id" : 362,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Stamp",
+			"origin" : "131.72186 -2.20166 0.00000",
+			"parent" : 360,
+			"scale" : "0.70000 0.70000 0.70000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 363,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Dot",
+			"parent" : 362,
+			"scale" : "0.50000 0.50000 0.50000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "left",
+			"id" : 364,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "",
+			"opaquebackground" : false,
+			"origin" : "26.59912 3.66943 0.00000",
+			"padding" : 0,
+			"parent" : 362,
+			"pointsize" : 5.0,
+			"scale" : "1.50000 1.50000 1.50000",
+			"size" : "57.00000 24.00000",
+			"text" : "Stamp",
+			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : 
+			{
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"scriptproperties" : 
+				{
+					"key" : "stroke_type",
+					"val" : "spray_can"
+				},
+				"value" : "1.00000 1.00000 1.00000"
+			},
+			"id" : 365,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Spray Can",
+			"origin" : "242.33514 -2.20166 0.00000",
+			"parent" : 360,
+			"scale" : "0.70000 0.70000 0.70000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 366,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Dot",
+			"parent" : 365,
+			"scale" : "0.50000 0.50000 0.50000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "left",
+			"id" : 367,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "",
+			"opaquebackground" : false,
+			"origin" : "26.59912 3.66943 0.00000",
+			"padding" : 0,
+			"parent" : 365,
+			"pointsize" : 5.0,
+			"scale" : "1.50000 1.50000 1.50000",
+			"size" : "93.00000 24.00000",
+			"text" : "Spray Can",
+			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : 
+			{
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn shared['brushEditor']['brush']['draw_mode'] != 'smear';\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"scriptproperties" : 
+				{
+					"key" : "stroke_type",
+					"val" : "line"
+				},
+				"value" : "1.00000 1.00000 1.00000"
+			},
+			"id" : 368,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Connected Line",
+			"origin" : "391.19586 -2.20166 0.00000",
+			"parent" : 360,
+			"scale" : "0.70000 0.70000 0.70000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 369,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Dot",
+			"parent" : 368,
+			"scale" : "0.50000 0.50000 0.50000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "left",
+			"id" : 370,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "",
+			"opaquebackground" : false,
+			"origin" : "26.59912 3.66943 0.00000",
+			"padding" : 0,
+			"parent" : 368,
+			"pointsize" : 5.0,
+			"scale" : "1.50000 1.50000 1.50000",
+			"size" : "138.00000 24.00000",
+			"text" : "Connected Line",
+			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : 
+			{
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"scriptproperties" : 
+				{
+					"key" : "stroke_type",
+					"val" : "evenly_spaced"
+				},
+				"value" : "1.00000 1.00000 1.00000"
+			},
+			"id" : 371,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Evenly Spaced",
+			"origin" : "591.97870 -2.20166 0.00000",
+			"parent" : 360,
+			"scale" : "0.70000 0.70000 0.70000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 372,
+			"image" : "models/small_circle@2x.json",
+			"name" : "Dot",
+			"parent" : 371,
+			"scale" : "0.50000 0.50000 0.50000",
+			"size" : "32.00000 32.00000"
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "left",
+			"id" : 373,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "",
+			"opaquebackground" : false,
+			"origin" : "26.59912 3.66943 0.00000",
+			"padding" : 0,
+			"parent" : 371,
+			"pointsize" : 5.0,
+			"scale" : "1.50000 1.50000 1.50000",
+			"size" : "131.00000 24.00000",
+			"text" : "Evenly Spaced",
+			"verticalalign" : "center"
+		},
+		{
 			"id" : 190,
+			"locktransforms" : true,
 			"name" : "Paint Controls",
 			"origin" : "1280.00000 720.00000 0.00000"
 		},
@@ -1165,6 +1832,39 @@
 		},
 		{
 			"angles" : "0.00000 -0.00000 0.00000",
+			"id" : 246,
+			"name" : "Visibility",
+			"origin" : "1150.00000 -600.00000 0.00000",
+			"parent" : 190
+		},
+		{
+			"alpha" : 0.30000001,
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 230,
+			"image" : "models/Hide_small.json",
+			"name" : "Hide_small",
+			"parent" : 246,
+			"scale" : "0.50000 0.50000 1.00000",
+			"size" : "256.00000 256.00000",
+			"visible" : 
+			{
+				"script" : "'use strict';\n\nvar showVis;\n\n/**\n * @param {Boolean} value - for property 'visible'\n * @return {Boolean} - update current property value\n */\nexport function init(value) {\n\tvar show = localStorage.get(\"showUi\");\n\tshared[\"showUi\"] = typeof show === 'undefined' ? true : show;\n\tshowVis = thisLayer.getParent().getChildren()[1];\n\tshowVis.visible = shared[\"showUi\"];\n\treturn value;\n}\n\n/**\n * @param {Boolean} value - for property 'visible'\n * @return {Boolean} - update current property value\n */\nexport function update(value) {\n\t\n\treturn value;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tshared[\"showUi\"] = !shared[\"showUi\"];\n\tlocalStorage.set('showUi', shared['showUi']);\n\tshowVis.visible = shared[\"showUi\"];\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tshared[\"cursorOnUi\"] = false;\n}",
+				"value" : true
+			}
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 243,
+			"image" : "models/show_small.json",
+			"name" : "show_small",
+			"parent" : 246,
+			"scale" : "0.50000 0.50000 1.00000",
+			"size" : "256.00000 256.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
 			"id" : 263,
 			"name" : "Lock",
 			"origin" : "975.00000 -600.00000 0.00000",
@@ -1203,39 +1903,6 @@
 			"image" : "models/Locked@0.5x.json",
 			"name" : "Locked@0.5x",
 			"parent" : 263,
-			"scale" : "0.50000 0.50000 1.00000",
-			"size" : "256.00000 256.00000"
-		},
-		{
-			"angles" : "0.00000 -0.00000 0.00000",
-			"id" : 246,
-			"name" : "Visibility",
-			"origin" : "1150.00000 -600.00000 0.00000",
-			"parent" : 190
-		},
-		{
-			"alpha" : 0.30000001,
-			"angles" : "0.00000 -0.00000 0.00000",
-			"castshadow" : false,
-			"id" : 230,
-			"image" : "models/Hide_small.json",
-			"name" : "Hide_small",
-			"parent" : 246,
-			"scale" : "0.50000 0.50000 1.00000",
-			"size" : "256.00000 256.00000",
-			"visible" : 
-			{
-				"script" : "'use strict';\n\nvar showVis;\n\n/**\n * @param {Boolean} value - for property 'visible'\n * @return {Boolean} - update current property value\n */\nexport function init(value) {\n\tvar show = localStorage.get(\"showUi\");\n\tshared[\"showUi\"] = typeof show === 'undefined' ? true : show;\n\tshowVis = thisLayer.getParent().getChildren()[1];\n\tshowVis.visible = shared[\"showUi\"];\n\treturn value;\n}\n\n/**\n * @param {Boolean} value - for property 'visible'\n * @return {Boolean} - update current property value\n */\nexport function update(value) {\n\t\n\treturn value;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tshared[\"showUi\"] = !shared[\"showUi\"];\n\tlocalStorage.set('showUi', shared['showUi']);\n\tshowVis.visible = shared[\"showUi\"];\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tshared[\"cursorOnUi\"] = false;\n}",
-				"value" : true
-			}
-		},
-		{
-			"angles" : "0.00000 -0.00000 0.00000",
-			"castshadow" : false,
-			"id" : 243,
-			"image" : "models/show_small.json",
-			"name" : "show_small",
-			"parent" : 246,
 			"scale" : "0.50000 0.50000 1.00000",
 			"size" : "256.00000 256.00000"
 		}
