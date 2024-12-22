@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "237.93262 315.95331 -1.00000",
-		"eye" : "237.93262 315.95331 0.00000",
+		"center" : "136.32878 456.76877 -1.00000",
+		"eye" : "136.32878 456.76877 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -393,7 +393,7 @@
 		{
 			"angles" : 
 			{
-				"script" : "'use strict';\n\n// SETUP & EVENT HANDLING SCRIPT\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tshared['brushEditor'] = {};\n\tshared['brushEditor']['brush'] = {};\n\treturn value;\n}\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['changed']) {\n\t\tshared['brushEditor']['hasChanged'] = true;\n\t\tshared['brushEditor']['changed'] = false;\n\t}else {\n\t\tshared['brushEditor']['hasChanged'] = false;\n\t}\n\treturn value;\n}\n",
+				"script" : "'use strict';\n\n// SETUP & EVENT HANDLING SCRIPT\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tshared['brushEditor'] = {};\n\tshared['currentBrush'] = {};\n\treturn value;\n}\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['changed']) {\n\t\tshared['brushEditor']['hasChanged'] = true;\n\t\tshared['brushEditor']['changed'] = false;\n\t}else {\n\t\tshared['brushEditor']['hasChanged'] = false;\n\t}\n\treturn value;\n}\n",
 				"value" : "0.00000 -0.00000 0.00000"
 			},
 			"castshadow" : false,
@@ -483,7 +483,7 @@
 			"castshadow" : false,
 			"depthtest" : "enabled",
 			"font" : "systemfont_arial",
-			"horizontalalign" : "left",
+			"horizontalalign" : "right",
 			"id" : 307,
 			"limitrows" : false,
 			"limituseellipsis" : false,
@@ -492,6 +492,7 @@
 			"maxwidth" : 500.0,
 			"name" : "Draw Mode",
 			"opaquebackground" : false,
+			"origin" : "100.00000 0.00000 0.00000",
 			"padding" : 0,
 			"parent" : 358,
 			"pointsize" : 5.0,
@@ -504,7 +505,7 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['currentBrush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['currentBrush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
 				"scriptproperties" : 
 				{
 					"key" : "draw_mode",
@@ -515,7 +516,7 @@
 			"id" : 357,
 			"image" : "models/small_circle@2x.json",
 			"name" : "Paint",
-			"origin" : "131.72186 -2.20166 0.00000",
+			"origin" : "31.72186 -2.20166 0.00000",
 			"parent" : 307,
 			"scale" : "0.70000 0.70000 0.70000",
 			"size" : "32.00000 32.00000"
@@ -563,7 +564,7 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['currentBrush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['currentBrush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
 				"scriptproperties" : 
 				{
 					"key" : "draw_mode",
@@ -574,7 +575,7 @@
 			"id" : 322,
 			"image" : "models/small_circle@2x.json",
 			"name" : "Erase",
-			"origin" : "235.12225 -2.20166 0.00000",
+			"origin" : "135.12225 -2.20166 0.00000",
 			"parent" : 307,
 			"scale" : "0.70000 0.70000 0.70000",
 			"size" : "32.00000 32.00000"
@@ -622,7 +623,7 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['currentBrush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['currentBrush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
 				"scriptproperties" : 
 				{
 					"key" : "draw_mode",
@@ -633,7 +634,7 @@
 			"id" : 329,
 			"image" : "models/small_circle@2x.json",
 			"name" : "Blend",
-			"origin" : "346.47638 -2.20166 0.00000",
+			"origin" : "246.47638 -2.20166 0.00000",
 			"parent" : 307,
 			"scale" : "0.70000 0.70000 0.70000",
 			"size" : "32.00000 32.00000"
@@ -681,7 +682,7 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['currentBrush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['currentBrush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
 				"scriptproperties" : 
 				{
 					"key" : "draw_mode",
@@ -692,7 +693,7 @@
 			"id" : 335,
 			"image" : "models/small_circle@2x.json",
 			"name" : "Smear",
-			"origin" : "453.49213 -2.20166 0.00000",
+			"origin" : "353.49213 -2.20166 0.00000",
 			"parent" : 307,
 			"scale" : "0.70000 0.70000 0.70000",
 			"size" : "32.00000 32.00000"
@@ -740,7 +741,7 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['currentBrush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['currentBrush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
 				"scriptproperties" : 
 				{
 					"key" : "draw_mode",
@@ -751,7 +752,7 @@
 			"id" : 341,
 			"image" : "models/small_circle@2x.json",
 			"name" : "Flatten",
-			"origin" : "565.56940 -2.20166 0.00000",
+			"origin" : "465.56940 -2.20166 0.00000",
 			"parent" : 307,
 			"scale" : "0.70000 0.70000 0.70000",
 			"size" : "32.00000 32.00000"
@@ -803,7 +804,7 @@
 			"castshadow" : false,
 			"depthtest" : "enabled",
 			"font" : "systemfont_arial",
-			"horizontalalign" : "left",
+			"horizontalalign" : "right",
 			"id" : 360,
 			"limitrows" : false,
 			"limituseellipsis" : false,
@@ -812,7 +813,7 @@
 			"maxwidth" : 500.0,
 			"name" : "Stroke Type",
 			"opaquebackground" : false,
-			"origin" : "0.00000 -35.00000 0.00000",
+			"origin" : "100.00000 -35.00000 0.00000",
 			"padding" : 0,
 			"parent" : 358,
 			"pointsize" : 5.0,
@@ -825,7 +826,7 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn shared['brushEditor']['brush']['draw_mode'] != 'smear';;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn shared['currentBrush']['draw_mode'] != 'smear';;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['currentBrush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['currentBrush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
 				"scriptproperties" : 
 				{
 					"key" : "stroke_type",
@@ -836,7 +837,7 @@
 			"id" : 362,
 			"image" : "models/small_circle@2x.json",
 			"name" : "Stamp",
-			"origin" : "131.72186 -2.20166 0.00000",
+			"origin" : "31.72186 -2.20166 0.00000",
 			"parent" : 360,
 			"scale" : "0.70000 0.70000 0.70000",
 			"size" : "32.00000 32.00000"
@@ -884,7 +885,7 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['currentBrush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['currentBrush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
 				"scriptproperties" : 
 				{
 					"key" : "stroke_type",
@@ -895,7 +896,7 @@
 			"id" : 365,
 			"image" : "models/small_circle@2x.json",
 			"name" : "Spray Can",
-			"origin" : "242.33514 -2.20166 0.00000",
+			"origin" : "142.33514 -2.20166 0.00000",
 			"parent" : 360,
 			"scale" : "0.70000 0.70000 0.70000",
 			"size" : "32.00000 32.00000"
@@ -943,7 +944,7 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn shared['brushEditor']['brush']['draw_mode'] != 'smear';\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn shared['currentBrush']['draw_mode'] != 'smear';\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['currentBrush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['currentBrush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
 				"scriptproperties" : 
 				{
 					"key" : "stroke_type",
@@ -954,7 +955,7 @@
 			"id" : 368,
 			"image" : "models/small_circle@2x.json",
 			"name" : "Connected Line",
-			"origin" : "391.19586 -2.20166 0.00000",
+			"origin" : "291.19586 -2.20166 0.00000",
 			"parent" : 360,
 			"scale" : "0.70000 0.70000 0.70000",
 			"size" : "32.00000 32.00000"
@@ -1002,7 +1003,7 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['brushEditor']['brush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['brushEditor']['brush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar dot;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tdot = thisLayer.getChildren()[0];\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? new Vec3(1.0, 1.0, 1.0) : new Vec3(0.7, 0.7, 0.7);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared['currentBrush'][scriptProperties['key']] = scriptProperties['val'];\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tdot.visible = shared['currentBrush'][scriptProperties['key']] == scriptProperties['val'];\n}\n\n",
 				"scriptproperties" : 
 				{
 					"key" : "stroke_type",
@@ -1013,7 +1014,7 @@
 			"id" : 371,
 			"image" : "models/small_circle@2x.json",
 			"name" : "Evenly Spaced",
-			"origin" : "591.97870 -2.20166 0.00000",
+			"origin" : "491.97870 -2.20166 0.00000",
 			"parent" : 360,
 			"scale" : "0.70000 0.70000 0.70000",
 			"size" : "32.00000 32.00000"
@@ -1055,6 +1056,189 @@
 			"size" : "131.00000 24.00000",
 			"text" : "Evenly Spaced",
 			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"id" : 403,
+			"name" : "General Brush Settings",
+			"origin" : "100.00000 -86.00000 0.00000",
+			"parent" : 358
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "right",
+			"id" : 408,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "Size",
+			"opaquebackground" : false,
+			"padding" : 0,
+			"parent" : 403,
+			"pointsize" : 5.0,
+			"scale" : "1.05000 1.05000 1.05000",
+			"size" : "43.00000 24.00000",
+			"text" : "Size:",
+			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 404,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Size Slider",
+			"origin" : "134.00000 -3.80957 0.00000",
+			"parent" : 408,
+			"scale" : "0.95238 0.95238 0.95238",
+			"size" : "256.00000 8.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 405,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Solid",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\nimport * as WEMath from 'WEMath';\n\nexport var scriptProperties = createScriptProperties()\n\t.addSlider({\n\t\tname: 'leftVal',\n\t\tlabel: 'Left Value',\n\t\tvalue: 0,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'rightVal',\n\t\tlabel: 'Right Value',\n\t\tvalue: 1,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'default',\n\t\tlabel: 'Start Value',\n\t\tvalue: 0.5,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Setting Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\nvar grabbed = false;\nvar enabled = false;\nvar pxSize;\nvar range01;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\nfunction clamp(val, a, b) {\n\treturn Math.min(\n\t\tMath.max(\n\t\t\tval,\n\t\t\tMath.min(a,b)\n\t\t),\n\t\tMath.max(a,b)\n\t);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tshared['currentBrush'][scriptProperties['key']] = clamp(scriptProperties['default'], scriptProperties['leftVal'], scriptProperties['rightVal']);\n\tpxSize = thisLayer.getParent().size.x;\n\trefresh();\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\n\tthisLayer.color = enabled ? new Vec3(1.0, 1.0 , 1.0) : new Vec3(0.7, 0.7 , 0.7);\n\n\treturn new Vec3(\n\t\t(range01 - 0.5) * pxSize,\n\t\tvalue.y,\n\t\tvalue.z\n\t);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tif(!isVisible() || !enabled) {return;}\n\tgrabbed = true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorMove(event) {\n\tif(!isVisible()) {return;}\n\tif(grabbed) {\n\t\tif(!input.cursorLeftDown) {\n\t\t\tgrabbed = false;\n\t\t\treturn;\n\t\t}\n\n\t\tvar xpos = clamp(thisLayer.origin.x - thisLayer.size.x / 2. + event.localPosition.x, pxSize/2., -pxSize/2.);\n\t\t\n\n\t\tshared['currentBrush'][scriptProperties['key']] = WEMath.mix(\n\t\t\tscriptProperties['leftVal'],\n\t\t\tscriptProperties['rightVal'],\n\t\t\t(xpos / pxSize) + 0.5\n\t\t);\n\t\tshared['brushEditor']['changed'] = true;\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\t\n\tvar val = shared['currentBrush'][scriptProperties['key']];\n\tvar minV = scriptProperties['leftVal'];\n\tvar maxV = scriptProperties['rightVal'];\n\n\tval = clamp(val, minV, maxV);\n\tshared['currentBrush'][scriptProperties['key']] = val;\n\n\trange01 = (val - minV) / (maxV - minV);\n}\n\n",
+				"scriptproperties" : 
+				{
+					"default" : 0.1,
+					"key" : "size",
+					"leftVal" : 0,
+					"rightVal" : 1
+				},
+				"value" : "0.00000 0.00000 0.00000"
+			},
+			"parent" : 404,
+			"size" : "16.00000 32.00000"
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "right",
+			"id" : 410,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "Alpha",
+			"opaquebackground" : false,
+			"origin" : "346.76111 0.00000 0.00000",
+			"padding" : 0,
+			"parent" : 403,
+			"pointsize" : 5.0,
+			"scale" : "1.05000 1.05000 1.05000",
+			"size" : "56.00000 24.00000",
+			"text" : "Alpha:",
+			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 411,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Alpha Slider",
+			"origin" : "134.00000 -3.80957 0.00000",
+			"parent" : 410,
+			"scale" : "0.95238 0.95238 0.95238",
+			"size" : "256.00000 8.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 412,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Solid",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\nimport * as WEMath from 'WEMath';\n\nexport var scriptProperties = createScriptProperties()\n\t.addSlider({\n\t\tname: 'leftVal',\n\t\tlabel: 'Left Value',\n\t\tvalue: 0,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'rightVal',\n\t\tlabel: 'Right Value',\n\t\tvalue: 1,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'default',\n\t\tlabel: 'Start Value',\n\t\tvalue: 0.5,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Setting Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\nvar grabbed = false;\nvar enabled = false;\nvar pxSize;\nvar range01;\n\nexport function shouldEnable() {\n\treturn true;\n}\n\nfunction clamp(val, a, b) {\n\treturn Math.min(\n\t\tMath.max(\n\t\t\tval,\n\t\t\tMath.min(a,b)\n\t\t),\n\t\tMath.max(a,b)\n\t);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tshared['currentBrush'][scriptProperties['key']] = clamp(scriptProperties['default'], scriptProperties['leftVal'], scriptProperties['rightVal']);\n\tpxSize = thisLayer.getParent().size.x;\n\trefresh();\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\n\tthisLayer.color = enabled ? new Vec3(1.0, 1.0 , 1.0) : new Vec3(0.7, 0.7 , 0.7);\n\n\treturn new Vec3(\n\t\t(range01 - 0.5) * pxSize,\n\t\tvalue.y,\n\t\tvalue.z\n\t);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tif(!isVisible() || !enabled) {return;}\n\tgrabbed = true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorMove(event) {\n\tif(!isVisible()) {return;}\n\tif(grabbed) {\n\t\tif(!input.cursorLeftDown) {\n\t\t\tgrabbed = false;\n\t\t\treturn;\n\t\t}\n\n\t\tvar xpos = clamp(thisLayer.origin.x - thisLayer.size.x / 2. + event.localPosition.x, pxSize/2., -pxSize/2.);\n\t\t\n\n\t\tshared['currentBrush'][scriptProperties['key']] = WEMath.mix(\n\t\t\tscriptProperties['leftVal'],\n\t\t\tscriptProperties['rightVal'],\n\t\t\t(xpos / pxSize) + 0.5\n\t\t);\n\t\tshared['brushEditor']['changed'] = true;\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\t\n\tvar val = shared['currentBrush'][scriptProperties['key']];\n\tvar minV = scriptProperties['leftVal'];\n\tvar maxV = scriptProperties['rightVal'];\n\n\tval = clamp(val, minV, maxV);\n\tshared['currentBrush'][scriptProperties['key']] = val;\n\n\trange01 = (val - minV) / (maxV - minV);\n}\n\n",
+				"scriptproperties" : 
+				{
+					"default" : 0.1,
+					"key" : "alpha",
+					"leftVal" : 0,
+					"rightVal" : 1
+				},
+				"value" : "0.00000 0.00000 0.00000"
+			},
+			"parent" : 411,
+			"size" : "16.00000 32.00000"
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "right",
+			"id" : 416,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "Alpha",
+			"opaquebackground" : false,
+			"origin" : "718.20264 0.00000 0.00000",
+			"padding" : 0,
+			"parent" : 403,
+			"pointsize" : 5.0,
+			"scale" : "1.05000 1.05000 1.05000",
+			"size" : "76.00000 24.00000",
+			"text" : "Spacing:",
+			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 290,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Spacing Slider",
+			"origin" : "134.00000 -3.80957 0.00000",
+			"parent" : 416,
+			"scale" : "0.95238 0.95238 0.95238",
+			"size" : "256.00000 8.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 402,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Solid",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\nimport * as WEMath from 'WEMath';\n\nexport var scriptProperties = createScriptProperties()\n\t.addSlider({\n\t\tname: 'leftVal',\n\t\tlabel: 'Left Value',\n\t\tvalue: 0,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'rightVal',\n\t\tlabel: 'Right Value',\n\t\tvalue: 1,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'default',\n\t\tlabel: 'Start Value',\n\t\tvalue: 0.5,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Setting Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\nvar grabbed = false;\nvar enabled = false;\nvar pxSize;\nvar range01;\n\nexport function shouldEnable() {\n\treturn shared['currentBrush']['stroke_type'] === \"evenly_spaced\";\n}\n\nfunction clamp(val, a, b) {\n\treturn Math.min(\n\t\tMath.max(\n\t\t\tval,\n\t\t\tMath.min(a,b)\n\t\t),\n\t\tMath.max(a,b)\n\t);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tshared['currentBrush'][scriptProperties['key']] = clamp(scriptProperties['default'], scriptProperties['leftVal'], scriptProperties['rightVal']);\n\tpxSize = thisLayer.getParent().size.x;\n\trefresh();\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\n\tthisLayer.color = enabled ? new Vec3(1.0, 1.0 , 1.0) : new Vec3(0.7, 0.7 , 0.7);\n\n\treturn new Vec3(\n\t\t(range01 - 0.5) * pxSize,\n\t\tvalue.y,\n\t\tvalue.z\n\t);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tif(!isVisible() || !enabled) {return;}\n\tgrabbed = true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorMove(event) {\n\tif(!isVisible()) {return;}\n\tif(grabbed) {\n\t\tif(!input.cursorLeftDown) {\n\t\t\tgrabbed = false;\n\t\t\treturn;\n\t\t}\n\n\t\tvar xpos = clamp(thisLayer.origin.x - thisLayer.size.x / 2. + event.localPosition.x, pxSize/2., -pxSize/2.);\n\t\t\n\n\t\tshared['currentBrush'][scriptProperties['key']] = WEMath.mix(\n\t\t\tscriptProperties['leftVal'],\n\t\t\tscriptProperties['rightVal'],\n\t\t\t(xpos / pxSize) + 0.5\n\t\t);\n\t\tshared['brushEditor']['changed'] = true;\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\t\n\tvar val = shared['currentBrush'][scriptProperties['key']];\n\tvar minV = scriptProperties['leftVal'];\n\tvar maxV = scriptProperties['rightVal'];\n\n\tval = clamp(val, minV, maxV);\n\tshared['currentBrush'][scriptProperties['key']] = val;\n\n\trange01 = (val - minV) / (maxV - minV);\n}\n\n",
+				"scriptproperties" : 
+				{
+					"default" : 0.1,
+					"key" : "spacing",
+					"leftVal" : 0,
+					"rightVal" : 1
+				},
+				"value" : "0.00000 0.00000 0.00000"
+			},
+			"parent" : 290,
+			"size" : "16.00000 32.00000"
 		},
 		{
 			"id" : 190,
