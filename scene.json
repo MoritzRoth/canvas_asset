@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "234.54025 150.79439 -1.00000",
-		"eye" : "234.54025 150.79439 0.00000",
+		"center" : "327.54205 108.47870 -1.00000",
+		"eye" : "327.54205 108.47870 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -414,7 +414,7 @@
 		{
 			"angles" : 
 			{
-				"script" : "'use strict';\n\n// SETUP & EVENT HANDLING SCRIPT\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tshared['brushEditor'] = {\n\t\ttexCnt: 2,\n\t\ttexId : 0,\n\t\tchanged: true,\n\t\thasChanged: false\n\t};\n\tshared['currentBrush'] = {\n\t\ttex: []\n\t};\n\tfor(var i = 0; i < shared['brushEditor'].texCnt; i++) {\n\t\tshared['currentBrush']['tex'][i] = {};\n\t}\n\n\treturn value;\n}\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['changed']) {\n\t\tshared['brushEditor']['hasChanged'] = true;\n\t\tshared['brushEditor']['changed'] = false;\n\t}else {\n\t\tshared['brushEditor']['hasChanged'] = false;\n\t}\n\treturn value;\n}\n",
+				"script" : "'use strict';\n\n// SETUP & EVENT HANDLING SCRIPT\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tshared['brushEditor'] = {\n\t\tvisible: false,\n\t\tbrushId: 0,\n\t\ttexCnt: 2,\n\t\ttexId : 0,\n\t\tchanged: true,\n\t\thasChanged: false\n\t};\n\tshared['currentBrush'] = {\n\t\ttex: []\n\t};\n\tfor(var i = 0; i < shared['brushEditor'].texCnt; i++) {\n\t\tshared['currentBrush']['tex'][i] = {};\n\t}\n\n\tshared['brushes'] = localStorage.get('brushes', localStorage.LOCATION_GLOBAL) || [];\n\tif(shared['brushes'].length > 0) {\t// TODO REMOVE ME\n\t\tshared['currentBrush'] = JSON.parse(JSON.stringify(shared['brushes'][0]));\n\t}\n\n\treturn value;\n}\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['changed']) {\n\t\tshared['brushEditor']['hasChanged'] = true;\n\t\tshared['brushEditor']['changed'] = false;\n\t}else {\n\t\tshared['brushEditor']['hasChanged'] = false;\n\t}\n\treturn value;\n}\n",
 				"value" : "0.00000 -0.00000 0.00000"
 			},
 			"castshadow" : false,
@@ -431,7 +431,12 @@
 				},
 				"value" : "1480.00000 1304.15625 0.00000"
 			},
-			"size" : "1060.00000 60.00000"
+			"size" : "1060.00000 60.00000",
+			"visible" : 
+			{
+				"script" : "'use strict';\n\n/**\n * @param {Boolean} value - for property 'visible'\n * @return {Boolean} - update current property value\n */\nexport function update(value) {\n\t\n\treturn shared.brushEditor.visible;\n}\n",
+				"value" : true
+			}
 		},
 		{
 			"angles" : "0.00000 -0.00000 0.00000",
@@ -441,7 +446,7 @@
 			"name" : "Background",
 			"origin" : 
 			{
-				"script" : "'use strict';\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\t\n\treturn value;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\t\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
 				"value" : "-0.00012 -334.38184 0.00000"
 			},
 			"parent" : 293,
@@ -459,6 +464,36 @@
 			"parent" : 293,
 			"scale" : "4.14173 0.23501 0.60000",
 			"size" : "256.00000 256.00000"
+		},
+		{
+			"angles" : "0.00000 0.00000 3.14159",
+			"castshadow" : false,
+			"id" : 455,
+			"image" : "models/Next_2.json",
+			"name" : "Previous_2",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\t\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushEditor.brushId = (shared.brushes.length + shared.brushEditor.brushId - 1) % shared.brushes.length;\n\tshared.currentBrush = JSON.parse(JSON.stringify(shared.brushes[shared.brushEditor.brushId]));\n\tshared.brushEditor.changed = true;\n}\n",
+				"value" : "-120.00000 0.00003 0.00000"
+			},
+			"parent" : 304,
+			"scale" : "0.20593 3.62931 1.42154",
+			"size" : "64.00000 64.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 420,
+			"image" : "models/Next_2.json",
+			"name" : "Next_2",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\t\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushEditor.brushId = (shared.brushEditor.brushId + 1) % shared.brushes.length;\n\tshared.currentBrush = JSON.parse(JSON.stringify(shared.brushes[shared.brushEditor.brushId]));\n\tshared.brushEditor.changed = true;\n}\n",
+				"value" : "-105.00000 0.00000 0.00000"
+			},
+			"parent" : 304,
+			"scale" : "0.20593 3.62931 1.42154",
+			"size" : "64.00000 64.00000"
 		},
 		{
 			"anchor" : "none",
@@ -479,14 +514,108 @@
 			"maxwidth" : 500.0,
 			"name" : "Window Title",
 			"opaquebackground" : false,
-			"origin" : "-125.50398 0.00000 0.00000",
+			"origin" : "-95.00000 20.00000 0.00000",
 			"padding" : 32,
 			"parent" : 304,
 			"pointsize" : 8.0,
 			"scale" : "0.24144 4.25508 1.66667",
 			"size" : "393.00000 38.00000",
-			"text" : "Editing Custom Brush X / Y",
+			"text" : 
+			{
+				"script" : "'use strict';\n\n/**\n * @param {String} value - for property 'text'\n * @return {String} - update current property value\n */\nexport function update(value) {\n\t\n\treturn `Editing Custom Brush ${shared.brushEditor.brushId + 1} / ${shared.brushes.length}`;\n}\n",
+				"value" : "Editing Custom Brush X / Y"
+			},
 			"verticalalign" : "center"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 434,
+			"image" : "models/Print_2.json",
+			"name" : "Print_2",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\t\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tconsole.log(JSON.stringify(shared['currentBrush']));\n}\n",
+				"value" : "45.00000 0.00000 0.00000"
+			},
+			"parent" : 304,
+			"scale" : "0.20593 3.62931 1.42154",
+			"size" : "64.00000 64.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 406,
+			"image" : "models/Delete_2.json",
+			"name" : "Delete_2",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\t\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tif(shared.brushes.length <= 1) {return;}\n\n\tvar brushes = shared.brushes;\n\tvar editor = shared.brushEditor;\n\n\tbrushes.splice(editor.brushId, 1);\n\teditor.brushId = Math.min(editor.brushId, brushes.length - 1);\n\tshared.currentBrush = JSON.parse(JSON.stringify(brushes[editor.brushId]));\n\teditor.changed = true;\n\n\tlocalStorage.set('brushes', brushes, localStorage.LOCATION_GLOBAL);\n}\n",
+				"value" : "60.00000 0.00000 0.00000"
+			},
+			"parent" : 304,
+			"scale" : "0.20593 3.62931 1.42154",
+			"size" : "64.00000 64.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 448,
+			"image" : "models/Refresh_2.json",
+			"name" : "Refresh_2",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\t\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushes = localStorage.get('brushes', localStorage.LOCATION_GLOBAL);\n\tshared.currentBrush = JSON.parse(JSON.stringify(shared.brushes[shared.brushEditor.brushId]));\n\tshared.brushEditor.changed = true;\n}\n",
+				"value" : "75.00000 0.00000 0.00000"
+			},
+			"parent" : 304,
+			"scale" : "0.20593 3.62931 1.42154",
+			"size" : "64.00000 64.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 414,
+			"image" : "models/Add_2.json",
+			"name" : "Add_2",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\t\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushes.push(JSON.parse(JSON.stringify(shared['currentBrush'])));\n\tshared.brushEditor.brushId = shared.brushes.length - 1;\n\tshared.brushEditor.changed = true;\n\tlocalStorage.set('brushes', shared['brushes'], localStorage.LOCATION_GLOBAL);\n}\n",
+				"value" : "90.00000 0.00000 0.00000"
+			},
+			"parent" : 304,
+			"scale" : "0.20593 3.62931 1.42154",
+			"size" : "64.00000 64.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 438,
+			"image" : "models/Save_2.json",
+			"name" : "Save_2",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\t\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared['brushes'][shared.brushEditor.brushId] = JSON.parse(JSON.stringify(shared['currentBrush']));\n\tlocalStorage.set('brushes', shared['brushes'], localStorage.LOCATION_GLOBAL);\n}\n",
+				"value" : "105.00000 0.00000 0.00000"
+			},
+			"parent" : 304,
+			"scale" : "0.20593 3.62931 1.42154",
+			"size" : "64.00000 64.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 453,
+			"image" : "models/Close_2.json",
+			"name" : "Close_2",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\t\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushEditor.visible = !shared.brushEditor.visible;\n\tshared[\"cursorOnUi\"] = false;\n}\n",
+				"value" : "120.00000 0.00000 0.00000"
+			},
+			"parent" : 304,
+			"scale" : "0.20593 3.62931 1.42154",
+			"size" : "64.00000 64.00000"
 		},
 		{
 			"angles" : "0.00000 -0.00000 0.00000",
@@ -2852,6 +2981,21 @@
 			"image" : "models/Undo@0.5x.json",
 			"name" : "Undo",
 			"origin" : "0.00000 -600.00000 0.00000",
+			"parent" : 171,
+			"scale" : "0.50000 0.50000 1.00000",
+			"size" : "256.00000 256.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 696,
+			"image" : "models/BrushEditor@0.5x.json",
+			"name" : "Toggle Brush Editor",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\t\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushEditor.visible = !shared.brushEditor.visible;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"value" : "-175.00000 -600.00000 0.00000"
+			},
 			"parent" : 171,
 			"scale" : "0.50000 0.50000 1.00000",
 			"size" : "256.00000 256.00000"
