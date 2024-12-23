@@ -56,18 +56,18 @@ uniform float u_drawHardness; // {"material":"drawHardness","label":"Draw Hardne
 
 uniform float u_useTextures;  // {"material":"brush0Texture","label":"Use Brush Texture","int":true,"default":1,"range":[0,1]}
 uniform float u_brushSpacing; // {"material":"brush0Spacing","label":"Brush Spacing","default":0.125,"range":[0,1]}
-uniform vec3 u_brushProb; // {"material":"brush1Prob","label":"Brush Channel Frequency RGBA","default":"1 0 0","range":[0,1]}
-uniform vec3 u_brushInfluence; // {"material":"brush2Factor","label":"Brush Channel Influence","default":"1 1 1","range":[-2,2]}
-uniform vec3 u_brushSizeFactor; // {"material":"brushSizeFactor","label":"Brush Size Modifier","default":"1 1 1","range":[0,1]}
+uniform vec2 u_brushProb; // {"material":"brush1Prob","label":"Brush Channel Frequency RGBA","default":"1 0","range":[0,1]}
+uniform vec2 u_brushInfluence; // {"material":"brush2Factor","label":"Brush Channel Influence","default":"1 1","range":[-2,2]}
+uniform vec2 u_brushSizeFactor; // {"material":"brushSizeFactor","label":"Brush Size Modifier","default":"1 1","range":[0,1]}
 uniform float u_brushVelMax; // {"material":"brushVelMax","label":"Brush Velocity Cap","default":5,"range":[0,10]}
 
-uniform vec3 u_brushRotJitter; // {"material":"brushRotJitter","label":"Brush Rotation Jitter","default":"0.125 0 0","range":[0,1]}
-uniform vec3 u_brushSizeJitter; // {"material":"brushSizeJitter","label":"Brush Size Jitter","default":"0.125 0 0","range":[0,1]}
-uniform vec3 u_brushAlphaJitter; // {"material":"brushAlphaJitter","label":"Brush Alpha Jitter","default":"0 0 0","range":[0,1]}
-uniform vec3 u_brushPosJitter; // {"material":"brushPositionJitter","label":"Brush Position Jitter","default":"0 0 0","range":[0,1]}
+uniform vec2 u_brushRotJitter; // {"material":"brushRotJitter","label":"Brush Rotation Jitter","default":"0.125 0","range":[0,1]}
+uniform vec2 u_brushSizeJitter; // {"material":"brushSizeJitter","label":"Brush Size Jitter","default":"0.125 0","range":[0,1]}
+uniform vec2 u_brushAlphaJitter; // {"material":"brushAlphaJitter","label":"Brush Alpha Jitter","default":"0 0","range":[0,1]}
+uniform vec2 u_brushPosJitter; // {"material":"brushPositionJitter","label":"Brush Position Jitter","default":"0 0","range":[0,1]}
 
-uniform vec3 u_brushVelSizeMod; // {"material":"brushSizeVelMod","label":"Brush Size Velocity Modifier","default":"0 0 0","range":[-1,1]}
-uniform vec3 u_brushVelAlphaMod; // {"material":"brushAlphaVelMod","label":"Brush Alpha Velocity Modifier","default":"0 0 0","range":[-1,1]}
+uniform vec2 u_brushVelSizeMod; // {"material":"brushSizeVelMod","label":"Brush Size Velocity Modifier","default":"0 0","range":[-1,1]}
+uniform vec2 u_brushVelAlphaMod; // {"material":"brushAlphaVelMod","label":"Brush Alpha Velocity Modifier","default":"0 0","range":[-1,1]}
 
 
 float modeMatch(float a, float b) {
@@ -120,11 +120,11 @@ float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 p
 	float velR = mix(pVelRat, velRat, t);
 
 	// select brush texture, different textures may have different brush properties so we need to get this early on
-	vec3 cThreshMin = vec3(0, u_brushProb.r, dot(u_brushProb.rg, CAST2(1.)));
-	vec3 cThreshMax = vec3(cThreshMin.gb, cThreshMin.b + u_brushProb.b);
-	cThreshMin /= cThreshMax.b;
-	cThreshMax /= cThreshMax.b;
-	vec3 selectedChannel = step(cThreshMin, CAST3(rnd.x)) * step(CAST3(rnd.x), cThreshMax);
+	vec2 cThreshMin = vec2(0, u_brushProb.r);
+	vec2 cThreshMax = vec2(cThreshMin.g, cThreshMin.g + u_brushProb.g);
+	cThreshMin /= cThreshMax.g;
+	cThreshMax /= cThreshMax.g;
+	vec2 selectedChannel = step(cThreshMin, CAST2(rnd.x)) * step(CAST2(rnd.x), cThreshMax);
 
 	// calc brush rotation jitter
 	float rot = atan2(velocity.x, velocity.y) - M_PI / 2.;
@@ -152,7 +152,7 @@ float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 p
 	sampleSpot = mul(rMat(rot), sampleSpot) / sizeModifier;
 	float sample;
 	if(u_useTextures > 0.5) {
-		 sample = 1. - dot(texSample2D(g_Texture6, sampleSpot + CAST2(0.5)), selectedChannel);
+		 sample = 1. - dot(texSample2D(g_Texture6, sampleSpot + CAST2(0.5)).rg, selectedChannel);
 	}else {
 		sample = smoothstep(1., min(u_drawHardness, IPSILON), length(sampleSpot) * 2.);
 	}

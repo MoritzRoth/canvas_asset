@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "41.70138 103.02695 -1.00000",
-		"eye" : "41.70138 103.02695 0.00000",
+		"center" : "234.54025 150.79439 -1.00000",
+		"eye" : "234.54025 150.79439 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -202,18 +202,54 @@
 									"value" : 1
 								},
 								"brush1GProb" : 0.5,
-								"brush1Prob" : "1 1 0",
+								"brush1Prob" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brush1Prob'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].probability, tex[1].probability);\n}\n",
+									"value" : "1.00000 1.00000"
+								},
 								"brush2BProb" : 0.0,
-								"brush2Factor" : "1 1 1",
+								"brush2Factor" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brush2Factor'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].influence, tex[1].influence);\n}\n",
+									"value" : "1.00000 1.00000"
+								},
 								"brush3AProb" : "0 0 0 0",
-								"brushAlphaJitter" : 0,
-								"brushAlphaVelMod" : "0 0 0 0",
-								"brushPositionJitter" : "0.2 0.4 0",
+								"brushAlphaJitter" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushAlphaJitter'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].alpha_jitter, tex[1].alpha_jitter);\n}\n",
+									"value" : "0.00000 0.00000"
+								},
+								"brushAlphaVelMod" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushAlphaVelMod'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].alpha_vel, tex[1].alpha_vel);\n}\n",
+									"value" : "0.00000 0.00000"
+								},
+								"brushPositionJitter" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushPositionJitter'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].scatter_jitter, tex[1].scatter_jitter);\n}\n",
+									"value" : "0.20000 0.40000"
+								},
 								"brushProb" : "1 1 0 0",
-								"brushRotJitter" : "1 1 0 0",
-								"brushSizeFactor" : "1 1 1 1",
-								"brushSizeJitter" : 0,
-								"brushSizeVelMod" : "-0.7 -0.7 0",
+								"brushRotJitter" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushRotJitter'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].rot_jitter, tex[1].rot_jitter);\n}\n",
+									"value" : "1.00000 1.00000"
+								},
+								"brushSizeFactor" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushSizeFactor'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].size, tex[1].size);\n}\n",
+									"value" : "1.00000 1.00000"
+								},
+								"brushSizeJitter" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushSizeJitter'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].size_jitter, tex[1].size_jitter);\n}\n",
+									"value" : "0.00000 0.00000"
+								},
+								"brushSizeVelMod" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushSizeVelMod'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].size_vel, tex[1].size_vel);\n}\n",
+									"value" : "-0.70000 -0.70000"
+								},
 								"brushSpacing" : 
 								{
 									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",
@@ -2101,9 +2137,9 @@
 				"script" : "'use strict';\n\nimport * as WEMath from 'WEMath';\n\nexport var scriptProperties = createScriptProperties()\n\t.addSlider({\n\t\tname: 'leftVal',\n\t\tlabel: 'Left Value',\n\t\tvalue: 0,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'rightVal',\n\t\tlabel: 'Right Value',\n\t\tvalue: 1,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'default',\n\t\tlabel: 'Start Value',\n\t\tvalue: 0.5,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Setting Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\nvar grabbed = false;\nvar enabled = false;\nvar pxSize;\nvar range01;\n\nvar colorDefault = new Vec3(1.0, 1.0, 1.0);\nvar colorDisabled = new Vec3(0.6, 0.6, 0.6);\n\nexport function shouldEnable() {\n\tvar cb = shared.currentBrush;\n\treturn cb.stroke_type != \"stamp\";\n}\n\nfunction clamp(val, a, b) {\n\treturn Math.min(\n\t\tMath.max(\n\t\t\tval,\n\t\t\tMath.min(a,b)\n\t\t),\n\t\tMath.max(a,b)\n\t);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\t\n\tfor(var i = 0; i < shared.brushEditor.texCnt; i++) {\n\t\tshared.currentBrush.tex[i][scriptProperties['key']] = clamp(scriptProperties['default'], scriptProperties['leftVal'], scriptProperties['rightVal']);\n\t}\n\t\n\tpxSize = thisLayer.getParent().size.x;\n\trefresh();\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\n\tthisLayer.color = enabled ? colorDefault : colorDisabled;\n\n\treturn new Vec3(\n\t\t(range01 - 0.5) * pxSize,\n\t\tvalue.y,\n\t\tvalue.z\n\t);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tif(!isVisible() || !enabled) {return;}\n\tgrabbed = true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorMove(event) {\n\tif(!isVisible()) {return;}\n\tif(grabbed) {\n\t\tif(!input.cursorLeftDown) {\n\t\t\tgrabbed = false;\n\t\t\treturn;\n\t\t}\n\n\t\tvar xpos = clamp(thisLayer.origin.x - thisLayer.size.x / 2. + event.localPosition.x, pxSize/2., -pxSize/2.);\n\t\t\n\n\t\tshared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] = WEMath.mix(\n\t\t\tscriptProperties['leftVal'],\n\t\t\tscriptProperties['rightVal'],\n\t\t\t(xpos / pxSize) + 0.5\n\t\t);\n\t\tshared['brushEditor']['changed'] = true;\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\t\n\tvar val = shared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']];\n\tvar minV = scriptProperties['leftVal'];\n\tvar maxV = scriptProperties['rightVal'];\n\n\tval = clamp(val, minV, maxV);\n\tshared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] = val;\n\n\trange01 = (val - minV) / (maxV - minV);\n}\n\n",
 				"scriptproperties" : 
 				{
-					"default" : 0.1,
+					"default" : 0,
 					"key" : "size_vel",
-					"leftVal" : 0,
+					"leftVal" : -1,
 					"rightVal" : 1
 				},
 				"value" : "0.00000 0.00000 0.00000"
@@ -2198,9 +2234,9 @@
 				"script" : "'use strict';\n\nimport * as WEMath from 'WEMath';\n\nexport var scriptProperties = createScriptProperties()\n\t.addSlider({\n\t\tname: 'leftVal',\n\t\tlabel: 'Left Value',\n\t\tvalue: 0,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'rightVal',\n\t\tlabel: 'Right Value',\n\t\tvalue: 1,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'default',\n\t\tlabel: 'Start Value',\n\t\tvalue: 0.5,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Setting Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\nvar grabbed = false;\nvar enabled = false;\nvar pxSize;\nvar range01;\n\nvar colorDefault = new Vec3(1.0, 1.0, 1.0);\nvar colorDisabled = new Vec3(0.6, 0.6, 0.6);\n\nexport function shouldEnable() {\n\tvar cb = shared.currentBrush;\n\treturn cb.stroke_type != \"stamp\";\n}\n\nfunction clamp(val, a, b) {\n\treturn Math.min(\n\t\tMath.max(\n\t\t\tval,\n\t\t\tMath.min(a,b)\n\t\t),\n\t\tMath.max(a,b)\n\t);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\t\n\tfor(var i = 0; i < shared.brushEditor.texCnt; i++) {\n\t\tshared.currentBrush.tex[i][scriptProperties['key']] = clamp(scriptProperties['default'], scriptProperties['leftVal'], scriptProperties['rightVal']);\n\t}\n\t\n\tpxSize = thisLayer.getParent().size.x;\n\trefresh();\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\n\tthisLayer.color = enabled ? colorDefault : colorDisabled;\n\n\treturn new Vec3(\n\t\t(range01 - 0.5) * pxSize,\n\t\tvalue.y,\n\t\tvalue.z\n\t);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tif(!isVisible() || !enabled) {return;}\n\tgrabbed = true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorMove(event) {\n\tif(!isVisible()) {return;}\n\tif(grabbed) {\n\t\tif(!input.cursorLeftDown) {\n\t\t\tgrabbed = false;\n\t\t\treturn;\n\t\t}\n\n\t\tvar xpos = clamp(thisLayer.origin.x - thisLayer.size.x / 2. + event.localPosition.x, pxSize/2., -pxSize/2.);\n\t\t\n\n\t\tshared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] = WEMath.mix(\n\t\t\tscriptProperties['leftVal'],\n\t\t\tscriptProperties['rightVal'],\n\t\t\t(xpos / pxSize) + 0.5\n\t\t);\n\t\tshared['brushEditor']['changed'] = true;\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\t\n\tvar val = shared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']];\n\tvar minV = scriptProperties['leftVal'];\n\tvar maxV = scriptProperties['rightVal'];\n\n\tval = clamp(val, minV, maxV);\n\tshared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] = val;\n\n\trange01 = (val - minV) / (maxV - minV);\n}\n\n",
 				"scriptproperties" : 
 				{
-					"default" : 0.1,
+					"default" : 0,
 					"key" : "alpha_vel",
-					"leftVal" : 0,
+					"leftVal" : -1,
 					"rightVal" : 1
 				},
 				"value" : "0.00000 0.00000 0.00000"
@@ -2264,7 +2300,7 @@
 				"script" : "'use strict';\n\nimport * as WEMath from 'WEMath';\n\nexport var scriptProperties = createScriptProperties()\n\t.addSlider({\n\t\tname: 'leftVal',\n\t\tlabel: 'Left Value',\n\t\tvalue: 0,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'rightVal',\n\t\tlabel: 'Right Value',\n\t\tvalue: 1,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'default',\n\t\tlabel: 'Start Value',\n\t\tvalue: 0.5,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Setting Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\nvar grabbed = false;\nvar enabled = false;\nvar pxSize;\nvar range01;\n\nvar colorDefault = new Vec3(1.0, 1.0, 1.0);\nvar colorDisabled = new Vec3(0.6, 0.6, 0.6);\n\nexport function shouldEnable() {\n\treturn true;\n}\n\nfunction clamp(val, a, b) {\n\treturn Math.min(\n\t\tMath.max(\n\t\t\tval,\n\t\t\tMath.min(a,b)\n\t\t),\n\t\tMath.max(a,b)\n\t);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\t\n\tfor(var i = 0; i < shared.brushEditor.texCnt; i++) {\n\t\tshared.currentBrush.tex[i][scriptProperties['key']] = clamp(scriptProperties['default'], scriptProperties['leftVal'], scriptProperties['rightVal']);\n\t}\n\t\n\tpxSize = thisLayer.getParent().size.x;\n\trefresh();\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\n\tthisLayer.color = enabled ? colorDefault : colorDisabled;\n\n\treturn new Vec3(\n\t\t(range01 - 0.5) * pxSize,\n\t\tvalue.y,\n\t\tvalue.z\n\t);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tif(!isVisible() || !enabled) {return;}\n\tgrabbed = true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorMove(event) {\n\tif(!isVisible()) {return;}\n\tif(grabbed) {\n\t\tif(!input.cursorLeftDown) {\n\t\t\tgrabbed = false;\n\t\t\treturn;\n\t\t}\n\n\t\tvar xpos = clamp(thisLayer.origin.x - thisLayer.size.x / 2. + event.localPosition.x, pxSize/2., -pxSize/2.);\n\t\t\n\n\t\tshared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] = WEMath.mix(\n\t\t\tscriptProperties['leftVal'],\n\t\t\tscriptProperties['rightVal'],\n\t\t\t(xpos / pxSize) + 0.5\n\t\t);\n\t\tshared['brushEditor']['changed'] = true;\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\t\n\tvar val = shared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']];\n\tvar minV = scriptProperties['leftVal'];\n\tvar maxV = scriptProperties['rightVal'];\n\n\tval = clamp(val, minV, maxV);\n\tshared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] = val;\n\n\trange01 = (val - minV) / (maxV - minV);\n}\n\n",
 				"scriptproperties" : 
 				{
-					"default" : 0.1,
+					"default" : 0,
 					"key" : "scatter_jitter",
 					"leftVal" : 0,
 					"rightVal" : 1
@@ -2295,9 +2331,9 @@
 				"script" : "'use strict';\n\nimport * as WEMath from 'WEMath';\n\nexport var scriptProperties = createScriptProperties()\n\t.addSlider({\n\t\tname: 'leftVal',\n\t\tlabel: 'Left Value',\n\t\tvalue: 0,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'rightVal',\n\t\tlabel: 'Right Value',\n\t\tvalue: 1,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addSlider({\n\t\tname: 'default',\n\t\tlabel: 'Start Value',\n\t\tvalue: 0.5,\n\t\tmin: -100,\n\t\tmax: 100,\n\t\tinteger: false\n\t})\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Setting Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\nvar grabbed = false;\nvar enabled = false;\nvar pxSize;\nvar range01;\n\nvar colorDefault = new Vec3(1.0, 1.0, 1.0);\nvar colorDisabled = new Vec3(0.6, 0.6, 0.6);\n\nexport function shouldEnable() {\n\tvar cb = shared.currentBrush;\n\treturn cb.stroke_type != \"stamp\";\n}\n\nfunction clamp(val, a, b) {\n\treturn Math.min(\n\t\tMath.max(\n\t\t\tval,\n\t\t\tMath.min(a,b)\n\t\t),\n\t\tMath.max(a,b)\n\t);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\t\n\tfor(var i = 0; i < shared.brushEditor.texCnt; i++) {\n\t\tshared.currentBrush.tex[i][scriptProperties['key']] = clamp(scriptProperties['default'], scriptProperties['leftVal'], scriptProperties['rightVal']);\n\t}\n\t\n\tpxSize = thisLayer.getParent().size.x;\n\trefresh();\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\n\tthisLayer.color = enabled ? colorDefault : colorDisabled;\n\n\treturn new Vec3(\n\t\t(range01 - 0.5) * pxSize,\n\t\tvalue.y,\n\t\tvalue.z\n\t);\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tif(!isVisible() || !enabled) {return;}\n\tgrabbed = true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorMove(event) {\n\tif(!isVisible()) {return;}\n\tif(grabbed) {\n\t\tif(!input.cursorLeftDown) {\n\t\t\tgrabbed = false;\n\t\t\treturn;\n\t\t}\n\n\t\tvar xpos = clamp(thisLayer.origin.x - thisLayer.size.x / 2. + event.localPosition.x, pxSize/2., -pxSize/2.);\n\t\t\n\n\t\tshared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] = WEMath.mix(\n\t\t\tscriptProperties['leftVal'],\n\t\t\tscriptProperties['rightVal'],\n\t\t\t(xpos / pxSize) + 0.5\n\t\t);\n\t\tshared['brushEditor']['changed'] = true;\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\t\n\tvar val = shared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']];\n\tvar minV = scriptProperties['leftVal'];\n\tvar maxV = scriptProperties['rightVal'];\n\n\tval = clamp(val, minV, maxV);\n\tshared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] = val;\n\n\trange01 = (val - minV) / (maxV - minV);\n}\n\n",
 				"scriptproperties" : 
 				{
-					"default" : 0.1,
+					"default" : 0,
 					"key" : "scatter_vel",
-					"leftVal" : 0,
+					"leftVal" : -1,
 					"rightVal" : 1
 				},
 				"value" : "0.00000 0.00000 0.00000"
