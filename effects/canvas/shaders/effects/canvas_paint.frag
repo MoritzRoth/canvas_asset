@@ -22,6 +22,10 @@ varying vec2 v_TexCoord;
 #define DRAW_MODE_COLOR_CPY 3
 #define DRAW_MODE_BLEND 4
 
+#define OFFSET_ONE_DIR 0
+#define OFFSET_BOTH_DIR 1
+#define OFFSET_MIRROR 2
+
 #define MAX_BRUSH_SAMPLES_PER_PIXEL 32.
 
 // below texture
@@ -59,15 +63,19 @@ uniform float u_brushSpacing; // {"material":"brush0Spacing","label":"Brush Spac
 uniform vec2 u_brushProb; // {"material":"brush1Prob","label":"Brush Channel Frequency RGBA","default":"1 0","range":[0,1]}
 uniform vec2 u_brushInfluence; // {"material":"brush2Factor","label":"Brush Channel Influence","default":"1 1","range":[-2,2]}
 uniform vec2 u_brushSizeFactor; // {"material":"brushSizeFactor","label":"Brush Size Modifier","default":"1 1","range":[0,1]}
+uniform vec2 u_brushOffset; // {"material":"brushPositionOffset","label":"Brush Constant Offset","default":"0 0","range":[-1,1]}
+uniform vec2 u_brushMirrorOffset; // {"material":"brushOffsetMirror","label":"Brush Mirror Offset","default":"1 1","range":[0,1]}
+uniform vec2 u_brushRotOffset; // {"material":"brushRotOffset","label":"Brush Rotation Offset","default":"0 0","range":[-1,1]}
 uniform float u_brushVelMax; // {"material":"brushVelMax","label":"Brush Velocity Cap","default":5,"range":[0,10]}
 
 uniform vec2 u_brushRotJitter; // {"material":"brushRotJitter","label":"Brush Rotation Jitter","default":"0.125 0","range":[0,1]}
 uniform vec2 u_brushSizeJitter; // {"material":"brushSizeJitter","label":"Brush Size Jitter","default":"0.125 0","range":[0,1]}
 uniform vec2 u_brushAlphaJitter; // {"material":"brushAlphaJitter","label":"Brush Alpha Jitter","default":"0 0","range":[0,1]}
-uniform vec2 u_brushPosJitter; // {"material":"brushPositionJitter","label":"Brush Position Jitter","default":"0 0","range":[0,1]}
+uniform vec2 u_brushOffsetJitter; // {"material":"brushPositionJitter","label":"Brush Position Jitter","default":"0 0","range":[0,1]}
 
 uniform vec2 u_brushVelSizeMod; // {"material":"brushSizeVelMod","label":"Brush Size Velocity Modifier","default":"0 0","range":[-1,1]}
 uniform vec2 u_brushVelAlphaMod; // {"material":"brushAlphaVelMod","label":"Brush Alpha Velocity Modifier","default":"0 0","range":[-1,1]}
+uniform vec2 u_brushVelOffsetMod; // {"material":"brushOffsetVelMod","label":"Brush Offset Velocity Modifier","default":"0 0","range":[-1,1]}
 
 
 float modeMatch(float a, float b) {
@@ -107,6 +115,10 @@ float velMod(float modifier, float velocity) {
 	return mix(1. - max(0., modifier), 1. + min(0., modifier), velocity);
 }
 
+float jitter(float jitterVal, float rnd) {
+	return mix(1. - jitterVal, 1., rnd);
+}
+
 float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 pVelocity, float t) {
 	// get random values to incorporate for jitter / brush texture selection
 	vec4 rnd = hash44(vec4(center, t, g_Time));
@@ -128,28 +140,43 @@ float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 p
 
 	// calc brush rotation jitter
 	float rot = atan2(velocity.x, velocity.y) - M_PI / 2.;
+	rot += dot(u_brushRotOffset, selectedChannel) * M_PI;
 	rot += (rnd.y * 2. - 1.) * dot(u_brushRotJitter, selectedChannel) * M_PI;
 
 	// calc brush size jitter & velocity variation
-	float sizeModifier = dot(u_brushSizeFactor, selectedChannel) * mix(1. - dot(u_brushSizeJitter, selectedChannel), 1., rnd.z);
+	float sizeModifier = dot(u_brushSizeFactor, selectedChannel) * jitter(dot(u_brushSizeJitter, selectedChannel), rnd.z);
 	sizeModifier *= velMod(dot(u_brushVelSizeMod, selectedChannel), velR);
 
 	// calc alpha jitter & velocity variation
-	float alpha = u_drawAlpha * mix(1. - dot(u_brushAlphaJitter, selectedChannel), 1., rnd.w);
+	float alpha = u_drawAlpha * jitter(dot(u_brushAlphaJitter, selectedChannel), rnd.w);
 	alpha *= velMod(dot(u_brushVelAlphaMod, selectedChannel), velR);
 
 	// get influence factor
 	float influence = dot(u_brushInfluence, selectedChannel);
 
-	// calc pos jitter offset (only in perpendicular fashion to the brush stroke direction)
-	vec2 jitter = CAST2(0.);
+	// calc pos offset (only in perpendicular fashion to the brush stroke direction)
+	vec2 offset = CAST2(0.);
+	float mirrorSample = 0.;
 	if(length(velocity) > 0.) {
-		jitter = normalize(velocity).yx * vec2(1.,-1.) * (rnd2.x * 2. - 1.) * 2. * penRadius * sizeModifier * dot(u_brushPosJitter, selectedChannel);
+		vec2 offsetDir  = normalize(velocity).yx * vec2(1.,-1.);
+		float offsetDist = 2. * penRadius * sizeModifier * dot(u_brushOffset, selectedChannel);
+		offset = offsetDir * offsetDist * jitter(dot(u_brushOffsetJitter, selectedChannel), rnd2.x) * velMod(dot(u_brushVelOffsetMod, selectedChannel), velR);
+
+		float offsetMode = dot(u_brushMirrorOffset, selectedChannel);
+		float shouldMirror = step(0., dot(offsetDir, uv - center));
+		offset *= modeMatch(offsetMode, OFFSET_ONE_DIR)
+				+ modeMatch(offsetMode, OFFSET_BOTH_DIR) * mix(-1., 1., step(0.5, rnd2.y))
+				+ modeMatch(offsetMode, OFFSET_MIRROR) * mix(-1., 1., shouldMirror);
+		mirrorSample = modeMatch(offsetMode, OFFSET_MIRROR) * shouldMirror;
 	}
 
+
+	vec2 sampleSpot = (uv - (center + offset)) / (penRadius * 2.);
+	vec2 sP = velocity * dot(sampleSpot, velocity) / dot(velocity,velocity);
+	sampleSpot = mix(sampleSpot, sP + (sP - sampleSpot), mirrorSample); // mirror sample pos along velocity dir
+	sampleSpot = mul(rMat(rot), sampleSpot) / sizeModifier; // apply rotation
+
 	// sample brush texture & calc mask
-	vec2 sampleSpot = (uv - (center + jitter)) / (penRadius * 2.);
-	sampleSpot = mul(rMat(rot), sampleSpot) / sizeModifier;
 	float sample;
 	if(u_useTextures > 0.5) {
 		 sample = 1. - dot(texSample2D(g_Texture6, sampleSpot + CAST2(0.5)).rg, selectedChannel);
