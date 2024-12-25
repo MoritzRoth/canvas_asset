@@ -72,7 +72,7 @@ uniform vec2 u_brushOffset; // {"material":"brushPositionOffset","label":"Brush 
 uniform vec2 u_brushMirrorOffset; // {"material":"brushOffsetMirror","label":"Brush Mirror Offset","default":"0 0","range":[0,1]}
 uniform vec2 u_brushRotOffset; // {"material":"brushRotOffset","label":"Brush Rotation Offset","default":"0 0","range":[-1,1]}
 uniform vec2 u_brushRotLock; // {"material":"brushRotLock","label":"Brush Rotation Lock to Stroke Dir","default":"1 1","range":[0,1]}
-uniform float u_brushVelMax; // {"material":"brushVelMax","label":"Brush Velocity Cap","default":5,"range":[0,10]}
+uniform vec2 u_velBounds; // {"material":"brushVelocityBounds","label":"Brush Velocity Bounds","default":"0 5","range":[0,10]}
 
 uniform vec2 u_brushRotJitter; // {"material":"brushRotJitter","label":"Brush Rotation Jitter","default":"0.125 0","range":[0,1]}
 uniform vec2 u_brushSizeJitter; // {"material":"brushSizeJitter","label":"Brush Size Jitter","default":"0.125 0","range":[0,1]}
@@ -131,8 +131,9 @@ float calcPointInfluence(float brushRadius, vec2 uv, vec2 center, vec2 velocity,
 	// seems like the seed for rng is not 100% uniform for each call and hashing twice reeveals the error?
 
 	// interpolate cursor velocities from current & previous frame so we have smooth transitions
-	float velRat = min(1., length(velocity) / u_brushVelMax);
-	float pVelRat = min(1., length(pVelocity) / u_brushVelMax);
+	float velRange = dot(u_velBounds,vec2(-1., 1.));
+	float velRat = min(1., max(length(velocity) - u_velBounds.x, 0.) / velRange);
+	float pVelRat = min(1., max(length(pVelocity) - u_velBounds.x, 0.) / velRange);
 	float velR = mix(pVelRat, velRat, t);
 
 	// select brush texture, different textures may have different brush properties so we need to get this early on
