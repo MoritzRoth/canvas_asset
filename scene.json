@@ -250,6 +250,11 @@
 									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushRotJitter'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].rot_jitter, tex[1].rot_jitter);\n}\n",
 									"value" : "1.00000 1.00000"
 								},
+								"brushRotLock" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushRotLock'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].rot_lock ? 1:0, tex[1].rot_lock? 1:0);\n}\n",
+									"value" : "1.00000 1.00000"
+								},
 								"brushRotOffset" : 
 								{
 									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushRotJitter'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].rot, tex[1].rot);\n}\n",
@@ -349,16 +354,15 @@
 								null,
 								"_rt_imageLayerComposite_288_a",
 								null,
-								"watercolor3"
+								"DebugOrientationBrush"
 							]
 						},
 						{
 							"constantshadervalues" : 
 							{
-								"brush0Spacing" : 0.125,
-								"brushSpacing" : 
+								"brush0Spacing" : 
 								{
-									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties['key']];\n}\n",
+									"script" : "'use strict';\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared.currentBrush.spacing;\n}\n",
 									"scriptproperties" : 
 									{
 										"key" : "brushSpacing"

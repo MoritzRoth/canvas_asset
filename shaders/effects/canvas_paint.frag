@@ -64,8 +64,9 @@ uniform vec2 u_brushProb; // {"material":"brush1Prob","label":"Brush Channel Fre
 uniform vec2 u_brushInfluence; // {"material":"brush2Factor","label":"Brush Channel Influence","default":"1 1","range":[-2,2]}
 uniform vec2 u_brushSizeFactor; // {"material":"brushSizeFactor","label":"Brush Size Modifier","default":"1 1","range":[0,1]}
 uniform vec2 u_brushOffset; // {"material":"brushPositionOffset","label":"Brush Constant Offset","default":"0 0","range":[-1,1]}
-uniform vec2 u_brushMirrorOffset; // {"material":"brushOffsetMirror","label":"Brush Mirror Offset","default":"1 1","range":[0,1]}
+uniform vec2 u_brushMirrorOffset; // {"material":"brushOffsetMirror","label":"Brush Mirror Offset","default":"0 0","range":[0,1]}
 uniform vec2 u_brushRotOffset; // {"material":"brushRotOffset","label":"Brush Rotation Offset","default":"0 0","range":[-1,1]}
+uniform vec2 u_brushRotLock; // {"material":"brushRotLock","label":"Brush Rotation Lock to Stroke Dir","default":"1 1","range":[0,1]}
 uniform float u_brushVelMax; // {"material":"brushVelMax","label":"Brush Velocity Cap","default":5,"range":[0,10]}
 
 uniform vec2 u_brushRotJitter; // {"material":"brushRotJitter","label":"Brush Rotation Jitter","default":"0.125 0","range":[0,1]}
@@ -138,10 +139,10 @@ float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 p
 	cThreshMax /= cThreshMax.g;
 	vec2 selectedChannel = step(cThreshMin, CAST2(rnd.x)) * step(CAST2(rnd.x), cThreshMax);
 
-	// calc brush rotation jitter
-	float rot = atan2(velocity.x, velocity.y) - M_PI / 2.;
-	rot += dot(u_brushRotOffset, selectedChannel) * M_PI;
-	rot += (rnd.y * 2. - 1.) * dot(u_brushRotJitter, selectedChannel) * M_PI;
+	// calc brush rotation
+	float rot = dot(u_brushRotOffset, selectedChannel) * M_PI;	// baseline rotation
+	rot += dot(u_brushRotLock, selectedChannel) * (atan2(velocity.x, velocity.y) - M_PI / 2.);	// rotation due to storke direction lock
+	rot += (rnd.y * 2. - 1.) * dot(u_brushRotJitter, selectedChannel) * M_PI; // rotation jitter
 
 	// calc brush size jitter & velocity variation
 	float sizeModifier = dot(u_brushSizeFactor, selectedChannel) * jitter(dot(u_brushSizeJitter, selectedChannel), rnd.z);
