@@ -5,8 +5,8 @@ varying vec2 v_TexCoord;
 
 #define DRAW_MODE_ERASE 0
 #define DRAW_MODE_BRUSH 1
-#define DRAW_MODE_SMEAR 2		// preview doesn't make sense
-#define DRAW_MODE_COLOR_CPY 3	// preview doesn't make sense
+#define DRAW_MODE_SMEAR 2
+#define DRAW_MODE_COLOR_CPY 3
 #define DRAW_MODE_BLEND 4
 
 #define INFLUENCE_STAMP 0
@@ -26,6 +26,8 @@ uniform sampler2D g_Texture2; // {"hidden":true}
 // blend texture
 uniform sampler2D g_Texture4; // {"material":"blendTex","label":"Pattern Texture", "default":"util/black"}
 
+uniform vec2 g_PointerPosition;
+
 uniform float u_drawMode; // {"material":"drawMode","label":"Draw Mode Duplicate","int":true,"default":0,"range":[0,4]}
 uniform vec3 u_drawColor; // {"material":"drawCol","label":"Draw Color","type":"color","default":"1 1 1"}
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
@@ -34,6 +36,10 @@ uniform float u_brushPreview; // {"material":"brushPreview","label":"Preview (No
 
 float modeMatch(float a, float b) {
 	return step(abs(a-b), 0.1);
+}
+
+bool isMode(float a, float b) {
+	return modeMatch(a,b) > 0.5;
 }
 
 float NOT(float v) {
@@ -51,16 +57,27 @@ float NOT(float v) {
 
 vec4 linePreview(vec4 canvas, vec2 uv) {
 	float lineInfluence = texSample2D(g_Texture1, uv).r;
-	vec4 defaultAlbedo = texSample2D(g_Texture2, uv);
 
-	vec3 previewColor = defaultAlbedo * modeMatch(u_drawMode, DRAW_MODE_ERASE)
-						+ u_drawColor * modeMatch(u_drawMode, DRAW_MODE_BRUSH);
+	vec4 brushColor = canvas;
+	if(isMode(u_drawMode, DRAW_MODE_ERASE)) {
+		brushColor = texSample2D(g_Texture2, uv);
+	}
+	if(isMode(u_drawMode, DRAW_MODE_BRUSH)) {
+		brushColor = vec4(u_drawColor, 1.);
+	}
 #if ENABLE_BLEND
-	previewColor += texSample2D(g_Texture4, uv) * modeMatch(u_drawMode, DRAW_MODE_BLEND);
+	if(isMode(u_drawMode, DRAW_MODE_BLEND)) {
+		brushColor = texSample2D(g_Texture4, uv);
+	}
+#endif
+#if ENABLE_CPY_BRUSH
+	if(isMode(u_drawMode, DRAW_MODE_COLOR_CPY)) {
+		brushColor = texSample2D(g_Texture0, g_PointerPosition);
+	}
 #endif
 
-	float previewOn = modeMatch(u_strokeType, INFLUENCE_CLINES) * NOT(modeMatch(u_drawMode, DRAW_MODE_SMEAR)) * NOT(modeMatch(u_drawMode, DRAW_MODE_COLOR_CPY));
-	return mix(canvas, vec4(previewColor, 1.), lineInfluence * u_mouseDown.x * previewOn);
+	float previewOn = modeMatch(u_strokeType, INFLUENCE_CLINES) * NOT(modeMatch(u_drawMode, DRAW_MODE_SMEAR));
+	return mix(canvas, brushColor, lineInfluence * u_mouseDown.x * previewOn);
 }
 
 void main() {
