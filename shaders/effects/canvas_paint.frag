@@ -22,6 +22,11 @@ varying vec2 v_TexCoord;
 #define DRAW_MODE_COLOR_CPY 3
 #define DRAW_MODE_BLEND 4
 
+#define INFLUENCE_STAMP 0
+#define INFLUENCE_SPRAY 1
+#define INFLUENCE_CLINES 2
+#define INFLUENCE_SPACED_DOTS 3
+
 #define OFFSET_ONE_DIR 0
 #define OFFSET_BOTH_DIR 1
 #define OFFSET_MIRROR 2
@@ -51,7 +56,7 @@ uniform float g_Time;
 uniform float u_command; // {"material":"cmd","label":"Command (None, Reset, Undo, Blend)","int":true,"default":0,"range":[0,3]}
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
 uniform float u_drawMode; // {"material":"drawMode","label":"Draw Mode (Erase, Brush, Smear, Color Copy, Blend)","int":true,"default":0,"range":[0,4]}
-uniform float u_preferredInfluence; // {"material":"influenceMode","label":"Air Brush - Connected Lines","int":true,"default":0,"range":[0,1]}
+uniform float u_strokeType; // {"material":"influenceMode","label":"Stroke Type (Stamp, Air Brush, Connected Line, Evenly Spaced)","int":true,"default":0,"range":[0,3]}
 
 uniform vec3 u_drawColor; // {"material":"drawCol","label":"Draw Color","type":"color","default":"1 1 1"}
 uniform float u_drawAlpha; // {"material": "drawAlpha","label":"Draw Alpha","default":1,"range":[0,1]}
@@ -83,6 +88,10 @@ float modeMatch(float a, float b) {
 	return step(abs(a-b), 0.1);
 }
 
+bool isMode(float a, float b) {
+	return modeMatch(a,b) > 0.5;
+}
+
 float NOT(float v) {
 	return 1.-v;
 }
@@ -101,12 +110,6 @@ vec4 hash44(vec4 p4)
     return frac((p4.xxyz+p4.yzzw)*p4.zywx);
 }
 
-float calcProcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, float t) {
-	vec4 rnd = hash44(vec4(center, t, g_Time));
-
-	return u_drawAlpha * smoothstep(penRadius, penRadius * min(u_drawHardness, IPSILON), length(uv - center));
-}
-
 /** \brief Calculates a velocity modification factor in range [1 - abs(modifier),1]
  *
  * \param modifier [-1,1] if 0 velocity makes no difference; if positive the factor rises with increasing velocity; vice versa if negative
@@ -120,7 +123,7 @@ float jitter(float jitterVal, float rnd) {
 	return mix(1. - jitterVal, 1., rnd);
 }
 
-float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 pVelocity, float t) {
+float calcPointInfluence(float brushRadius, vec2 uv, vec2 center, vec2 velocity, vec2 pVelocity, float t) {
 	// get random values to incorporate for jitter / brush texture selection
 	vec4 rnd = hash44(vec4(center, t, g_Time));
 	vec4 rnd2 = hash44(vec4(g_Time, t, center));
@@ -160,7 +163,7 @@ float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 p
 	float mirrorSample = 0.;
 	if(length(velocity) > 0.) {
 		vec2 offsetDir  = normalize(velocity).yx * vec2(1.,-1.);
-		float offsetDist = 2. * penRadius * sizeModifier * dot(u_brushOffset, selectedChannel);
+		float offsetDist = 2. * brushRadius * sizeModifier * dot(u_brushOffset, selectedChannel);
 		offset = offsetDir * offsetDist * jitter(dot(u_brushOffsetJitter, selectedChannel), rnd2.x) * velMod(dot(u_brushVelOffsetMod, selectedChannel), velR);
 
 		float offsetMode = dot(u_brushMirrorOffset, selectedChannel);
@@ -172,7 +175,7 @@ float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 p
 	}
 
 
-	vec2 sampleSpot = (uv - (center + offset)) / (penRadius * 2.);
+	vec2 sampleSpot = (uv - (center + offset)) / (brushRadius * 2.);
 	vec2 sP = velocity * dot(sampleSpot, velocity) / dot(velocity,velocity);
 	sampleSpot = mix(sampleSpot, sP + (sP - sampleSpot), mirrorSample); // mirror sample pos along velocity dir
 	sampleSpot = mul(rMat(rot), sampleSpot) / sizeModifier; // apply rotation
@@ -187,6 +190,10 @@ float calcInfluence(float penRadius, vec2 uv, vec2 center, vec2 velocity, vec2 p
 	float sampleMask = step(length(sampleSpot) * 2., 1.);
 
 	return alpha * influence * sample * sampleMask;
+}
+
+float calcPointInfluence(float brushRadius, vec2 uv, vec2 center, vec2 velocity) {
+	return calcPointInfluence(brushRadius, uv, center, velocity, CAST2(0.), 1.);
 }
 
 float getT(vec2 lineStart, vec2 lineEnd, vec2 projPt) {
@@ -240,7 +247,7 @@ float getT(vec2 lineStart, vec2 lineEnd, vec2 projPt) {
  * the next frame. This is what the spacingOffset parameter is for.
  * 
  */
-float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor, vec2 pCursor, vec2 velocity, vec2 pVelocity) {
+float calcStrokeInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor, vec2 pCursor, vec2 velocity, vec2 pVelocity) {
 	float brushSpacing = max(u_brushSpacing, 1./MAX_BRUSH_SAMPLES_PER_PIXEL);
 	float ptDist = 2. * radius * brushSpacing;
 
@@ -258,7 +265,7 @@ float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor
 	}
 	vec2 start = pCursor + interval * (1. - spacingOffset);
 	if(pts == 1.) {
-		return clamp(calcInfluence(radius, uv, start, velocity, pVelocity, getT(pCursor, cursor, start)), 0., 1.);
+		return clamp(calcPointInfluence(radius, uv, start, velocity, pVelocity, getT(pCursor, cursor, start)), 0., 1.);
 	}
 	float rpts = pts - 1.;	// no mathematical meaning; term just appeared a bunch in calcs below, so i just pulled it into its own var
 	vec2 end = start + interval * rpts;
@@ -277,77 +284,124 @@ float calcBrushInfluence(float radius, float spacingOffset, vec2 uv, vec2 cursor
 		vec2 pt = mix(start, end, ptT);
 		influence += clamp(
 					step(-EPSILON, ptT) * step(ptT, 1. + EPSILON) // no contrib if outside stroke range
-					* calcInfluence(radius, uv, pt, velocity, pVelocity, getT(pCursor, cursor, pt))
+					* calcPointInfluence(radius, uv, pt, velocity, pVelocity, getT(pCursor, cursor, pt))
 				,-1.,1.);
 	}
 
 	return clamp(influence, 0., 1.);
 }
 
-void main() {
-	vec4 defaultAlbedo = texSample2D(g_Texture0, v_TexCoord.xy);
-	vec4 canvasAlbedo = texSample2D(g_Texture1, v_TexCoord.xy);
-#if ENABLE_CPY_BRUSH
-	vec4 cursorAlbedo = texSample2D(g_Texture1, g_PointerPosition);
-#endif
-#if ENABLE_SMEAR
-	vec4 smearAlbedo = texSample2D(g_Texture1, g_PointerPositionLast + (v_TexCoord.xy - g_PointerPosition));
-#endif
-#if ENABLE_UNDO_CMD
-	vec4 undoAlbedo = texSample2D(g_Texture2, v_TexCoord.xy);
-#endif
-#if ENABLE_BLEND
-	vec4 blendAlbedo = texSample2D(g_Texture4, v_TexCoord.xy);
-#endif
-	float lineInfluence = texSample2D(g_Texture3, v_TexCoord.xy).g;
-	vec4 lastFrameInfo = texSample2D(g_Texture5, vec2(0.5, 0.5));
-	float brushSpacingOffset = lastFrameInfo.x;
-	float p_Frametime = lastFrameInfo.y;
+/**
+ * Calculates the corresponding brush influence for the selected stroke type
+ * 
+ * Returns vec2:
+ *   - X contains influence for current fragment.
+ *   - Y is set to 0 if no fragment could have non-zero influence (i.e. draw calcs can be skipped). Otherwise Y is 1.
+ */
+vec2 calcInfluence(vec2 fragPos) {
 
 	vec2 ratCorr = mix(
 		vec2(1., g_Texture0Resolution.y/g_Texture0Resolution.x),
 		vec2(g_Texture0Resolution.x/g_Texture0Resolution.y, 1.),
 		step(g_Texture0Resolution.x, g_Texture0Resolution.y)
 	);
-	vec2 uv = v_TexCoord.xy * ratCorr;
+	vec2 uv = fragPos * ratCorr;
 	vec2 cursor = g_PointerPosition * ratCorr;
 	vec2 pCursor = g_PointerPositionLast * ratCorr;
-	vec2 ppCursor = lastFrameInfo.zw * ratCorr;
 	vec2 velocity = (cursor - pCursor) / g_Frametime;
-	vec2 pVelocity = (pCursor - ppCursor) / p_Frametime;
 
-	float penRadius = max(pow(u_drawRadius, 2.), EPSILON);
-	float penInfluence = calcProcInfluence(penRadius, uv, cursor, velocity, 1.);
+	float brushRadius = max(pow(u_drawRadius, 2.), EPSILON);
 
+	if(isMode(u_strokeType, INFLUENCE_STAMP)) {
+		if(u_mouseDown.x * NOT(u_mouseDown.y)) { // draws in an area around the cursor on mouse press
+			return vec2(clamp(calcPointInfluence(brushRadius, uv, cursor, velocity), 0., 1.), 1.);
+		}
+		return CAST2(0.);
+	}
+
+	if(isMode(u_strokeType, INFLUENCE_SPRAY)) {
+		if(u_mouseDown.x) { // draws while mouse down in an area around the cursor
+			return vec2(clamp(calcPointInfluence(brushRadius, uv, cursor, velocity), 0., 1.), 1.);
+		}
+		return CAST2(0.);
+	}
+
+#if ENABLE_LINE_INFLUENCE
 	// Line influence is only added to the canvas when the mouse is released, until then the present shader will show a preview of how the line looks.
 	// This way we avoid stacking brush influence when drawing line segments.
-	lineInfluence *= u_mouseDown.y * NOT(u_mouseDown.x);	// draws entire stroke (connected lines) on mouse release
-	float sprayInfluence = penInfluence * u_mouseDown.x;	// draws while mouse down in an area around the cursor
-	float stampInfluence = penInfluence * u_mouseDown.x * NOT(u_mouseDown.y);	// draws in an area around the cursor on mouse press
-	float brushInfluence = 0.;
-	if(u_mouseDown.x) {	// since brush influence calc is VERY expensive we want to skip it if possible
-		brushInfluence = calcBrushInfluence(penRadius, brushSpacingOffset, uv, cursor, pCursor, velocity, pVelocity);
+	if(isMode(u_strokeType, INFLUENCE_CLINES)) {
+		if(u_mouseDown.y * NOT(u_mouseDown.x)) { // draws entire stroke (connected lines) on mouse release
+			return vec2(texSample2D(g_Texture3, fragPos).g, 1.);
+		}
+		return CAST2(0.);
 	}
-#if ENABLE_LINE_INFLUENCE
-	// for draw modes that make sense with both spray and line influence use this and let the user decide which one to use
-	float generalInfluence = mix(brushInfluence, lineInfluence, u_preferredInfluence);
-#endif
-#if !ENABLE_LINE_INFLUENCE
-	float generalInfluence = brushInfluence;
 #endif
 
-	// apply strokes in various draw modes
-	vec4 nextAlbedo = mix(canvasAlbedo, defaultAlbedo, generalInfluence * modeMatch(u_drawMode, DRAW_MODE_ERASE));
-	nextAlbedo = mix(nextAlbedo, vec4(u_drawColor, 1.), generalInfluence * modeMatch(u_drawMode, DRAW_MODE_BRUSH));
+	if(isMode(u_strokeType, INFLUENCE_SPACED_DOTS)) {
+		if(u_mouseDown.x) { // draws evenly spaced dots while mouse down
+			
+			vec4 lastFrameInfo = texSample2D(g_Texture5, vec2(0.5, 0.5));
+			float brushSpacingOffset = lastFrameInfo.x;
+			float pFrametime = lastFrameInfo.y;
+			
+			vec2 ppCursor = lastFrameInfo.zw * ratCorr;
+			vec2 pVelocity = (pCursor - ppCursor) / pFrametime;
+
+			return vec2(calcStrokeInfluence(brushRadius, brushSpacingOffset, uv, cursor, pCursor, velocity, pVelocity), 1.);
+		}
+		return CAST2(0.);
+	}
+
+	return CAST2(0.);
+}
+
+vec4 applyDrawMode(vec4 canvasAlbedo, float brushInfluence, vec2 fragPos) {
+	vec4 brushColor = canvasAlbedo;
+
+	if(isMode(u_drawMode, DRAW_MODE_ERASE)) {
+		brushColor = texSample2D(g_Texture0, fragPos);
+	}
+
+	if(isMode(u_drawMode, DRAW_MODE_BRUSH)) {
+		brushColor = vec4(u_drawColor, 1.);
+	}
+
 #if ENABLE_BLEND
-	nextAlbedo = mix(nextAlbedo, blendAlbedo, generalInfluence * modeMatch(u_drawMode, DRAW_MODE_BLEND));
+	if(isMode(u_drawMode, DRAW_MODE_BLEND)) {
+		brushColor =  texSample2D(g_Texture4, fragPos);
+	}
 #endif
+
 #if ENABLE_SMEAR
-	nextAlbedo = mix(nextAlbedo, smearAlbedo, sprayInfluence * modeMatch(u_drawMode, DRAW_MODE_SMEAR));
+	if(isMode(u_drawMode, DRAW_MODE_SMEAR)) {
+		brushColor = texSample2D(g_Texture1, g_PointerPositionLast + (fragPos - g_PointerPosition));
+	}
 #endif
+
 #if ENABLE_CPY_BRUSH
-	nextAlbedo = mix(nextAlbedo, cursorAlbedo, sprayInfluence * modeMatch(u_drawMode, DRAW_MODE_COLOR_CPY));
+	if(isMode(u_drawMode, DRAW_MODE_COLOR_CPY)) {
+		brushColor = texSample2D(g_Texture1, g_PointerPosition);
+	}
 #endif
+
+	return mix(canvasAlbedo, brushColor, brushInfluence);
+}
+
+void main() {
+	vec4 defaultAlbedo = texSample2D(g_Texture0, v_TexCoord.xy);
+	vec4 canvasAlbedo = texSample2D(g_Texture1, v_TexCoord.xy);
+#if ENABLE_UNDO_CMD
+	vec4 undoAlbedo = texSample2D(g_Texture2, v_TexCoord.xy);
+#endif
+#if ENABLE_BLEND
+	vec4 blendAlbedo = texSample2D(g_Texture4, v_TexCoord.xy);
+#endif
+	
+	vec4 nextAlbedo = canvasAlbedo;
+	vec2 brushInfluence = calcInfluence(v_TexCoord.xy);
+	if(brushInfluence.y) {
+		nextAlbedo = applyDrawMode(nextAlbedo, brushInfluence.x, v_TexCoord.xy);
+	}
 
 	// apply commands
 	nextAlbedo = mix(nextAlbedo, defaultAlbedo, modeMatch(u_command, CMD_RESET));

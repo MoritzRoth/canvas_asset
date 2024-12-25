@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "175.49522 227.88985 -1.00000",
-		"eye" : "175.49522 227.88985 0.00000",
+		"center" : "0.00000 0.00000 -1.00000",
+		"eye" : "0.00000 0.00000 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -204,13 +204,13 @@
 								"brush1GProb" : 0.5,
 								"brush1Prob" : 
 								{
-									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brush1Prob'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].probability, tex[1].probability);\n}\n",
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brush1Prob'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar cb = shared.currentBrush;\n\tvar tex = cb.tex;\n\tif(cb.brush_type == \"procedural\") {\n\t\treturn new Vec2(1.0,0.0);\n\t}\n\treturn new Vec2(tex[0].probability, tex[1].probability);\n}\n",
 									"value" : "1.00000 1.00000"
 								},
 								"brush2BProb" : 0.0,
 								"brush2Factor" : 
 								{
-									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brush2Factor'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].influence, tex[1].influence);\n}\n",
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brush2Factor'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar cb = shared.currentBrush\n\tvar tex = cb.tex;\n\tif(cb.brush_type == \"procedural\") {\n\t\treturn new Vec2(1.0, 0.0);\n\t}\n\treturn new Vec2(tex[0].influence, tex[1].influence);\n}\n",
 									"value" : "1.00000 1.00000"
 								},
 								"brush3AProb" : "0 0 0 0",
@@ -262,7 +262,7 @@
 								},
 								"brushSizeFactor" : 
 								{
-									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushSizeFactor'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].size, tex[1].size);\n}\n",
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushSizeFactor'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar cb = shared.currentBrush;\n\tvar tex = cb.tex;\n\tif(cb.brush_type == \"procedural\") {\n\t\t// any value other than 1 doesn't make sense here since we don't have multiple textures that need different sizes\n\t\t// the overall size parameter is sufficient here\n\t\treturn new Vec2(1., 1.);\n\t}\n\treturn new Vec2(tex[0].size, tex[1].size);\n}\n",
 									"value" : "1.00000 1.00000"
 								},
 								"brushSizeJitter" : 
@@ -332,11 +332,7 @@
 								},
 								"influenceMode" : 
 								{
-									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tswitch(shared[scriptProperties['key']]) {\n\t\tcase \"line\":\n\t\t\treturn 1.;\n\t\tcase \"spray\":\n\t\tdefault:\n\t\t\treturn 0.;\n\t}\n}\n",
-									"scriptproperties" : 
-									{
-										"key" : "drawInfluence"
-									},
+									"script" : "'use strict';\n\n/**\n * @param {Number} value - for property 'influenceMode'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tvar cb = shared.currentBrush;\n\tswitch(cb.stroke_type) {\n\t\tcase \"stamp\":\n\t\t\treturn 0.;\n\t\tcase \"spray_can\":\n\t\t\treturn 1.;\n\t\tcase \"connected_lines\":\n\t\t\treturn 2.;\n\t\tcase \"evenly_spaced\":\n\t\t\treturn 3.;\n\t\tdefault:\n\t\t\treturn 1.;\n\t}\n}\n",
 									"value" : 0
 								},
 								"mouseDown" : 
@@ -408,11 +404,7 @@
 								},
 								"influenceMode" : 
 								{
-									"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property Name',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tswitch(shared[scriptProperties['key']]) {\n\t\tcase \"line\":\n\t\t\treturn 1.;\n\t\tcase \"spray\":\n\t\tdefault:\n\t\t\treturn 0.;\n\t}\n}\n",
-									"scriptproperties" : 
-									{
-										"key" : "drawInfluence"
-									},
+									"script" : "'use strict';\n\n/**\n * @param {Number} value - for property 'influenceMode'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tvar cb = shared.currentBrush;\n\tswitch(cb.stroke_type) {\n\t\tcase \"stamp\":\n\t\t\treturn 0.;\n\t\tcase \"spray_can\":\n\t\t\treturn 1.;\n\t\tcase \"connected_lines\":\n\t\t\treturn 2.;\n\t\tcase \"evenly_spaced\":\n\t\t\treturn 3.;\n\t\tdefault:\n\t\t\treturn 1.;\n\t}\n}\n",
 									"value" : 0
 								},
 								"mouseDown" : 
@@ -1122,7 +1114,7 @@
 				"scriptproperties" : 
 				{
 					"key" : "stroke_type",
-					"val" : "line"
+					"val" : "connected_lines"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
