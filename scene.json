@@ -49,6 +49,35 @@
 			"effects" : 
 			[
 				{
+					"file" : "effects/repeattexture/effect.json",
+					"id" : 539,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"Rotation" : 0.0,
+								"Scale" : 1.0
+							},
+							"id" : 540,
+							"textures" : [ null, "watercolor3" ]
+						}
+					],
+					"visible" : true
+				}
+			],
+			"id" : 536,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Brush",
+			"origin" : "1280.00000 720.00000 0.00000",
+			"size" : "1024.00000 1024.00000"
+		},
+		{
+			"castshadow" : false,
+			"effects" : 
+			[
+				{
 					"file" : "effects/workshop/2911547294/clouds/effect.json",
 					"id" : 299,
 					"name" : "",
@@ -85,7 +114,7 @@
 		},
 		{
 			"castshadow" : false,
-			"dependencies" : [ 288 ],
+			"dependencies" : [ 288, 536 ],
 			"effects" : 
 			[
 				{
@@ -400,7 +429,7 @@
 								null,
 								"_rt_imageLayerComposite_288_a",
 								null,
-								"DebugOrientationBrush"
+								"_rt_imageLayerComposite_536_a"
 							]
 						},
 						{
@@ -1881,6 +1910,27 @@
 		{
 			"angles" : "0.00000 -0.00000 0.00000",
 			"castshadow" : false,
+			"dependencies" : [ 536 ],
+			"effects" : 
+			[
+				{
+					"file" : "effects/brush_preview/effect.json",
+					"id" : 560,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"channelSelection" : "1 0 0 0"
+							},
+							"id" : 561,
+							"textures" : [ "_rt_imageLayerComposite_516_a", "_rt_imageLayerComposite_536_a" ]
+						}
+					],
+					"visible" : true
+				}
+			],
 			"id" : 516,
 			"image" : "models/util/solidlayer.json",
 			"name" : "Channel 0",
@@ -1913,6 +1963,27 @@
 		{
 			"angles" : "0.00000 -0.00000 0.00000",
 			"castshadow" : false,
+			"dependencies" : [ 536 ],
+			"effects" : 
+			[
+				{
+					"file" : "effects/brush_preview/effect.json",
+					"id" : 589,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"channelSelection" : "0 1 0 0"
+							},
+							"id" : 0,
+							"textures" : [ "_rt_imageLayerComposite_493_a", "_rt_imageLayerComposite_536_a" ]
+						}
+					],
+					"visible" : true
+				}
+			],
 			"id" : 493,
 			"image" : "models/util/solidlayer.json",
 			"name" : "Channel 1",

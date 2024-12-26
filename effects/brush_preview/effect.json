@@ -1,0 +1,19 @@
+{
+	"dependencies" : 
+	[
+		"materials/effects/brush_preview.json",
+		"shaders/effects/brush_preview.frag",
+		"shaders/effects/brush_preview.vert"
+	],
+	"editable" : true,
+	"group" : "localeffects",
+	"name" : "Brush Preview",
+	"passes" : 
+	[
+		{
+			"material" : "materials/effects/brush_preview.json"
+		}
+	],
+	"replacementkey" : "brush_preview",
+	"version" : 1
+}
