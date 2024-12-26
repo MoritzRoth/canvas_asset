@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "155.78307 33.23372 -1.00000",
-		"eye" : "155.78307 33.23372 0.00000",
+		"center" : "0.00000 0.00000 -1.00000",
+		"eye" : "0.00000 0.00000 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -145,6 +145,51 @@
 						{
 							"constantshadervalues" : 
 							{
+								"brushAlphaJitter" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushAlphaJitter'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].alpha_jitter, tex[1].alpha_jitter);\n}\n",
+									"value" : "0.00000 0.00000"
+								},
+								"brushAlphaVelMod" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushAlphaVelMod'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].alpha_vel, tex[1].alpha_vel);\n}\n",
+									"value" : "0.00000 0.00000"
+								},
+								"brushOffsetMirror" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushPositionJitter'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].offset_mirror, tex[1].offset_mirror);\n}\n",
+									"value" : "1.00000 1.00000"
+								},
+								"brushOffsetVelMod" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushAlphaVelMod'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].offset_vel, tex[1].offset_vel);\n}\n",
+									"value" : "0.00000 0.00000"
+								},
+								"brushPositionJitter" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushPositionJitter'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].offset_jitter, tex[1].offset_jitter);\n}\n",
+									"value" : "0.20000 0.40000"
+								},
+								"brushPositionOffset" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushPositionJitter'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].offset, tex[1].offset);\n}\n",
+									"value" : "0.00000 0.00000"
+								},
+								"brushSizeJitter" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushSizeJitter'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].size_jitter, tex[1].size_jitter);\n}\n",
+									"value" : "0.00000 0.00000"
+								},
+								"brushSizeVelMod" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushSizeVelMod'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].size_vel, tex[1].size_vel);\n}\n",
+									"value" : "-0.70000 -0.70000"
+								},
+								"brushVelocityBounds" : 
+								{
+									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushVelocityBounds'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar cb = shared.currentBrush;\n\treturn new Vec2(cb.lo_vel, cb.hi_vel);\n}\n",
+									"value" : "0.00000 5.00000"
+								},
 								"drawAlpha" : 
 								{
 									"script" : "'use strict';\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared['currentBrush'].alpha;\n}\n",
@@ -2465,7 +2510,7 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar check;\n\nvar colorDefault = new Vec3(1.0, 1.0, 1.0);\nvar colorDisabled = new Vec3(0.6, 0.6, 0.6);\n\nexport function shouldEnable() {\n\tvar cb = shared.currentBrush;\n\treturn cb.brush_type != 'procedural' && cb.stroke_type != 'stamp';\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tcheck = thisLayer.getChildren()[0];\n\t\n\tfor(var i = 0; i < shared.brushEditor.texCnt; i++) {\n\t\tshared.currentBrush.tex[i][scriptProperties['key']] = 0;\n\t}\n\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? colorDefault : colorDisabled;\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] = (shared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] + 1) % 3;\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tvar status = shared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']];\n\tcheck.visible = status > 0;\n\tcheck.alpha = status / 2.;\n}\n\n",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar check;\n\nvar colorDefault = new Vec3(1.0, 1.0, 1.0);\nvar colorDisabled = new Vec3(0.6, 0.6, 0.6);\n\nexport function shouldEnable() {\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tcheck = thisLayer.getChildren()[0];\n\t\n\tfor(var i = 0; i < shared.brushEditor.texCnt; i++) {\n\t\tshared.currentBrush.tex[i][scriptProperties['key']] = 0;\n\t}\n\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? colorDefault : colorDisabled;\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] = (shared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] + 1) % 3;\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tvar status = shared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']];\n\tcheck.visible = status > 0;\n\tcheck.alpha = status / 2.;\n}\n\n",
 				"scriptproperties" : 
 				{
 					"key" : "offset_mirror"

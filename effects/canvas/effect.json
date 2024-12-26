@@ -111,6 +111,10 @@
 				{
 					"index" : 0,
 					"name" : "_u_memoryPenInfluence"
+				},
+				{
+					"index":5,
+					"name": "_u_storageMemory"
 				}
 			],
 			"material" : "materials/effects/canvas_pen_influence.json",
