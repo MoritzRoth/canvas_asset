@@ -13,6 +13,7 @@ varying vec2 v_TexCoord;
 #define INFLUENCE_SPRAY 1
 #define INFLUENCE_CLINES 2
 #define INFLUENCE_SPACED_DOTS 3
+#define INFLUENCE_LINE 4
 
 // canvas texture
 uniform sampler2D g_Texture0; // {"hidden":true}
@@ -31,7 +32,7 @@ uniform vec2 g_PointerPosition;
 uniform float u_drawMode; // {"material":"drawMode","label":"Draw Mode Duplicate","int":true,"default":0,"range":[0,4]}
 uniform vec3 u_drawColor; // {"material":"drawCol","label":"Draw Color","type":"color","default":"1 1 1"}
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
-uniform float u_strokeType; // {"material":"influenceMode","label":"Stroke Type (Stamp, Air Brush, Connected Line, Evenly Spaced)","int":true,"default":0,"range":[0,1]}
+uniform float u_strokeType; // {"material":"influenceMode","label":"Stroke Type (Stamp, Air Brush, Connected Line, Evenly Spaced, Straight Line)","int":true,"default":0,"range":[0,1]}
 uniform float u_brushPreview; // {"material":"brushPreview","label":"Preview (None, Outline, Full)","int":true,"default":0,"range":[0,2]}
 
 float modeMatch(float a, float b) {
@@ -76,7 +77,7 @@ vec4 linePreview(vec4 canvas, vec2 uv) {
 	}
 #endif
 
-	float previewOn = modeMatch(u_strokeType, INFLUENCE_CLINES) * NOT(modeMatch(u_drawMode, DRAW_MODE_SMEAR));
+	float previewOn = (modeMatch(u_strokeType, INFLUENCE_CLINES) + modeMatch(u_strokeType, INFLUENCE_LINE)) * NOT(modeMatch(u_drawMode, DRAW_MODE_SMEAR));
 	return mix(canvas, brushColor, lineInfluence * u_mouseDown.x * previewOn);
 }
 

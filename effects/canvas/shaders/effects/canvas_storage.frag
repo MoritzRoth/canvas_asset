@@ -19,6 +19,30 @@ uniform float u_drawRadius; // {"material":"drawRadius","label":"Draw Radius","d
 #define IPSILON 1. - EPSILON
 #define MAX_BRUSH_SAMPLES_PER_PIXEL 32.
 
+#define STORAGE_FRAMEINFO 0.		// X: brush spacing offset, Y: prev frametime, ZW: pprev cursor pos
+#define STORAGE_MOUSE_EVENT_POS 1.	// XY: pos of last cursor down, ZW: unused
+#define STORAGE_COLOR 2.			// RGBA: stored color from color picker tool TODO
+
+#define STORAGE_SIZE 3.
+
+/** \brief Calculates the sample position required to fetch the given storage id from the storage buffer.
+ * Needs to be kept in sync with other shaders
+ */
+vec2 sampleSpot(float storageId) {
+	return vec2((storageId + 0.5) / STORAGE_SIZE, 0.5);
+}
+
+/** \brief Calculates a mask for the given storage id. Ensures that no masks overlap.
+ * Needs to be kept in sync with sampleSpot()
+ */
+float mask(vec2 uv, float storageId) {
+	return step(storageId / STORAGE_SIZE, uv.x) * step(uv.x, (storageId+1.) / STORAGE_SIZE);
+}
+
+float NOT(float v) {
+	return 1.-v;
+}
+
 float calcBrushSpacingOffset(float radius, float lastSpacingOffset, vec2 cursor, vec2 pCursor) {
 	float brushSpacing = max(u_brushSpacing, 1./MAX_BRUSH_SAMPLES_PER_PIXEL);
 	float ptDist = 2. * radius * brushSpacing;
@@ -45,7 +69,6 @@ float calcBrushSpacingOffset(float radius, float lastSpacingOffset, vec2 cursor,
 }
 
 void main() {
-	vec2 lastFrameData = texSample2D(g_Texture1, vec2(0.5, 0.5)).rg;
 
 	vec2 ratCorr = mix(
 		vec2(1., g_Texture0Resolution.y/g_Texture0Resolution.x),
@@ -57,10 +80,16 @@ void main() {
 
 	float penRadius = max(pow(u_drawRadius, 2.), EPSILON);
 
-	float previousOffset = lastFrameData.x;
+	float previousOffset = texSample2D(g_Texture1, sampleSpot(STORAGE_FRAMEINFO)).r;
 	float nextOffset = calcBrushSpacingOffset(penRadius, previousOffset, cursor, pCursor);
 	nextOffset = mix(1.,min(nextOffset, IPSILON), u_mouseDown.x);
+	vec4 frameInfo = vec4(nextOffset, g_Frametime, g_PointerPositionLast);
 
-	// update undo frame only if we start a new pen stroke this frame
-	gl_FragColor = vec4(nextOffset, g_Frametime, g_PointerPositionLast);
+	vec2 pLastMouseDown = texSample2D(g_Texture1, sampleSpot(STORAGE_MOUSE_EVENT_POS)).xy;	// TODO only track this if needed to skip texture sample
+	vec2 lastMouseDown = mix(pLastMouseDown, g_PointerPosition, u_mouseDown.x * NOT(u_mouseDown.y));
+	vec4 mouseEventPos = vec4(lastMouseDown, CAST2(0.));
+	
+	gl_FragColor = 
+		  frameInfo * mask(v_TexCoord.xy, STORAGE_FRAMEINFO)
+		+ mouseEventPos * mask(v_TexCoord.xy, STORAGE_MOUSE_EVENT_POS);
 }

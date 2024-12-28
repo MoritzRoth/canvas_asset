@@ -8,6 +8,12 @@ varying vec2 v_TexCoord;
 #define OFFSET_BOTH_DIR 1
 #define OFFSET_MIRROR 2
 
+#define INFLUENCE_STAMP 0
+#define INFLUENCE_SPRAY 1
+#define INFLUENCE_CLINES 2
+#define INFLUENCE_SPACED_DOTS 3
+#define INFLUENCE_LINE 4
+
 uniform sampler2D g_Texture0; // {"hidden":true}
 // storage texture
 uniform sampler2D g_Texture5; // {"hidden":true}
@@ -23,6 +29,7 @@ uniform float u_drawHardness; // {"material":"drawHardness","label":"Draw Hardne
 uniform float u_drawAlpha; // {"material":"drawAlpha","label":"Draw Alpha","default":1,"range":[0,1]}
 
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
+uniform float u_strokeType; // {"material":"influenceMode","label":"Stroke Type (Stamp, Air Brush, Connected Line, Evenly Spaced, Straight Line)","int":true,"default":0,"range":[0,1]}
 
 uniform vec2 u_brushOffset; // {"material":"brushPositionOffset","label":"Brush Constant Offset","default":"0 0","range":[-1,1]}
 uniform vec2 u_brushMirrorOffset; // {"material":"brushOffsetMirror","label":"Brush Mirror Offset","default":"0 0","range":[0,1]}
@@ -36,8 +43,25 @@ uniform vec2 u_brushVelSizeMod; // {"material":"brushSizeVelMod","label":"Brush 
 uniform vec2 u_brushVelAlphaMod; // {"material":"brushAlphaVelMod","label":"Brush Alpha Velocity Modifier","default":"0 0","range":[-1,1]}
 uniform vec2 u_brushVelOffsetMod; // {"material":"brushOffsetVelMod","label":"Brush Offset Velocity Modifier","default":"0 0","range":[-1,1]}
 
+#define STORAGE_FRAMEINFO 0.		// X: brush spacing offset, Y: prev frametime, ZW: pprev cursor pos
+#define STORAGE_MOUSE_EVENT_POS 1.	// XY: pos of last cursor down, ZW: unused
+#define STORAGE_COLOR 2.			// RGBA: stored color from color picker tool TODO
+
+#define STORAGE_SIZE 3.
+
+/** \brief Calculates the sample position required to fetch the given storage id from the storage buffer.
+ * Needs to be kept in sync with other shaders
+ */
+vec2 sampleSpot(float storageId) {
+	return vec2((storageId + 0.5) / STORAGE_SIZE, 0.5);
+}
+
 float modeMatch(float a, float b) {
 	return step(abs(a-b), 0.1);
+}
+
+bool isMode(float a, float b) {
+	return modeMatch(a,b) > 0.5;
 }
 
 float NOT(float v) {
@@ -99,36 +123,17 @@ vec2 calcOffset(vec2 dir, vec2 rnd, float vel, float penRadius, vec2 uv, vec2 pt
 	return offset;
 }
 
-void main() {
-	float previousInfluence = texSample2D(g_Texture0, v_TexCoord.xy).r;
-	vec4 lastFrameInfo = texSample2D(g_Texture5, vec2(0.5, 0.5));
-	float pFrametime = lastFrameInfo.y;
-	// only add to last influence if last frame the mouse was down
-	float influence = mix(previousInfluence, 0., NOT(u_mouseDown.y));
+float calcSegmentInfluence(vec2 uv, float penRadius, vec4 pos, vec4 vel, vec2 frametime, float incompleteSegment) {
 
-	float penRadius = max(pow(u_drawRadius, 2.), EPSILON);
+	vec4 rnd = hash44(vec4(pos.xy, frametime.x, vel.x));
+	vec4 pRnd = hash44(vec4(pos.zw, frametime.y, vel.z));
+	float t = clamp(getT(pos.zw, pos.xy, uv), EPSILON, IPSILON);
 
-	vec2 ratCorr = mix(
-		vec2(1., g_Texture0Resolution.y/g_Texture0Resolution.x),
-		vec2(g_Texture0Resolution.x/g_Texture0Resolution.y, 1.),
-		step(g_Texture0Resolution.x, g_Texture0Resolution.y)
-	);
-	vec2 uv = v_TexCoord.xy * ratCorr;
-	vec2 cursor = g_PointerPosition * ratCorr;
-	vec2 pCursor = g_PointerPositionLast * ratCorr;
-	vec2 ppCursor = lastFrameInfo.zw * ratCorr;
-	vec2 velocity = (cursor - pCursor) / g_Frametime;
-	vec2 pVelocity = (pCursor - ppCursor) / pFrametime;
-
-	vec4 rnd = hash44(vec4(cursor, g_Frametime, pCursor.x));
-	vec4 pRnd = hash44(vec4(pCursor, pFrametime, ppCursor.x));
-	float t = clamp(getT(pCursor, cursor, uv), EPSILON, IPSILON);
-
-	// interpolate cursor velocities from current & previous frame so we have smooth transitions
+	// interpolate velocities from current & previous frame so we have smooth transitions
 	vec2 velBounds = vec2(u_velBounds.x, max(u_velBounds.y, u_velBounds.x + EPSILON));
 	float velRange = dot(velBounds,vec2(-1., 1.));
-	float velRat = min(1., max(length(velocity) - u_velBounds.x, 0.) / velRange);
-	float pVelRat = min(1., max(length(pVelocity) - u_velBounds.x, 0.) / velRange);
+	float velRat = min(1., max(length(vel.xy) - u_velBounds.x, 0.) / velRange);
+	float pVelRat = min(1., max(length(vel.zw) - u_velBounds.x, 0.) / velRange);
 	float velT = mix(pVelRat, velRat, t);
 
 	// calc brush size jitter & velocity variation
@@ -145,18 +150,69 @@ void main() {
 	vec2 pOffset = CAST2(0.);
 	vec2 offset = CAST2(0.);
 	float mirrorSample = 0.;
-	if(length(velocity) > 0.) {
-		pOffset = calcOffset(pVelocity, pRnd.zw, pVelRat, penRadius * sizeMod0, uv, pCursor);
-		offset = calcOffset(velocity, rnd.zw, velRat, penRadius * sizeMod1, uv, cursor);
+	if(length(vel.xy) > 0.) {
+		pOffset = calcOffset(vel.zw, pRnd.zw, pVelRat, penRadius * sizeMod0, uv, pos.zw);
+		offset = calcOffset(vel.xy, rnd.zw, velRat, penRadius * sizeMod1, uv, pos.xy);
 	}
 
 	penRadius *= sizeModifier;
 	float penSmoothRadius = penRadius * min(u_drawHardness, IPSILON);
-	float currentInfluence = alpha * u_mouseDown.x * (
-		   NOT(u_mouseDown.y) * smoothstep(penRadius, penSmoothRadius, length(uv - (cursor + offset)))
-		 +     u_mouseDown.y  * smoothstep(penRadius, penSmoothRadius, sdSegment(uv, cursor + offset, pCursor + pOffset))
+	return alpha * (
+		       incompleteSegment  * smoothstep(penRadius, penSmoothRadius, length(uv - (pos.xy + offset)))
+		 + NOT(incompleteSegment) * smoothstep(penRadius, penSmoothRadius, sdSegment(uv, pos.xy + offset, pos.zw + pOffset))
+	);
+}
+
+float calcLineInfluence(vec2 uv, float penRadius, vec2 start, vec2 end) {
+	float penSmoothRadius = penRadius * min(u_drawHardness, IPSILON);
+	return u_drawAlpha * smoothstep(penRadius, penSmoothRadius, sdSegment(uv, start, end));
+}
+
+void main() {
+
+	vec2 ratCorr = mix(
+		vec2(1., g_Texture0Resolution.y/g_Texture0Resolution.x),
+		vec2(g_Texture0Resolution.x/g_Texture0Resolution.y, 1.),
+		step(g_Texture0Resolution.x, g_Texture0Resolution.y)
 	);
 
-	influence = max(influence, currentInfluence);
+	vec2 uv = v_TexCoord.xy * ratCorr;
+	vec2 cursor = g_PointerPosition * ratCorr;
+	vec2 pCursor = g_PointerPositionLast * ratCorr;
+	vec2 velocity = (cursor - pCursor) / g_Frametime;
+	float penRadius = max(pow(u_drawRadius, 2.), EPSILON);
+	
+	float influence = 0.;
+	if(isMode(u_strokeType, INFLUENCE_CLINES)) {
+		vec4 lastFrameInfo = texSample2D(g_Texture5, sampleSpot(STORAGE_FRAMEINFO));
+		float pFrametime = lastFrameInfo.y;
+		vec2 ppCursor = lastFrameInfo.zw * ratCorr;
+		vec2 pVelocity = (pCursor - ppCursor) / pFrametime;
+
+		float previousInfluence = texSample2D(g_Texture0, v_TexCoord.xy).r;
+		
+		// only add to last influence if last frame the mouse was down
+		influence = mix(previousInfluence, 0., NOT(u_mouseDown.y));
+
+		influence = max(
+			influence,
+			calcSegmentInfluence(
+				uv, penRadius,
+				vec4(cursor, pCursor),
+				vec4(velocity, pVelocity),
+				vec2(g_Frametime, pFrametime),
+				NOT(u_mouseDown.y)
+			) * u_mouseDown.x
+		);
+	}
+
+	if(isMode(u_strokeType, INFLUENCE_LINE)) {
+		vec2 lineStart = texSample2D(g_Texture5, sampleSpot(STORAGE_MOUSE_EVENT_POS)).xy * ratCorr;
+		lineStart = mix(cursor, lineStart, u_mouseDown.y);
+
+		influence = min(dot(u_mouseDown, CAST2(1.)), 1.) * calcLineInfluence(uv, penRadius, lineStart, cursor);
+	}
+
+	
 	gl_FragColor = CAST4(influence);
 }

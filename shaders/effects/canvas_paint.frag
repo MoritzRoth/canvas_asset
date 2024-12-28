@@ -26,6 +26,7 @@ varying vec2 v_TexCoord;
 #define INFLUENCE_SPRAY 1
 #define INFLUENCE_CLINES 2
 #define INFLUENCE_SPACED_DOTS 3
+#define INFLUENCE_LINE 4
 
 #define OFFSET_ONE_DIR 0
 #define OFFSET_BOTH_DIR 1
@@ -56,7 +57,7 @@ uniform float g_Time;
 uniform float u_command; // {"material":"cmd","label":"Command (None, Reset, Undo, Blend)","int":true,"default":0,"range":[0,3]}
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
 uniform float u_drawMode; // {"material":"drawMode","label":"Draw Mode (Erase, Brush, Smear, Color Copy, Blend)","int":true,"default":0,"range":[0,4]}
-uniform float u_strokeType; // {"material":"influenceMode","label":"Stroke Type (Stamp, Air Brush, Connected Line, Evenly Spaced)","int":true,"default":0,"range":[0,3]}
+uniform float u_strokeType; // {"material":"influenceMode","label":"Stroke Type (Stamp, Air Brush, Connected Line, Evenly Spaced, Straight Line)","int":true,"default":0,"range":[0,3]}
 
 uniform vec3 u_drawColor; // {"material":"drawCol","label":"Draw Color","type":"color","default":"1 1 1"}
 uniform float u_drawAlpha; // {"material": "drawAlpha","label":"Draw Alpha","default":1,"range":[0,1]}
@@ -83,6 +84,18 @@ uniform vec2 u_brushVelSizeMod; // {"material":"brushSizeVelMod","label":"Brush 
 uniform vec2 u_brushVelAlphaMod; // {"material":"brushAlphaVelMod","label":"Brush Alpha Velocity Modifier","default":"0 0","range":[-1,1]}
 uniform vec2 u_brushVelOffsetMod; // {"material":"brushOffsetVelMod","label":"Brush Offset Velocity Modifier","default":"0 0","range":[-1,1]}
 
+#define STORAGE_FRAMEINFO 0.		// X: brush spacing offset, Y: prev frametime, ZW: pprev cursor pos
+#define STORAGE_MOUSE_EVENT_POS 1	// XY: pos of last cursor down, ZW: unused
+#define STORAGE_COLOR 2.			// RGBA: stored color from color picker tool TODO
+
+#define STORAGE_SIZE 3.
+
+/** \brief Calculates the sample position required to fetch the given storage id from the storage buffer.
+ * Needs to be kept in sync with other shaders
+ */
+vec2 sampleSpot(float storageId) {
+	return vec2((storageId + 0.5) / STORAGE_SIZE, 0.5);
+}
 
 float modeMatch(float a, float b) {
 	return step(abs(a-b), 0.1);
@@ -330,7 +343,7 @@ vec2 calcInfluence(vec2 fragPos) {
 #if ENABLE_LINE_INFLUENCE
 	// Line influence is only added to the canvas when the mouse is released, until then the present shader will show a preview of how the line looks.
 	// This way we avoid stacking brush influence when drawing line segments.
-	if(isMode(u_strokeType, INFLUENCE_CLINES)) {
+	if(isMode(u_strokeType, INFLUENCE_CLINES) || isMode(u_strokeType, INFLUENCE_LINE)) {
 		if(u_mouseDown.y * NOT(u_mouseDown.x)) { // draws entire stroke (connected lines) on mouse release
 			return vec2(texSample2D(g_Texture3, fragPos).g, 1.);
 		}
@@ -341,7 +354,7 @@ vec2 calcInfluence(vec2 fragPos) {
 	if(isMode(u_strokeType, INFLUENCE_SPACED_DOTS)) {
 		if(u_mouseDown.x) { // draws evenly spaced dots while mouse down
 			
-			vec4 lastFrameInfo = texSample2D(g_Texture5, vec2(0.5, 0.5));
+			vec4 lastFrameInfo = texSample2D(g_Texture5, sampleSpot(STORAGE_FRAMEINFO));
 			float brushSpacingOffset = lastFrameInfo.x;
 			float pFrametime = lastFrameInfo.y;
 			
