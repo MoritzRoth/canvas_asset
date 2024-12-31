@@ -10,5 +10,5 @@ void main() {
 	vec4 background = texSample2D(g_Texture0, v_TexCoord.xy);
 	vec4 customTex = texSample2D(g_Texture1, v_TexCoord.xy);
 
-	gl_FragColor = mix(background, customTex, vec4(u_channelMask, 0.));
+	gl_FragColor = mix(background, min(customTex, background), vec4(u_channelMask, 0.));
 }
