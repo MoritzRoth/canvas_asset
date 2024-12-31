@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "132.34567 163.95059 -1.00000",
-		"eye" : "132.34567 163.95059 0.00000",
+		"center" : "0.00000 0.00000 -1.00000",
+		"eye" : "0.00000 0.00000 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -123,7 +123,7 @@
 				{
 					"file" : "effects/brush_texture/effect.json",
 					"id" : 814,
-					"name" : "Circle",
+					"name" : "Debug",
 					"passes" : 
 					[
 						{
@@ -134,6 +134,78 @@
 							},
 							"id" : 815,
 							"textures" : [ null, "DbgBrush" ]
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/brush_texture/effect.json",
+					"id" : 550,
+					"name" : "Triangle",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"Channel Mask" : "1 1 1 1",
+								"channelMask" : "1 1 1"
+							},
+							"id" : 551,
+							"textures" : [ null, "Triangle" ]
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/brush_texture/effect.json",
+					"id" : 566,
+					"name" : "Square",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"Channel Mask" : "1 1 1 1",
+								"channelMask" : "1 1 1"
+							},
+							"id" : 571,
+							"textures" : [ null, "Square" ]
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/brush_texture/effect.json",
+					"id" : 586,
+					"name" : "Star",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"Channel Mask" : "1 1 1 1",
+								"channelMask" : "1 1 1"
+							},
+							"id" : 587,
+							"textures" : [ null, "Star" ]
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/brush_texture/effect.json",
+					"id" : 603,
+					"name" : "Gradient",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"Channel Mask" : "1 1 1 1",
+								"channelMask" : "1 1 1"
+							},
+							"id" : 604,
+							"textures" : [ null, "Gradient" ]
 						}
 					],
 					"visible" : false
