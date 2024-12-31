@@ -6,7 +6,7 @@
 			"cullmode" : "nocull",
 			"depthtest" : "disabled",
 			"depthwrite" : "disabled",
-			"shader" : "effects/repeattexture"
+			"shader" : "effects/brush_texture"
 		}
 	]
 }

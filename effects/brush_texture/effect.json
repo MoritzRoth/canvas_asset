@@ -1,0 +1,19 @@
+{
+	"dependencies" : 
+	[
+		"materials/effects/brush_texture.json",
+		"shaders/effects/brush_texture.frag",
+		"shaders/effects/brush_texture.vert"
+	],
+	"editable" : true,
+	"group" : "localeffects",
+	"name" : "Brush Texture",
+	"passes" : 
+	[
+		{
+			"material" : "materials/effects/brush_texture.json"
+		}
+	],
+	"replacementkey" : "brush_texture",
+	"version" : 1
+}
