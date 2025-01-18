@@ -104,6 +104,24 @@
 				},
 				{
 					"file" : "effects/brush_texture/effect.json",
+					"id" : 670,
+					"name" : "Sprinkles Jaggy",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"Channel Mask" : "1 1 1 1",
+								"channelMask" : "1 1 1"
+							},
+							"id" : 671,
+							"textures" : [ null, "BrushD" ]
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/brush_texture/effect.json",
 					"id" : 612,
 					"name" : "Circle",
 					"passes" : 
@@ -206,6 +224,60 @@
 							},
 							"id" : 604,
 							"textures" : [ null, "Gradient" ]
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/brush_texture/effect.json",
+					"id" : 546,
+					"name" : "Stripes",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"Channel Mask" : "1 1 1 1",
+								"channelMask" : "1 1 1"
+							},
+							"id" : 547,
+							"textures" : [ null, "Stripes" ]
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/brush_texture/effect.json",
+					"id" : 620,
+					"name" : "Brush 1",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"Channel Mask" : "1 1 1 1",
+								"channelMask" : "1 1 1"
+							},
+							"id" : 621,
+							"textures" : [ null, "BrushA" ]
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/brush_texture/effect.json",
+					"id" : 680,
+					"name" : "Cloud",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"Channel Mask" : "1 1 1 1",
+								"channelMask" : "1 1 1"
+							},
+							"id" : 681,
+							"textures" : [ null, "BrushC" ]
 						}
 					],
 					"visible" : false
