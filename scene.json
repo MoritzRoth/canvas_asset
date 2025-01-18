@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "346.84555 73.07427 -1.00000",
-		"eye" : "346.84555 73.07427 0.00000",
+		"center" : "301.16837 110.08223 -1.00000",
+		"eye" : "301.16837 110.08223 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -787,7 +787,7 @@
 			"name" : "Previous_2",
 			"origin" : 
 			{
-				"script" : "'use strict';\n\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushEditor.brushId = (shared.brushes.length + shared.brushEditor.brushId - 1) % shared.brushes.length;\n\tshared.currentBrush = JSON.parse(JSON.stringify(shared.brushes[shared.brushEditor.brushId]));\n\tshared.brushEditor.changed = true;\n}\n",
+				"script" : "'use strict';\n\nvar hovered =false;\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered) {\n\t\tshared.tooltip = \"Previous Brush (Discard Changes)\";\n\t}\n\treturn value;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!isVisible()) {return;}\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\thovered = false;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushEditor.brushId = (shared.brushes.length + shared.brushEditor.brushId - 1) % shared.brushes.length;\n\tshared.currentBrush = JSON.parse(JSON.stringify(shared.brushes[shared.brushEditor.brushId]));\n\tshared.brushEditor.changed = true;\n}\n\n\n",
 				"value" : "-120.00000 0.00003 0.00000"
 			},
 			"parent" : 304,
@@ -802,7 +802,7 @@
 			"name" : "Next_2",
 			"origin" : 
 			{
-				"script" : "'use strict';\n\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushEditor.brushId = (shared.brushEditor.brushId + 1) % shared.brushes.length;\n\tshared.currentBrush = JSON.parse(JSON.stringify(shared.brushes[shared.brushEditor.brushId]));\n\tshared.brushEditor.changed = true;\n}\n",
+				"script" : "'use strict';\n\nvar hovered =false;\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered) {\n\t\tshared.tooltip = \"Next Brush (Discard Changes)\";\n\t}\n\treturn value;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!isVisible()) {return;}\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\thovered = false;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushEditor.brushId = (shared.brushEditor.brushId + 1) % shared.brushes.length;\n\tshared.currentBrush = JSON.parse(JSON.stringify(shared.brushes[shared.brushEditor.brushId]));\n\tshared.brushEditor.changed = true;\n}\n",
 				"value" : "-105.00000 0.00000 0.00000"
 			},
 			"parent" : 304,
@@ -849,7 +849,7 @@
 			"name" : "Print_2",
 			"origin" : 
 			{
-				"script" : "'use strict';\n\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tconsole.log(JSON.stringify(shared['currentBrush']));\n}\n",
+				"script" : "'use strict';\n\nvar hovered =false;\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered) {\n\t\tshared.tooltip = \"Print Brush Settings to Log\";\n\t}\n\treturn value;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!isVisible()) {return;}\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\thovered = false;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tconsole.log(JSON.stringify(shared['currentBrush']));\n}\n",
 				"value" : "45.00000 0.00000 0.00000"
 			},
 			"parent" : 304,
@@ -864,7 +864,7 @@
 			"name" : "Delete_2",
 			"origin" : 
 			{
-				"script" : "'use strict';\n\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tif(shared.brushes.length <= 1) {return;}\n\n\tvar brushes = shared.brushes;\n\tvar editor = shared.brushEditor;\n\n\tbrushes.splice(editor.brushId, 1);\n\teditor.brushId = Math.min(editor.brushId, brushes.length - 1);\n\tshared.currentBrush = JSON.parse(JSON.stringify(brushes[editor.brushId]));\n\teditor.changed = true;\n\n\tlocalStorage.set('brushes', brushes, localStorage.LOCATION_GLOBAL);\n}\n",
+				"script" : "'use strict';\n\nvar hovered =false;\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered) {\n\t\tshared.tooltip = \"Delete Brush\";\n\t}\n\treturn value;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!isVisible()) {return;}\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\thovered = false;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tif(shared.brushes.length <= 1) {return;}\n\n\tvar brushes = shared.brushes;\n\tvar editor = shared.brushEditor;\n\n\tbrushes.splice(editor.brushId, 1);\n\teditor.brushId = Math.min(editor.brushId, brushes.length - 1);\n\tshared.currentBrush = JSON.parse(JSON.stringify(brushes[editor.brushId]));\n\teditor.changed = true;\n\n\tlocalStorage.set('brushes', brushes, localStorage.LOCATION_GLOBAL);\n}\n",
 				"value" : "60.00000 0.00000 0.00000"
 			},
 			"parent" : 304,
@@ -879,7 +879,7 @@
 			"name" : "Refresh_2",
 			"origin" : 
 			{
-				"script" : "'use strict';\n\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushes = localStorage.get('brushes', localStorage.LOCATION_GLOBAL);\n\tshared.currentBrush = JSON.parse(JSON.stringify(shared.brushes[shared.brushEditor.brushId]));\n\tshared.brushEditor.changed = true;\n}\n",
+				"script" : "'use strict';\n\nvar hovered =false;\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered) {\n\t\tshared.tooltip = \"Reset Brush / Reload all Brushes\";\n\t}\n\treturn value;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!isVisible()) {return;}\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\thovered = false;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushes = localStorage.get('brushes', localStorage.LOCATION_GLOBAL);\n\tshared.currentBrush = JSON.parse(JSON.stringify(shared.brushes[shared.brushEditor.brushId]));\n\tshared.brushEditor.changed = true;\n}\n",
 				"value" : "75.00000 0.00000 0.00000"
 			},
 			"parent" : 304,
@@ -894,7 +894,7 @@
 			"name" : "Add_2",
 			"origin" : 
 			{
-				"script" : "'use strict';\n\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushes.push(JSON.parse(JSON.stringify(shared['currentBrush'])));\n\tshared.brushEditor.brushId = shared.brushes.length - 1;\n\tshared.brushEditor.changed = true;\n\tlocalStorage.set('brushes', shared['brushes'], localStorage.LOCATION_GLOBAL);\n}\n",
+				"script" : "'use strict';\n\nvar hovered =false;\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered) {\n\t\tshared.tooltip = \"Save as New Brush\";\n\t}\n\treturn value;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!isVisible()) {return;}\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\thovered = false;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushes.push(JSON.parse(JSON.stringify(shared['currentBrush'])));\n\tshared.brushEditor.brushId = shared.brushes.length - 1;\n\tshared.brushEditor.changed = true;\n\tlocalStorage.set('brushes', shared['brushes'], localStorage.LOCATION_GLOBAL);\n}\n",
 				"value" : "90.00000 0.00000 0.00000"
 			},
 			"parent" : 304,
@@ -909,7 +909,7 @@
 			"name" : "Save_2",
 			"origin" : 
 			{
-				"script" : "'use strict';\n\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared['brushes'][shared.brushEditor.brushId] = JSON.parse(JSON.stringify(shared['currentBrush']));\n\tlocalStorage.set('brushes', shared['brushes'], localStorage.LOCATION_GLOBAL);\n}\n",
+				"script" : "'use strict';\n\nvar hovered =false;\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered) {\n\t\tshared.tooltip = \"Save Brush Changes\";\n\t}\n\treturn value;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!isVisible()) {return;}\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\thovered = false;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared['brushes'][shared.brushEditor.brushId] = JSON.parse(JSON.stringify(shared['currentBrush']));\n\tlocalStorage.set('brushes', shared['brushes'], localStorage.LOCATION_GLOBAL);\n}\n",
 				"value" : "105.00000 0.00000 0.00000"
 			},
 			"parent" : 304,
@@ -924,7 +924,7 @@
 			"name" : "Close_2",
 			"origin" : 
 			{
-				"script" : "'use strict';\n\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushEditor.visible = !shared.brushEditor.visible;\n\tshared[\"cursorOnUi\"] = false;\n}\n",
+				"script" : "'use strict';\n\nvar hovered =false;\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered) {\n\t\tshared.tooltip = \"Close Brush Editor\";\n\t}\n\treturn value;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!isVisible()) {return;}\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\thovered = false;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushEditor.visible = !shared.brushEditor.visible;\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n}\n",
 				"value" : "120.00000 0.00000 0.00000"
 			},
 			"parent" : 304,
@@ -2849,7 +2849,11 @@
 			"maxwidth" : 500.0,
 			"name" : "Offset",
 			"opaquebackground" : false,
-			"origin" : "-40.00000 0.00000 0.00000",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered) {\n\t\tshared.tooltip = \"Offset the brush center perpendicular to the stroke direction\";\n\t}\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!isVisible()) {return;}\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\thovered = false;\n}",
+				"value" : "-40.00000 0.00000 0.00000"
+			},
 			"padding" : 0,
 			"parent" : 578,
 			"pointsize" : 5.0,
@@ -2894,7 +2898,7 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\nvar enabled = false;\nvar check;\n\nvar colorDefault = new Vec3(1.0, 1.0, 1.0);\nvar colorDisabled = new Vec3(0.6, 0.6, 0.6);\n\nexport function shouldEnable() {\n\tvar cb = shared.currentBrush;\n\treturn cb.stroke_type != \"straight_line\";\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tcheck = thisLayer.getChildren()[0];\n\t\n\tfor(var i = 0; i < shared.brushEditor.texCnt; i++) {\n\t\tshared.currentBrush.tex[i][scriptProperties['key']] = 0;\n\t}\n\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? colorDefault : colorDisabled;\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tshared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] = (shared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] + 1) % 3;\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tvar status = shared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']];\n\tcheck.visible = status > 0;\n\tcheck.alpha = status / 2.;\n}\n\n",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Key',\n\t\tvalue: 'foo'\n\t})\n\t.finish();\n\nvar hovered = false;\nvar enabled = false;\nvar check;\n\nvar colorDefault = new Vec3(1.0, 1.0, 1.0);\nvar colorDisabled = new Vec3(0.6, 0.6, 0.6);\n\nexport function shouldEnable() {\n\tvar cb = shared.currentBrush;\n\treturn cb.stroke_type != \"straight_line\";\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tcheck = thisLayer.getChildren()[0];\n\t\n\tfor(var i = 0; i < shared.brushEditor.texCnt; i++) {\n\t\tshared.currentBrush.tex[i][scriptProperties['key']] = 0;\n\t}\n\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\tif(hovered && enabled) {\n\t\tswitch(currentStatus()) {\n\t\t\tcase 0:\n\t\t\t\tshared.tooltip = \"Offset in one direction\";\n\t\t\t\tbreak;\n\t\t\tcase 1:\n\t\t\t\tshared.tooltip = \"Randomly select in which direction to offset\";\n\t\t\t\tbreak;\n\t\t\tcase 2:\n\t\t\t\tshared.tooltip = \"Offset in both directions\";\n\t\t\t\tbreak;\n\t\t\t\n\t\t}\n\t}\n\treturn enabled ? colorDefault : colorDisabled;\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled && isVisible()) {\n\t\tshared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] = (shared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']] + 1) % 3;\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function currentStatus() {\n\treturn shared.currentBrush.tex[shared.brushEditor.texId][scriptProperties['key']];\n}\n\nexport function refresh() {\n\tenabled = shouldEnable();\n\tvar status = currentStatus();\n\tcheck.visible = status > 0;\n\tcheck.alpha = status / 2.;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!isVisible()) {return;}\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\thovered = false;\n}",
 				"scriptproperties" : 
 				{
 					"key" : "offset_mirror"
