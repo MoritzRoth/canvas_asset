@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "0.00000 0.00000 -1.00000",
-		"eye" : "0.00000 0.00000 0.00000",
+		"center" : "789.75250 433.39706 -1.00000",
+		"eye" : "789.75250 433.39706 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -31,6 +31,8 @@
 		"clearenabled" : true,
 		"farz" : 10000.0,
 		"fov" : 50.0,
+		"gravitydirection" : "0.00000 -1.00000 0.00000",
+		"gravitystrength" : 1.0,
 		"hdr" : false,
 		"nearz" : 0.0099999998,
 		"orthogonalprojection" : 
@@ -40,6 +42,9 @@
 		},
 		"perspectiveoverridefov" : 95.0,
 		"skylightcolor" : "0.30000 0.30000 0.30000",
+		"winddirection" : "0.70700 0.70700 0.00000",
+		"windenabled" : false,
+		"windstrength" : 1.0,
 		"zoom" : 1.0
 	},
 	"objects" : 
@@ -291,16 +296,39 @@
 				"script" : "'use strict';\n\nvar textures = {};\nvar lastTex = [];\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tvar effects = thisScene.getInitialLayerConfig(thisLayer).effects;\n\n\tfor(var i = 0; i < effects.length; i++) {\n\t\tvar effect = thisLayer.getEffect(i);\n\n\t\ttextures[effects[i].passes[0].textures[1]] = effect;\n\t\teffect.visible = false;\n\t\teffect.getMaterial(0).channelMask = new Vec4(0.0, 0.0, 0.0, 0.0);\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn value;\n}\n\nexport function refresh() {\n\tvar d = {};\n\n\tvar tex = shared.currentBrush.tex;\n\tfor(var t = 0; t < tex.length; t++) {\n\t\tif(typeof tex[t].images === \"undefined\") {\n\t\t\tbreak;\n\t\t}\n\t\tfor(var i = 0; i < tex[t].images.length; i++) {\n\t\t\tvar im = tex[t].images[i];\n\t\t\tvar v = new Vec3((t + 1) % 2, t % 2, 0);\n\t\t\tif(typeof d[im] === \"undefined\") {\n\t\t\t\td[im] = v;\n\t\t\t}else {\n\t\t\t\td[im] = v.add(d[im]);\n\t\t\t}\n\t\t}\n\t}\n\n\tfor(const [key, val] of Object.entries(d)) {\n\t\ttextures[key].visible = true;\n\t\ttextures[key].getMaterial(0).channelMask = val;\n\t}\n\n\tfor(const l of lastTex) {\n\t\tif(typeof d[l] === \"undefined\") {\n\t\t\ttextures[l].visible = false;\n\t\t}\n\t}\n\tlastTex = Object.keys(d);\n}",
 				"value" : "1280.00000 720.00000 0.00000"
 			},
-			"size" : "1024.00000 1024.00000"
+			"size" : "1024.00000 1024.00000",
+			"visible" : false
 		},
 		{
 			"castshadow" : false,
+			"dependencies" : [ 16 ],
 			"effects" : 
 			[
 				{
+					"file" : "effects/blend/effect.json",
+					"id" : 476,
+					"name" : "Canvas Copy",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 0
+							},
+							"constantshadervalues" : 
+							{
+								"multiply" : 1.0
+							},
+							"id" : 477,
+							"textures" : [ null, "_rt_imageLayerComposite_16_a" ]
+						}
+					],
+					"visible" : false
+				},
+				{
 					"file" : "effects/workshop/2911547294/clouds/effect.json",
 					"id" : 299,
-					"name" : "",
+					"name" : "Clouds",
 					"passes" : 
 					[
 						{
@@ -322,7 +350,81 @@
 							"id" : 300
 						}
 					],
-					"visible" : true
+					"visible" : false
+				},
+				{
+					"file" : "effects/localcontrast/effect.json",
+					"id" : 601,
+					"name" : "Sharpen",
+					"passes" : 
+					[
+						{
+							"id" : 602
+						},
+						{
+							"constantshadervalues" : 
+							{
+								"scale" : "1 1"
+							},
+							"id" : 605
+						},
+						{
+							"combos" : 
+							{
+								"VERTICAL" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"scale" : "1 1"
+							},
+							"id" : 606
+						},
+						{
+							"constantshadervalues" : 
+							{
+								"strength" : 1.0
+							},
+							"id" : 607
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/blur/effect.json",
+					"id" : 517,
+					"name" : "Blur",
+					"passes" : 
+					[
+						{
+							"id" : 519
+						},
+						{
+							"constantshadervalues" : 
+							{
+								"scale" : "1 1"
+							},
+							"id" : 521
+						},
+						{
+							"combos" : 
+							{
+								"VERTICAL" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"scale" : "1 1"
+							},
+							"id" : 523
+						},
+						{
+							"constantshadervalues" : 
+							{
+								"compositecolor" : "1 1 1"
+							},
+							"id" : 524
+						}
+					],
+					"visible" : false
 				}
 			],
 			"id" : 288,
@@ -330,7 +432,12 @@
 			"name" : "Pattern Texture",
 			"origin" : "1280.00000 720.00000 0.00000",
 			"parallaxDepth" : "0.00000 0.00000",
-			"size" : "2560.00000 1440.00000"
+			"size" : "2560.00000 1440.00000",
+			"visible" : 
+			{
+				"script" : "'use strict';\n\nvar effects = {};\nvar lastPat = [];\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tfor(var i = 0; i < thisLayer.getEffectCount(); i++) {\n\t\tvar e = thisLayer.getEffect(i);\n\t\teffects[e.name] = i;\n\t\te.visible = false;\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn value;\n}\n\nexport function refresh() {\n\tvar p = [];\n\n\tvar pat = shared.currentBrush.pat;\n\tif(typeof pat === \"undefined\") {\n\t\tfor(var i = 0; i < thisLayer.getEffectCount(); i++) {\n\t\t\tthisLayer.getEffect(i).visible = false;\n\t\t}\n\t\tlastPat = p;\n\t\treturn;\n\t}\n\n\tfor(var i = 0; i < pat.length; i++) {\n\t\tvar e = effects[pat[i]];\n\t\tif(typeof e !== \"undefined\") {\n\t\t\tp.push(e);\n\t\t\tthisLayer.getEffect(e).visible = true;\n\t\t}\n\t}\n\n\tfor(const l of lastPat) {\n\t\tif(p.indexOf(l) < 0) {\n\t\t\tthisLayer.getEffect(l).visible = false;\n\t\t}\n\t}\n\n\tlastPat = p;\n}",
+				"value" : true
+			}
 		},
 		{
 			"castshadow" : false,
@@ -450,10 +557,6 @@
 								"drawRadius" : 
 								{
 									"script" : "'use strict';\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared.currentBrush.size;\n}\n",
-									"scriptproperties" : 
-									{
-										"key" : "drawSize"
-									},
 									"value" : 0.22
 								},
 								"influenceMode" : 
@@ -622,10 +725,6 @@
 								"drawRadius" : 
 								{
 									"script" : "'use strict';\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared.currentBrush.size;\n}\n",
-									"scriptproperties" : 
-									{
-										"key" : "drawSize"
-									},
 									"value" : 0.22
 								},
 								"influenceMode" : 
@@ -666,10 +765,6 @@
 								"drawRadius" : 
 								{
 									"script" : "'use strict';\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared.currentBrush.size;\n}\n",
-									"scriptproperties" : 
-									{
-										"key" : "drawSize"
-									},
 									"value" : 0.22
 								},
 								"mouseDown" : 
@@ -728,7 +823,7 @@
 		{
 			"angles" : 
 			{
-				"script" : "'use strict';\n\n// SETUP & EVENT HANDLING SCRIPT\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tshared['brushEditor'] = {\n\t\tvisible: false,\t\t// set true to make brush designer window visible\n\t\ttexEdit: false,\t\t// set true to make texture editor visible\n\t\tbrushId: 0,\t\t\t// currently edited brush\n\t\ttexCnt: 2,\t\t\t// number of textures that can be simulatneously assigned to a brush\n\t\ttexId : 0,\t\t\t// currently edited texture\n\t\ttexPage: 0,\t\t\t// currently open texture page in texture editor\n\t\ttexImgTotal: 0,\t\t// nr of available images that can be set as brush texture (set by the tex editor itself)\n\t\ttexPageSize: -1,\t// page size of the texture editor (set by the tex editor itself)\n\t\tchanged: true,\t\t// set to true to force a ui update next frame\n\t\thasChanged: false\t// if set to true ui shall update\n\t};\n\tshared['currentBrush'] = {\n\t\ttex: [{images:[]},{images:[]}]\n\t};\n\tfor(var i = 0; i < shared['brushEditor'].texCnt; i++) {\n\t\tshared['currentBrush']['tex'][i] = {images:[]};\n\t}\n\n\tshared['brushes'] = localStorage.get('brushes', localStorage.LOCATION_GLOBAL) || [];\n\tif(shared['brushes'].length > 0) {\t// TODO REMOVE ME\n\t\tshared['currentBrush'] = JSON.parse(JSON.stringify(shared['brushes'][0]));\n\t}\n\n\treturn value;\n}\n\nexport function destroy() {\n\tlocalStorage.set('brushes', shared.brushes, localStorage.LOCATION_GLOBAL);\n}\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['changed']) {\n\t\tshared['brushEditor']['hasChanged'] = true;\n\t\tshared['brushEditor']['changed'] = false;\n\t}else {\n\t\tshared['brushEditor']['hasChanged'] = false;\n\t}\n\treturn value;\n}\n",
+				"script" : "'use strict';\n\n// SETUP & EVENT HANDLING SCRIPT\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tshared['brushEditor'] = {\n\t\tvisible: false,\t\t// set true to make brush designer window visible\n\t\ttexEdit: false,\t\t// set true to make texture editor visible\n\t\tpatEdit: false,\n\t\tbrushId: 0,\t\t\t// currently edited brush\n\t\ttexCnt: 2,\t\t\t// number of textures that can be simulatneously assigned to a brush\n\t\ttexId : 0,\t\t\t// currently edited texture\n\t\ttexPage: 0,\t\t\t// currently open texture page in texture editor\n\t\ttexImgTotal: 0,\t\t// nr of available images that can be set as brush texture (set by the tex editor itself)\n\t\ttexPageSize: -1,\t// page size of the texture editor (set by the tex editor itself)\n\t\tchanged: true,\t\t// set to true to force a ui update next frame\n\t\thasChanged: false\t// if set to true ui shall update\n\t};\n\tshared['currentBrush'] = {\n\t\ttex: [{images:[]},{images:[]}]\n\t};\n\tfor(var i = 0; i < shared['brushEditor'].texCnt; i++) {\n\t\tshared['currentBrush']['tex'][i] = {images:[]};\n\t}\n\n\tshared['brushes'] = localStorage.get('brushes', localStorage.LOCATION_GLOBAL) || [];\n\tif(shared['brushes'].length > 0) {\t// TODO REMOVE ME\n\t\tshared['currentBrush'] = JSON.parse(JSON.stringify(shared['brushes'][0]));\n\t}\n\n\treturn value;\n}\n\nexport function destroy() {\n\tlocalStorage.set('brushes', shared.brushes, localStorage.LOCATION_GLOBAL);\n}\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['changed']) {\n\t\tshared['brushEditor']['hasChanged'] = true;\n\t\tshared['brushEditor']['changed'] = false;\n\t}else {\n\t\tshared['brushEditor']['hasChanged'] = false;\n\t}\n\treturn value;\n}\n",
 				"value" : "0.00000 -0.00000 0.00000"
 			},
 			"castshadow" : false,
@@ -743,7 +838,7 @@
 				{
 					"isMovable" : true
 				},
-				"value" : "1480.00000 1304.15625 0.00000"
+				"value" : "1480.00000 1304.15625 1.00000"
 			},
 			"size" : "1060.00000 60.00000",
 			"visible" : 
@@ -1578,6 +1673,179 @@
 			"scale" : "1.50000 1.50000 1.50000",
 			"size" : "138.00000 24.00000",
 			"text" : "Connected Line",
+			"verticalalign" : "center"
+		},
+		{
+			"anchor" : "topright",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "right",
+			"id" : 695,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "Pattern Texture",
+			"opaquebackground" : false,
+			"origin" : "1001.71094 15.70020 0.00000",
+			"padding" : 0,
+			"parent" : 358,
+			"pointsize" : 5.0,
+			"scale" : "1.05000 1.05000 1.05000",
+			"size" : "69.00000 48.00000",
+			"text" : "Pattern \nTexture:",
+			"verticalalign" : "top"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"dependencies" : [ 288 ],
+			"effects" : 
+			[
+				{
+					"file" : "effects/blend/effect.json",
+					"id" : 700,
+					"name" : "",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 0,
+								"TRANSFORMUV" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"blendangle" : 0,
+								"blendoffset" : "-1240 -680",
+								"blendscale" : 0.059999999,
+								"multiply" : 1.0
+							},
+							"id" : 701,
+							"textures" : [ null, "_rt_imageLayerComposite_288_a" ]
+						}
+					],
+					"visible" : true
+				}
+			],
+			"id" : 686,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Pattern Preview",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\nvar penIco;\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tpenIco = thisLayer.getChildren()[0];\n\tpenIco.visible = false;\n\treturn value;\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tpenIco.visible = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tpenIco.visible = false;\n}",
+				"value" : "41.94836 -37.87854 0.00000"
+			},
+			"parent" : 695,
+			"scale" : "0.95238 0.95238 0.95238",
+			"size" : "80.00000 80.00000"
+		},
+		{
+			"alignment" : "bottomright",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"id" : 691,
+			"image" : "models/Pen_small.json",
+			"name" : "Edit",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) { return; }\n\tshared.brushEditor.patEdit = !shared.brushEditor.patEdit;\n\tshared.brushEditor.changed = true;\n}\n",
+				"value" : "40.00000 -40.00000 0.00000"
+			},
+			"parent" : 686,
+			"scale" : "0.10000 0.10000 1.00000",
+			"size" : "256.00000 256.00000"
+		},
+		{
+			"angles" : 
+			{
+				"script" : "'use strict';\n\nexport function init(value) {\n\tvar bg = thisLayer.getChildren()[0];\n\tvar original = thisLayer.getChildren()[1];\n\tvar template = JSON.stringify(buildTemplate(original));\n\t//console.log(template);\n\trecursiveDestroy(original);\n\n\tvar effects = [];\n\tvar idx = 0;\n\tvar pattern = thisScene.getInitialLayerConfig(thisScene.getLayer(\"Pattern Texture\"));\n\tfor(const effect of pattern.effects) {\n\t\tvar name = effect.name;\n\t\teffects.push(name);\n\n\t\tvar inst = JSON.parse(template);\n\n\t\tinst.layer[\"origin\"] = `20 ${-(idx * 40 + 20)} 0`; // set position\n\t\tinst.layer[\"name\"] = name;\n\t\tinst.children[1].layer[\"text\"] = name;\n\n\t\tinstantiateTemplate(inst, thisLayer);\n\t\tidx++;\n\t}\n\tbg.scale = new Vec3(bg.scale.x, effects.length, 1.0);\n\t//console.log(JSON.stringify(textures));\n\t\n\treturn value;\n}\n\n\nexport function buildTemplate(layer) {\n\tvar tmp = {\n\t\tlayer: thisScene.getInitialLayerConfig(layer),\n\t\tchildren: []\n\t};\n\n\tfor(const child of layer.getChildren()) {\n\t\ttmp.children.push(buildTemplate(child));\n\t}\n\treturn tmp;\n}\n\nexport function instantiateTemplate(template, parent) {\n\tvar l = thisScene.createLayer(template.layer);\n\tl.setParent(parent, false);\n\n\tfor(const child of template.children) {\n\t\tinstantiateTemplate(child, l);\n\t}\n\treturn l;\n}\n\nexport function recursiveDestroy(layer) {\n\tfor(var child of layer.getChildren()) {\n\t\trecursiveDestroy(child);\n\t}\n\tthisScene.destroyLayer(layer);\n}",
+				"value" : "0.00000 -0.00000 0.00000"
+			},
+			"id" : 707,
+			"name" : "Pattern Selector",
+			"origin" : "145.00000 0.00000 0.00000",
+			"parent" : 695,
+			"visible" : 
+			{
+				"script" : "'use strict';\n\n/**\n * @param {Boolean} value - for property 'visible'\n * @return {Boolean} - update current property value\n */\nexport function update(value) {\n\t\n\treturn shared.brushEditor.patEdit;\n}\n",
+				"value" : true
+			}
+		},
+		{
+			"alignment" : "topleft",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : "0.18824 0.18824 0.18824",
+			"id" : 697,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Background",
+			"origin" : 
+			{
+				"script" : "'use strict';\n\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"value" : "0.00000 0.00000 0.00000"
+			},
+			"parent" : 707,
+			"size" : "200.00000 40.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : 
+			{
+				"script" : "'use strict';\n\nvar enabled = false;\nvar check;\nvar checked;\n\nvar colorDefault = new Vec3(1.0, 1.0, 1.0);\nvar colorDisabled = new Vec3(0.6, 0.6, 0.6);\n\nexport function shouldEnable() {\n\tvar cb = shared.currentBrush;\n\treturn cb.draw_mode == 'blend';\n}\n\n/**\n * Since this layer is instantiated dynamically, it could be that not all other relative layers we want to access have been created at the time init() is called.\n * So instead we call lazyInit whenever we actually want to access variables that should be initialized with init.\n */\nexport function lazyinit() {\n\tif(typeof check === \"undefined\") {\n\t\tcheck = thisLayer.getChildren()[0];\n\t}\n\n\tif(typeof shared.currentBrush.pat === \"undefined\") {\n\t\tshared.currentBrush.pat = [];\n\t}\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['hasChanged']) {\n\t\trefresh();\n\t}\n\treturn enabled ? colorDefault : colorDisabled;\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(enabled) {\n\t\tlazyinit();\n\t\tvar cb = shared.currentBrush;\n\t\tif(typeof cb.pat === \"undefined\") {\n\t\t\tcb.pat = [];\n\t\t}\n\n\t\tchecked = !checked;\n\n\t\tif(checked) {\n\t\t\tcb.pat.push(thisLayer.name);\n\t\t}else {\n\t\t\tvar idx = cb.pat.indexOf(thisLayer.name);\n\t\t\tif(idx >= 0) {\n\t\t\t\tcb.pat.splice(idx, 1);\n\t\t\t}\n\t\t}\n\t\tshared['brushEditor']['changed'] = true;\t// enqueue event\n\t}\n}\n\nexport function refresh() {\n\tlazyinit();\n\tenabled = shouldEnable();\n\tchecked = shared.currentBrush.pat.indexOf(thisLayer.name) >= 0;\n\tcheck.visible = checked;\n}\n\n",
+				"value" : "1.00000 1.00000 1.00000"
+			},
+			"id" : 699,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Pattern Option",
+			"origin" : "20.00000 -20.00000 0.00000",
+			"parent" : 707,
+			"scale" : "1.00000 0.95236 0.95238",
+			"size" : "23.00000 23.00000"
+		},
+		{
+			"angles" : "0.00000 -0.00000 0.00000",
+			"castshadow" : false,
+			"color" : "0.00000 0.00000 0.00000",
+			"id" : 703,
+			"image" : "models/util/solidlayer.json",
+			"name" : "Check",
+			"parent" : 699,
+			"scale" : "0.61604 0.61604 0.61604",
+			"size" : "23.00000 23.00000"
+		},
+		{
+			"anchor" : "none",
+			"angles" : "0.00000 -0.00000 0.00000",
+			"backgroundbrightness" : 1.0,
+			"backgroundcolor" : "0.00000 0.00000 0.00000",
+			"blockalign" : false,
+			"castshadow" : false,
+			"depthtest" : "enabled",
+			"font" : "systemfont_arial",
+			"horizontalalign" : "left",
+			"id" : 704,
+			"limitrows" : false,
+			"limituseellipsis" : false,
+			"limitwidth" : false,
+			"maxrows" : 1,
+			"maxwidth" : 500.0,
+			"name" : "",
+			"opaquebackground" : false,
+			"origin" : "18.61926 2.56866 0.00000",
+			"padding" : 0,
+			"parent" : 699,
+			"pointsize" : 5.0,
+			"scale" : "1.05000 1.05002 1.05000",
+			"size" : "125.00000 24.00000",
+			"text" : "Pattern Option",
 			"verticalalign" : "center"
 		},
 		{
@@ -3307,7 +3575,7 @@
 				{
 					"isMovable" : true
 				},
-				"value" : "150.00000 1000.00000 0.00000"
+				"value" : "150.00000 1000.00000 2.00000"
 			},
 			"scale" : "4.14173 0.23501 0.60000",
 			"size" : "149.00000 256.00000",
@@ -3498,7 +3766,7 @@
 			"id" : 190,
 			"locktransforms" : true,
 			"name" : "Paint Controls",
-			"origin" : "1280.00000 720.00000 0.00000"
+			"origin" : "1280.00000 720.00000 3.00000"
 		},
 		{
 			"angles" : "0.00000 -0.00000 0.00000",
