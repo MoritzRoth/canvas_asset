@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "789.75250 433.39706 -1.00000",
-		"eye" : "789.75250 433.39706 0.00000",
+		"center" : "405.55576 341.38431 -1.00000",
+		"eye" : "405.55576 341.38431 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -818,14 +818,15 @@
 			"name" : "Canvas",
 			"origin" : "1280.00000 720.00000 0.00000",
 			"parallaxDepth" : "0.00000 0.00000",
-			"size" : "2560.00000 1440.00000"
+			"size" : "2560.00000 1440.00000",
+			"visible" : 
+			{
+				"script" : "'use strict';\n\n// SETUP & EVENT HANDLING SCRIPT\n\n/**\n * @param {Boolean} value - for property 'visible'\n * @return {Boolean} - update current property value\n */\nexport function init(value) {\n\tshared['brushEditor'] = {\n\t\tvisible: false,\t\t// set true to make brush designer window visible\n\t\ttexEdit: false,\t\t// set true to make texture editor visible\n\t\tpatEdit: false,\t\t// set true to make pattern selection pop-out visible\n\t\tbrushId: 0,\t\t\t// currently edited brush\n\t\ttexCnt: 2,\t\t\t// number of textures that can be simulatneously assigned to a brush\n\t\ttexId : 0,\t\t\t// currently edited texture\n\t\ttexPage: 0,\t\t\t// currently open texture page in texture editor\n\t\ttexImgTotal: 0,\t\t// nr of available images that can be set as brush texture (set by the tex editor itself)\n\t\ttexPageSize: -1,\t// page size of the texture editor (set by the tex editor itself)\n\t\tchanged: true,\t\t// set to true to force a ui update next frame\n\t\thasChanged: false\t// if set to true ui shall update\n\t};\n\tshared['currentBrush'] = {\n\t\ttex: [{images:[]},{images:[]}]\n\t};\n\tfor(var i = 0; i < shared['brushEditor'].texCnt; i++) {\n\t\tshared['currentBrush']['tex'][i] = {images:[]};\n\t}\n\n\tshared['brushes'] = localStorage.get('brushes', localStorage.LOCATION_GLOBAL) || [];\n\tif(shared['brushes'].length > 0) {\t// TODO REMOVE ME\n\t\tshared['currentBrush'] = JSON.parse(JSON.stringify(shared['brushes'][0]));\n\t}\n\n\treturn value;\n}\n\nexport function destroy() {\n\tlocalStorage.set('brushes', shared.brushes, localStorage.LOCATION_GLOBAL);\n}\n\n/**\n * @param {Boolean} value - for property 'visible'\n * @return {Boolean} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['changed']) {\n\t\tshared['brushEditor']['hasChanged'] = true;\n\t\tshared['brushEditor']['changed'] = false;\n\t}else {\n\t\tshared['brushEditor']['hasChanged'] = false;\n\t}\n\treturn value;\n}",
+				"value" : true
+			}
 		},
 		{
-			"angles" : 
-			{
-				"script" : "'use strict';\n\n// SETUP & EVENT HANDLING SCRIPT\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tshared['brushEditor'] = {\n\t\tvisible: false,\t\t// set true to make brush designer window visible\n\t\ttexEdit: false,\t\t// set true to make texture editor visible\n\t\tpatEdit: false,\n\t\tbrushId: 0,\t\t\t// currently edited brush\n\t\ttexCnt: 2,\t\t\t// number of textures that can be simulatneously assigned to a brush\n\t\ttexId : 0,\t\t\t// currently edited texture\n\t\ttexPage: 0,\t\t\t// currently open texture page in texture editor\n\t\ttexImgTotal: 0,\t\t// nr of available images that can be set as brush texture (set by the tex editor itself)\n\t\ttexPageSize: -1,\t// page size of the texture editor (set by the tex editor itself)\n\t\tchanged: true,\t\t// set to true to force a ui update next frame\n\t\thasChanged: false\t// if set to true ui shall update\n\t};\n\tshared['currentBrush'] = {\n\t\ttex: [{images:[]},{images:[]}]\n\t};\n\tfor(var i = 0; i < shared['brushEditor'].texCnt; i++) {\n\t\tshared['currentBrush']['tex'][i] = {images:[]};\n\t}\n\n\tshared['brushes'] = localStorage.get('brushes', localStorage.LOCATION_GLOBAL) || [];\n\tif(shared['brushes'].length > 0) {\t// TODO REMOVE ME\n\t\tshared['currentBrush'] = JSON.parse(JSON.stringify(shared['brushes'][0]));\n\t}\n\n\treturn value;\n}\n\nexport function destroy() {\n\tlocalStorage.set('brushes', shared.brushes, localStorage.LOCATION_GLOBAL);\n}\n\n/**\n * @param {Vec3} value - for property 'angles'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared['brushEditor']['changed']) {\n\t\tshared['brushEditor']['hasChanged'] = true;\n\t\tshared['brushEditor']['changed'] = false;\n\t}else {\n\t\tshared['brushEditor']['hasChanged'] = false;\n\t}\n\treturn value;\n}\n",
-				"value" : "0.00000 -0.00000 0.00000"
-			},
+			"angles" : "0.00000 -0.00000 0.00000",
 			"castshadow" : false,
 			"color" : "0.96471 0.96471 0.96471",
 			"id" : 293,
@@ -1832,11 +1833,11 @@
 			"font" : "systemfont_arial",
 			"horizontalalign" : "left",
 			"id" : 704,
-			"limitrows" : false,
-			"limituseellipsis" : false,
-			"limitwidth" : false,
+			"limitrows" : true,
+			"limituseellipsis" : true,
+			"limitwidth" : true,
 			"maxrows" : 1,
-			"maxwidth" : 500.0,
+			"maxwidth" : 152.47205,
 			"name" : "",
 			"opaquebackground" : false,
 			"origin" : "18.61926 2.56866 0.00000",
