@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "433.55420 335.26364 -1.00000",
-		"eye" : "433.55420 335.26364 0.00000",
+		"center" : "0.00000 0.00000 -1.00000",
+		"eye" : "0.00000 0.00000 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -370,7 +370,7 @@
 							"id" : 786
 						},
 						{
-							"id" : 787
+							"id" : 97
 						}
 					],
 					"visible" : false
@@ -4080,12 +4080,10 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.addCheckbox({\n\t\tname: 'isDefault',\n\t\tlabel: 'Default Option on Startup',\n\t\tvalue: false\n\t})\n\t.finish();\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tif(scriptProperties[\"isDefault\"]) {\n\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t}\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties[\"key\"]] == scriptProperties[\"val\"] ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Effect Json',\n\t\tvalue: '{\"info\":\"Put the json-brush data of a brush using the same pattern-texture-setup, that you want to apply to the entire canvas, here.\"}'\n\t})\n\t.finish();\n\nconst State = Object.freeze({\n\tIdle: 0,\n\tPrepareBrush: 1,\n\tApplyEffect:2,\n\tReset:3\n});\n\nvar state = State.Idle;\nvar pattern;\nvar currPat;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tpattern = JSON.parse(scriptProperties[\"brush\"]).pat;\n\treturn value;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tswitch(state) {\n\t\tcase State.Idle:\n\t\t\tbreak;\n\t\tcase State.PrepareBrush:\n\t\t\tvar cb = shared.currentBrush;\n\t\t\tcurrPat = cb.pat;\n\t\t\tcb.pat = pattern;\n\t\t\tshared.brushEditor.changed = true;\n\t\t\tstate = State.ApplyEffect;\n\t\t\tbreak;\n\t\tcase State.ApplyEffect:\n\t\t\tshared.cmd = \"blend\";\n\t\t\tstate = State.Reset;\n\t\t\tbreak;\n\t\tcase State.Reset:\n\t\t\tshared.currentBrush.pat = currPat;\n\t\t\tshared.brushEditor.changed = true;\n\t\t\tstate = State.Idle;\n\t\t\tbreak;\n\t}\n\treturn value;\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!shared[\"showUi\"] || state !== State.Idle) {return;}\n\tstate = State.PrepareBrush;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!shared[\"showUi\"]) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}\n",
 				"scriptproperties" : 
 				{
-					"isDefault" : false,
-					"key" : "cmd",
-					"val" : "blend"
+					"brush" : "{\"tex\":[{\"probability\":0.5054068565368652,\"influence\":0.18118762969970703,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0.26494312286376953,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":true,\"offset\":0.00013543331261844926,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0,\"images\":[]},{\"probability\":0.43509435653686523,\"influence\":0.8921256065368652,\"size\":1,\"size_jitter\":0,\"size_vel\":-0.8095054626464844,\"alpha_jitter\":1,\"alpha_vel\":0,\"scatter_jitter\":0.39384889602661133,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":false,\"offset\":0.32740737452651514,\"offset_mirror\":1,\"offset_jitter\":1,\"offset_vel\":0,\"images\":[]}],\"size\":0.2093242108821869,\"alpha\":0.29228782653808594,\"spacing\":0.1,\"hue\":0.5892025573430383,\"saturation\":1,\"value\":0.2784300148487091,\"hardness\":0.40234375,\"lo_vel\":0,\"hi_vel\":5,\"draw_mode\":\"blend\",\"stroke_type\":\"spray_can\",\"brush_type\":\"procedural\",\"pat\":[\"Canvas Copy\",\"Invert\"]}"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
