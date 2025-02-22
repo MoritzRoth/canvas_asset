@@ -1,0 +1,19 @@
+{
+	"dependencies" : 
+	[
+		"materials/workshop/2095628851/effects/desaturate.json",
+		"shaders/workshop/2095628851/effects/desaturate.frag",
+		"shaders/workshop/2095628851/effects/desaturate.vert"
+	],
+	"editable" : false,
+	"group" : "localeffects",
+	"name" : "Desaturate",
+	"passes" : 
+	[
+		{
+			"material" : "materials/workshop/2095628851/effects/desaturate.json"
+		}
+	],
+	"replacementkey" : "desaturate",
+	"version" : 1
+}

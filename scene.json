@@ -1,8 +1,8 @@
 {
 	"camera" : 
 	{
-		"center" : "405.55576 341.38431 -1.00000",
-		"eye" : "405.55576 341.38431 0.00000",
+		"center" : "433.55420 335.26364 -1.00000",
+		"eye" : "433.55420 335.26364 0.00000",
 		"up" : "0.00000 1.00000 0.00000"
 	},
 	"general" : 
@@ -353,6 +353,49 @@
 					"visible" : false
 				},
 				{
+					"file" : "effects/motionblur/effect.json",
+					"id" : 785,
+					"name" : "Freeze while Painting",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"rate" : 
+								{
+									"script" : "'use strict';\n\nvar accumulation = 1.;\n\n/**\n * @param {Number} value - for property 'rate'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\t\n\treturn accumulation;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\taccumulation = 0.;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\taccumulation = 1.;\n}\n",
+									"value" : 0.80000001
+								}
+							},
+							"id" : 786
+						},
+						{
+							"id" : 787
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/blend/effect.json",
+					"id" : 763,
+					"name" : "Invert",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 25
+							},
+							"constantshadervalues" : 
+							{
+								"multiply" : 1
+							},
+							"id" : 764
+						}
+					],
+					"visible" : false
+				},
+				{
 					"file" : "effects/localcontrast/effect.json",
 					"id" : 601,
 					"name" : "Sharpen",
@@ -425,6 +468,54 @@
 						}
 					],
 					"visible" : false
+				},
+				{
+					"file" : "effects/workshop/2095628851/desaturate/effect.json",
+					"id" : 591,
+					"name" : "Desaturate",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"Amount" : 0.2
+							},
+							"id" : 592
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/workshop/2095628851/desaturate/effect.json",
+					"id" : 758,
+					"name" : "Saturate",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"Amount" : -0.2
+							},
+							"id" : 759
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/workshop/2078835426/pixelate/effect.json",
+					"id" : 661,
+					"name" : "Pixelate",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"resolution_scale" : 0.125
+							},
+							"id" : 662
+						}
+					],
+					"visible" : false
 				}
 			],
 			"id" : 288,
@@ -436,7 +527,7 @@
 			"visible" : 
 			{
 				"script" : "'use strict';\n\nvar effects = {};\nvar lastPat = [];\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tfor(var i = 0; i < thisLayer.getEffectCount(); i++) {\n\t\tvar e = thisLayer.getEffect(i);\n\t\teffects[e.name] = i;\n\t\te.visible = false;\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn value;\n}\n\nexport function refresh() {\n\tvar p = [];\n\n\tvar pat = shared.currentBrush.pat;\n\tif(typeof pat === \"undefined\") {\n\t\tfor(var i = 0; i < thisLayer.getEffectCount(); i++) {\n\t\t\tthisLayer.getEffect(i).visible = false;\n\t\t}\n\t\tlastPat = p;\n\t\treturn;\n\t}\n\n\tfor(var i = 0; i < pat.length; i++) {\n\t\tvar e = effects[pat[i]];\n\t\tif(typeof e !== \"undefined\") {\n\t\t\tp.push(e);\n\t\t\tthisLayer.getEffect(e).visible = true;\n\t\t}\n\t}\n\n\tfor(const l of lastPat) {\n\t\tif(p.indexOf(l) < 0) {\n\t\t\tthisLayer.getEffect(l).visible = false;\n\t\t}\n\t}\n\n\tlastPat = p;\n}",
-				"value" : true
+				"value" : false
 			}
 		},
 		{
@@ -1793,7 +1884,7 @@
 				"value" : "0.00000 0.00000 0.00000"
 			},
 			"parent" : 707,
-			"size" : "200.00000 40.00000"
+			"size" : "250.00000 40.00000"
 		},
 		{
 			"angles" : "0.00000 -0.00000 0.00000",
@@ -1837,7 +1928,7 @@
 			"limituseellipsis" : true,
 			"limitwidth" : true,
 			"maxrows" : 1,
-			"maxwidth" : 152.47205,
+			"maxwidth" : 201.32629,
 			"name" : "",
 			"opaquebackground" : false,
 			"origin" : "18.61926 2.56866 0.00000",
@@ -3765,7 +3856,6 @@
 		},
 		{
 			"id" : 190,
-			"locktransforms" : true,
 			"name" : "Paint Controls",
 			"origin" : "1280.00000 720.00000 3.00000"
 		},

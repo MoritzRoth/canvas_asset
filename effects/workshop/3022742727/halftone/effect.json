@@ -1,0 +1,19 @@
+{
+	"dependencies" : 
+	[
+		"materials/workshop/3022742727/effects/halftone.json",
+		"shaders/workshop/3022742727/effects/halftone.frag",
+		"shaders/workshop/3022742727/effects/halftone.vert"
+	],
+	"editable" : false,
+	"group" : "localeffects",
+	"name" : "Halftone",
+	"passes" : 
+	[
+		{
+			"material" : "materials/workshop/3022742727/effects/halftone.json"
+		}
+	],
+	"replacementkey" : "halftone",
+	"version" : 1
+}
