@@ -1764,7 +1764,7 @@
 			"limitwidth" : false,
 			"maxrows" : 1,
 			"maxwidth" : 500.0,
-			"name" : "Pattern Texture",
+			"name" : "Pattern Texture Label",
 			"opaquebackground" : false,
 			"origin" : "1001.71094 15.70020 0.00000",
 			"padding" : 0,
@@ -1896,7 +1896,7 @@
 		{
 			"angles" : 
 			{
-				"script" : "'use strict';\n\nexport function init(value) {\n\tvar bg = thisLayer.getChildren()[0];\n\tvar original = thisLayer.getChildren()[1];\n\tvar template = JSON.stringify(buildTemplate(original));\n\t//console.log(template);\n\trecursiveDestroy(original);\n\n\tvar effects = [];\n\tvar idx = 0;\n\tvar pattern = thisScene.getInitialLayerConfig(thisScene.getLayer(\"Pattern Texture\"));\n\tfor(const effect of pattern.effects) {\n\t\tvar name = effect.name;\n\t\teffects.push(name);\n\n\t\tvar inst = JSON.parse(template);\n\n\t\tinst.layer[\"origin\"] = `20 ${-(idx * 40 + 20)} 0`; // set position\n\t\tinst.layer[\"name\"] = name;\n\t\tinst.children[1].layer[\"text\"] = name;\n\n\t\tinstantiateTemplate(inst, thisLayer);\n\t\tidx++;\n\t}\n\tbg.scale = new Vec3(bg.scale.x, effects.length, 1.0);\n\t//console.log(JSON.stringify(textures));\n\t\n\treturn value;\n}\n\n\nexport function buildTemplate(layer) {\n\tvar tmp = {\n\t\tlayer: thisScene.getInitialLayerConfig(layer),\n\t\tchildren: []\n\t};\n\n\tfor(const child of layer.getChildren()) {\n\t\ttmp.children.push(buildTemplate(child));\n\t}\n\treturn tmp;\n}\n\nexport function instantiateTemplate(template, parent) {\n\tvar l = thisScene.createLayer(template.layer);\n\tl.setParent(parent, false);\n\n\tfor(const child of template.children) {\n\t\tinstantiateTemplate(child, l);\n\t}\n\treturn l;\n}\n\nexport function recursiveDestroy(layer) {\n\tfor(var child of layer.getChildren()) {\n\t\trecursiveDestroy(child);\n\t}\n\tthisScene.destroyLayer(layer);\n}",
+				"script" : "'use strict';\n\nexport function init(value) {\n\tvar bg = thisLayer.getChildren()[0];\n\tvar original = thisLayer.getChildren()[1];\n\tvar template = JSON.stringify(buildTemplate(original));\n\t//console.log(template);\n\trecursiveDestroy(original);\n\n\tvar effects = [];\n\tvar idx = 0;\n\tvar patTexLayer = thisScene.getLayer(\"Pattern Texture\");\n\tif(patTexLayer === null) {\n\t\treturn value;\n\t}\n\tvar pattern = thisScene.getInitialLayerConfig(patTexLayer);\n\tfor(const effect of pattern.effects) {\n\t\tvar name = effect.name;\n\t\teffects.push(name);\n\n\t\tvar inst = JSON.parse(template);\n\n\t\tinst.layer[\"origin\"] = `20 ${-(idx * 40 + 20)} 0`; // set position\n\t\tinst.layer[\"name\"] = name;\n\t\tinst.children[1].layer[\"text\"] = name;\n\n\t\tinstantiateTemplate(inst, thisLayer);\n\t\tidx++;\n\t}\n\tbg.scale = new Vec3(bg.scale.x, effects.length, 1.0);\n\t//console.log(JSON.stringify(textures));\n\t\n\treturn value;\n}\n\n\nexport function buildTemplate(layer) {\n\tvar tmp = {\n\t\tlayer: thisScene.getInitialLayerConfig(layer),\n\t\tchildren: []\n\t};\n\n\tfor(const child of layer.getChildren()) {\n\t\ttmp.children.push(buildTemplate(child));\n\t}\n\treturn tmp;\n}\n\nexport function instantiateTemplate(template, parent) {\n\tvar l = thisScene.createLayer(template.layer);\n\tl.setParent(parent, false);\n\n\tfor(const child of template.children) {\n\t\tinstantiateTemplate(child, l);\n\t}\n\treturn l;\n}\n\nexport function recursiveDestroy(layer) {\n\tfor(var child of layer.getChildren()) {\n\t\trecursiveDestroy(child);\n\t}\n\tthisScene.destroyLayer(layer);\n}",
 				"value" : "0.00000 -0.00000 0.00000"
 			},
 			"id" : 707,
