@@ -278,8 +278,7 @@
 				"script" : "'use strict';\n\nvar textures = {};\nvar lastTex = [];\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tvar effects = thisScene.getInitialLayerConfig(thisLayer).effects;\n\n\tfor(var i = 0; i < effects.length; i++) {\n\t\tvar effect = thisLayer.getEffect(i);\n\n\t\ttextures[effects[i].name] = effect;\n\t\teffect.visible = false;\n\t\teffect.getMaterial(0).channelMask = new Vec4(0.0, 0.0, 0.0, 0.0);\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn value;\n}\n\nexport function refresh() {\n\tvar d = {};\n\n\tvar tex = shared.currentBrush.tex;\n\tfor(var t = 0; t < tex.length; t++) {\n\t\tif(typeof tex[t].images === \"undefined\") {\n\t\t\tbreak;\n\t\t}\n\t\tfor(var i = 0; i < tex[t].images.length; i++) {\n\t\t\tvar im = tex[t].images[i];\n\t\t\tvar v = new Vec3((t + 1) % 2, t % 2, 0);\n\t\t\tif(typeof d[im] === \"undefined\") {\n\t\t\t\td[im] = v;\n\t\t\t}else {\n\t\t\t\td[im] = v.add(d[im]);\n\t\t\t}\n\t\t}\n\t}\n\n\tfor(const [key, val] of Object.entries(d)) {\n\t\ttextures[key].visible = true;\n\t\ttextures[key].getMaterial(0).channelMask = val;\n\t}\n\n\tfor(const l of lastTex) {\n\t\tif(typeof d[l] === \"undefined\") {\n\t\t\ttextures[l].visible = false;\n\t\t}\n\t}\n\tlastTex = Object.keys(d);\n}",
 				"value" : "1280.00000 720.00000 0.00000"
 			},
-			"size" : "1024.00000 1024.00000",
-			"visible" : false
+			"size" : "1024.00000 1024.00000"
 		},
 		{
 			"castshadow" : false,
@@ -505,7 +504,7 @@
 			"visible" : 
 			{
 				"script" : "'use strict';\n\nvar effects = {};\nvar lastPat = [];\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tfor(var i = 0; i < thisLayer.getEffectCount(); i++) {\n\t\tvar e = thisLayer.getEffect(i);\n\t\teffects[e.name] = i;\n\t\te.visible = false;\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn value;\n}\n\nexport function refresh() {\n\tvar p = [];\n\n\tvar pat = shared.currentBrush.pat;\n\tif(typeof pat === \"undefined\") {\n\t\tfor(var i = 0; i < thisLayer.getEffectCount(); i++) {\n\t\t\tthisLayer.getEffect(i).visible = false;\n\t\t}\n\t\tlastPat = p;\n\t\treturn;\n\t}\n\n\tfor(var i = 0; i < pat.length; i++) {\n\t\tvar e = effects[pat[i]];\n\t\tif(typeof e !== \"undefined\") {\n\t\t\tp.push(e);\n\t\t\tthisLayer.getEffect(e).visible = true;\n\t\t}\n\t}\n\n\tfor(const l of lastPat) {\n\t\tif(p.indexOf(l) < 0) {\n\t\t\tthisLayer.getEffect(l).visible = false;\n\t\t}\n\t}\n\n\tlastPat = p;\n}",
-				"value" : false
+				"value" : true
 			}
 		},
 		{
