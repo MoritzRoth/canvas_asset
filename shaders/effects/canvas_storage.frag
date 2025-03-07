@@ -1,3 +1,4 @@
+// [COMBO] {"material":"Use Modified Cursor Positions","combo":"MODIFIED_CURSOR_POS","type":"options","default":0}
 
 varying vec2 v_TexCoord;
 
@@ -12,6 +13,8 @@ uniform vec2 g_PointerPositionLast;
 uniform float g_Frametime;
 
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
+uniform vec4 u_mousePos; // {"material":"mousePos","label":"Mouse Pos (XY = Current, ZW = Last Frame)","linked":false,"default":"0 0 0 0","range":[0,1]}
+uniform float u_frameTimeAndBTexUse;  // {"material":"brush0Texture","label":"Use Brush Texture & Custom Frame Time","int":true,"default":1,"range":[-10,10]}
 uniform float u_brushSpacing; // {"material":"brush0Spacing","label":"Brush Spacing","default":0.125,"range":[0,1]}
 uniform float u_drawRadius; // {"material":"drawRadius","label":"Draw Radius","default":1,"range":[0,1]}
 
@@ -75,18 +78,26 @@ void main() {
 		vec2(g_Texture0Resolution.x/g_Texture0Resolution.y, 1.),
 		step(g_Texture0Resolution.x, g_Texture0Resolution.y)
 	);
-	vec2 cursor = g_PointerPosition * ratCorr;
-	vec2 pCursor = g_PointerPositionLast * ratCorr;
+#if MODIFIED_CURSOR_POS == 0
+	vec2 cursor = g_PointerPosition;
+	vec2 pCursor = g_PointerPositionLast;
+	float frametime = g_Frametime;
+#endif
+#if MODIFIED_CURSOR_POS == 1
+	vec2 cursor = u_mousePos.xy;
+	vec2 pCursor = u_mousePos.zw;
+	float frametime = abs(u_frameTimeAndBTexUse);
+#endif
 
 	float penRadius = max(pow(u_drawRadius, 2.), EPSILON);
 
 	float previousOffset = texSample2D(g_Texture1, sampleSpot(STORAGE_FRAMEINFO)).r;
-	float nextOffset = calcBrushSpacingOffset(penRadius, previousOffset, cursor, pCursor);
+	float nextOffset = calcBrushSpacingOffset(penRadius, previousOffset, cursor * ratCorr, pCursor * ratCorr);
 	nextOffset = mix(1.,min(nextOffset, IPSILON), u_mouseDown.x);
-	vec4 frameInfo = vec4(nextOffset, g_Frametime, g_PointerPositionLast);
+	vec4 frameInfo = vec4(nextOffset, frametime, pCursor);
 
 	vec2 pLastMouseDown = texSample2D(g_Texture1, sampleSpot(STORAGE_MOUSE_EVENT_POS)).xy;	// TODO only track this if needed to skip texture sample
-	vec2 lastMouseDown = mix(pLastMouseDown, g_PointerPosition, u_mouseDown.x * NOT(u_mouseDown.y));
+	vec2 lastMouseDown = mix(pLastMouseDown, cursor, u_mouseDown.x * NOT(u_mouseDown.y));
 	vec4 mouseEventPos = vec4(lastMouseDown, CAST2(0.));
 	
 	gl_FragColor = 

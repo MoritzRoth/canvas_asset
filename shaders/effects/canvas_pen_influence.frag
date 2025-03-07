@@ -1,3 +1,4 @@
+// [COMBO] {"material":"Use Modified Cursor Positions","combo":"MODIFIED_CURSOR_POS","type":"options","default":0}
 
 varying vec2 v_TexCoord;
 
@@ -21,7 +22,6 @@ uniform sampler2D g_Texture5; // {"hidden":true}
 uniform vec4 g_Texture0Resolution;
 uniform vec2 g_PointerPosition;
 uniform vec2 g_PointerPositionLast;
-uniform float g_Time;
 uniform float g_Frametime;
 
 uniform float u_drawRadius; // {"material":"drawRadius","label":"Draw Radius","default":1,"range":[0,1]}
@@ -29,6 +29,8 @@ uniform float u_drawHardness; // {"material":"drawHardness","label":"Draw Hardne
 uniform float u_drawAlpha; // {"material":"drawAlpha","label":"Draw Alpha","default":1,"range":[0,1]}
 
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
+uniform vec4 u_mousePos; // {"material":"mousePos","label":"Mouse Pos (XY = Current, ZW = Last Frame)","linked":false,"default":"0 0 0 0","range":[0,1]}
+uniform float u_frameTimeAndBTexUse;  // {"material":"brush0Texture","label":"Use Brush Texture & Custom Frame Time","int":true,"default":1,"range":[-10,10]}
 uniform float u_strokeType; // {"material":"influenceMode","label":"Stroke Type (Stamp, Air Brush, Connected Line, Evenly Spaced, Straight Line)","int":true,"default":0,"range":[0,1]}
 
 uniform vec2 u_brushOffset; // {"material":"brushPositionOffset","label":"Brush Constant Offset","default":"0 0","range":[-1,1]}
@@ -177,9 +179,17 @@ void main() {
 	);
 
 	vec2 uv = v_TexCoord.xy * ratCorr;
+#if MODIFIED_CURSOR_POS == 0
 	vec2 cursor = g_PointerPosition * ratCorr;
 	vec2 pCursor = g_PointerPositionLast * ratCorr;
-	vec2 velocity = (cursor - pCursor) / g_Frametime;
+	float frametime = g_Frametime;
+#endif
+#if MODIFIED_CURSOR_POS == 1
+	vec2 cursor = u_mousePos.xy * ratCorr;
+	vec2 pCursor = u_mousePos.zw * ratCorr;
+	float frametime = abs(u_frameTimeAndBTexUse);
+#endif
+	vec2 velocity = (cursor - pCursor) / frametime;
 	float penRadius = max(pow(u_drawRadius, 2.), EPSILON);
 	
 	float influence = 0.;
@@ -200,7 +210,7 @@ void main() {
 				uv, penRadius,
 				vec4(cursor, pCursor),
 				vec4(velocity, pVelocity),
-				vec2(g_Frametime, pFrametime),
+				vec2(frametime, pFrametime),
 				NOT(u_mouseDown.y)
 			) * u_mouseDown.x
 		);

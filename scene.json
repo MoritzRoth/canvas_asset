@@ -275,7 +275,7 @@
 			"name" : "Brush",
 			"origin" : 
 			{
-				"script" : "'use strict';\n\nvar textures = {};\nvar lastTex = [];\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tvar effects = thisScene.getInitialLayerConfig(thisLayer).effects;\n\n\tfor(var i = 0; i < effects.length; i++) {\n\t\tvar effect = thisLayer.getEffect(i);\n\n\t\ttextures[effects[i].name] = effect;\n\t\teffect.visible = false;\n\t\teffect.getMaterial(0).channelMask = new Vec4(0.0, 0.0, 0.0, 0.0);\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn value;\n}\n\nexport function refresh() {\n\tvar d = {};\n\n\tvar tex = shared.currentBrush.tex;\n\tfor(var t = 0; t < tex.length; t++) {\n\t\tif(typeof tex[t].images === \"undefined\") {\n\t\t\tbreak;\n\t\t}\n\t\tfor(var i = 0; i < tex[t].images.length; i++) {\n\t\t\tvar im = tex[t].images[i];\n\t\t\tvar v = new Vec3((t + 1) % 2, t % 2, 0);\n\t\t\tif(typeof d[im] === \"undefined\") {\n\t\t\t\td[im] = v;\n\t\t\t}else {\n\t\t\t\td[im] = v.add(d[im]);\n\t\t\t}\n\t\t}\n\t}\n\n\tfor(const [key, val] of Object.entries(d)) {\n\t\ttextures[key].visible = true;\n\t\ttextures[key].getMaterial(0).channelMask = val;\n\t}\n\n\tfor(const l of lastTex) {\n\t\tif(typeof d[l] === \"undefined\") {\n\t\t\ttextures[l].visible = false;\n\t\t}\n\t}\n\tlastTex = Object.keys(d);\n}",
+				"script" : "'use strict';\n\nvar textures = {};\nvar lastTex = [];\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tvar effects = thisScene.getInitialLayerConfig(thisLayer).effects;\n\n\tfor(var i = 0; i < effects.length; i++) {\n\t\tvar effect = thisLayer.getEffect(i);\n\n\t\ttextures[effects[i].name] = effect;\n\t\teffect.visible = false;\n\t\teffect.getMaterial(0).channelMask = new Vec4(0.0, 0.0, 0.0, 0.0);\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn value;\n}\n\nexport function refresh() {\n\tvar d = {};\n\n\tvar tex = shared.currentBrush.tex;\n\tfor(var t = 0; t < tex.length; t++) {\n\t\tif(typeof tex[t].images === \"undefined\") {\n\t\t\tbreak;\n\t\t}\n\t\tfor(var i = 0; i < tex[t].images.length; i++) {\n\t\t\tvar im = tex[t].images[i];\n\t\t\tvar v = new Vec3((t + 1) % 2, t % 2, 0);\n\t\t\tif(typeof d[im] === \"undefined\") {\n\t\t\t\td[im] = v;\n\t\t\t}else {\n\t\t\t\td[im] = v.add(d[im]);\n\t\t\t}\n\t\t}\n\t}\n\n\tfor(const [key, val] of Object.entries(d)) {\n\t\tif(!(key in textures)) {\n\t\t\tconsole.log(`Unknown brush texture selected: ${key}`);\n\t\t\tcontinue;\n\t\t}\n\t\ttextures[key].visible = true;\n\t\ttextures[key].getMaterial(0).channelMask = val;\n\t}\n\n\tfor(const l of lastTex) {\n\t\tif(typeof d[l] === \"undefined\") {\n\t\t\ttextures[l].visible = false;\n\t\t}\n\t}\n\tlastTex = Object.keys(d);\n}",
 				"value" : "1280.00000 720.00000 0.00000"
 			},
 			"size" : "1024.00000 1024.00000"
@@ -364,7 +364,7 @@
 							"id" : 786
 						},
 						{
-							"id" : 37
+							"id" : 94
 						}
 					],
 					"visible" : false
@@ -561,8 +561,17 @@
 							"id" : 161
 						},
 						{
+							"combos" : 
+							{
+								"MODIFIED_CURSOR_POS" : 1
+							},
 							"constantshadervalues" : 
 							{
+								"brush0Texture" : 
+								{
+									"script" : "'use strict';\n\n// This parameter squishes two parameters into one to avoid exceeding the uniform limit (48 floats):\n// - Bool: Whether to use the procedural brush (negative sign) or sample a brush texture (positive sign)\n// - Unsigned Float: An override for the current frame time in seconds (if MODIFIED_CURSOR_POS is enabled)\n\n/**\n * @param {Number} value - for property 'brush0Texture'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tvar texUseFactor = shared.currentBrush.brush_type == 'textures' ? 1.0 : -1.0;\n\t\n\treturn engine.frametime * texUseFactor;\n}\n",
+									"value" : 1
+								},
 								"brushAlphaJitter" : 
 								{
 									"script" : "'use strict';\n\n/**\n * @param {Vec2} value - for property 'brushAlphaJitter'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar tex = shared.currentBrush.tex;\n\treturn new Vec2(tex[0].alpha_jitter, tex[1].alpha_jitter);\n}\n",
@@ -636,6 +645,11 @@
 								{
 									"script" : "'use strict';\n\nvar lastFrame;\nvar mouseDown;\n\n/**\n * @param {Number} value - for property 'Mouse Down'\n * @return {Number} - update current property value\n */\nexport function init(value) {\n\tlastFrame = 0;\n\tmouseDown = false;\n\tshared[\"cursorOnUi\"] = false;\n\treturn 0;\n}\n\n/**\n * @param {Vec2} value - for property 'Mouse Down (X = This Frame, Y = Last Frame)'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar vec = new Vec2((mouseDown && !shared[\"cursorOnUi\"] && !shared[\"locked\"]) ? 1 : 0, lastFrame);\n\tlastFrame = vec.x;\n\treturn vec;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tmouseDown = false;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tmouseDown = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tmouseDown = false;\n}\n",
 									"value" : "0.00000 0.00000"
+								},
+								"mousePos" : 
+								{
+									"script" : "'use strict';\n\nvar pPos = new Vec2(0,0);\n\n/**\n * @param {Vec4} value - for property 'mousePos'\n * @return {Vec4} - update current property value (XY = current, ZW = last frame)\n */\nexport function update(value) {\n\tvar pos = new Vec2(input.cursorWorldPosition).divide(engine.canvasSize).multiply(new Vec2(1,-1)).add(new Vec2(0, 1));\n\t\n\tvar val = new Vec4(pos.x, pos.y, pPos.x, pPos.y);\n\tpPos = pos;\n\n\treturn val;\n}\n",
+									"value" : "1.00000 1.00000 0.00000 0.00000"
 								}
 							},
 							"id" : 64
@@ -646,7 +660,8 @@
 								"ENABLE_BLEND" : 1,
 								"ENABLE_CPY_BRUSH" : 1,
 								"ENABLE_SMEAR" : 1,
-								"ENABLE_UNDO_CMD" : 1
+								"ENABLE_UNDO_CMD" : 1,
+								"MODIFIED_CURSOR_POS" : 1
 							},
 							"constantshadervalues" : 
 							{
@@ -662,7 +677,7 @@
 								},
 								"brush0Texture" : 
 								{
-									"script" : "'use strict';\n\n/**\n * @param {Number} value - for property 'brush0Texture'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\t\n\treturn shared.currentBrush.brush_type == 'textures' ? 1.0 : 0.0;\n}\n",
+									"script" : "'use strict';\n\n// This parameter squishes two parameters into one to avoid exceeding the uniform limit (48 floats):\n// - Bool: Whether to use the procedural brush (negative sign) or sample a brush texture (positive sign)\n// - Unsigned Float: An override for the current frame time in seconds (if MODIFIED_CURSOR_POS is enabled)\n\n/**\n * @param {Number} value - for property 'brush0Texture'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tvar texUseFactor = shared.currentBrush.brush_type == 'textures' ? 1.0 : -1.0;\n\t\n\treturn engine.frametime * texUseFactor;\n}\n",
 									"value" : 1
 								},
 								"brush1GProb" : 0.5,
@@ -804,6 +819,11 @@
 								{
 									"script" : "'use strict';\n\nvar lastFrame;\nvar mouseDown;\n\n/**\n * @param {Number} value - for property 'Mouse Down'\n * @return {Number} - update current property value\n */\nexport function init(value) {\n\tlastFrame = 0;\n\tmouseDown = false;\n\tshared[\"cursorOnUi\"] = false;\n\treturn 0;\n}\n\n/**\n * @param {Vec2} value - for property 'Mouse Down (X = This Frame, Y = Last Frame)'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar vec = new Vec2((mouseDown && !shared[\"cursorOnUi\"] && !shared[\"locked\"]) ? 1 : 0, lastFrame);\n\tlastFrame = vec.x;\n\treturn vec;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tmouseDown = false;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tmouseDown = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tmouseDown = false;\n}\n",
 									"value" : "0.00000 0.00000"
+								},
+								"mousePos" : 
+								{
+									"script" : "'use strict';\n\nvar pPos = new Vec2(0,0);\n\n/**\n * @param {Vec4} value - for property 'mousePos'\n * @return {Vec4} - update current property value (XY = current, ZW = last frame)\n */\nexport function update(value) {\n\tvar pos = new Vec2(input.cursorWorldPosition).divide(engine.canvasSize).multiply(new Vec2(1,-1)).add(new Vec2(0, 1));\n\t\n\tvar val = new Vec4(pos.x, pos.y, pPos.x, pPos.y);\n\tpPos = pos;\n\n\treturn val;\n}\n",
+									"value" : "1.00000 1.00000 0.00000 0.00000"
 								}
 							},
 							"id" : 62,
@@ -819,6 +839,10 @@
 							]
 						},
 						{
+							"combos" : 
+							{
+								"MODIFIED_CURSOR_POS" : 1
+							},
 							"constantshadervalues" : 
 							{
 								"brush0Spacing" : 
@@ -830,6 +854,11 @@
 									},
 									"value" : 0.25
 								},
+								"brush0Texture" : 
+								{
+									"script" : "'use strict';\n\n// This parameter squishes two parameters into one to avoid exceeding the uniform limit (48 floats):\n// - Bool: Whether to use the procedural brush (negative sign) or sample a brush texture (positive sign)\n// - Unsigned Float: An override for the current frame time in seconds (if MODIFIED_CURSOR_POS is enabled)\n\n/**\n * @param {Number} value - for property 'brush0Texture'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tvar texUseFactor = shared.currentBrush.brush_type == 'textures' ? 1.0 : -1.0;\n\t\n\treturn engine.frametime * texUseFactor;\n}\n",
+									"value" : 1
+								},
 								"drawRadius" : 
 								{
 									"script" : "'use strict';\n\n/**\n * @param {Number} value - for property 'Draw Radius'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\treturn shared.currentBrush.size;\n}\n",
@@ -839,6 +868,11 @@
 								{
 									"script" : "'use strict';\n\nvar lastFrame;\nvar mouseDown;\n\n/**\n * @param {Number} value - for property 'Mouse Down'\n * @return {Number} - update current property value\n */\nexport function init(value) {\n\tlastFrame = 0;\n\tmouseDown = false;\n\tshared[\"cursorOnUi\"] = false;\n\treturn 0;\n}\n\n/**\n * @param {Vec2} value - for property 'Mouse Down (X = This Frame, Y = Last Frame)'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar vec = new Vec2((mouseDown && !shared[\"cursorOnUi\"] && !shared[\"locked\"]) ? 1 : 0, lastFrame);\n\tlastFrame = vec.x;\n\treturn vec;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tmouseDown = false;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tmouseDown = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tmouseDown = false;\n}\n",
 									"value" : "0.00000 0.00000"
+								},
+								"mousePos" : 
+								{
+									"script" : "'use strict';\n\nvar pPos = new Vec2(0,0);\n\n/**\n * @param {Vec4} value - for property 'mousePos'\n * @return {Vec4} - update current property value (XY = current, ZW = last frame)\n */\nexport function update(value) {\n\tvar pos = new Vec2(input.cursorWorldPosition).divide(engine.canvasSize).multiply(new Vec2(1,-1)).add(new Vec2(0, 1));\n\t\n\tvar val = new Vec4(pos.x, pos.y, pPos.x, pPos.y);\n\tpPos = pos;\n\n\treturn val;\n}\n",
+									"value" : "1.00000 1.00000 0.00000 0.00000"
 								}
 							},
 							"id" : 28
@@ -849,7 +883,8 @@
 								"ENABLE_BLEND" : 1,
 								"ENABLE_CPY_BRUSH" : 1,
 								"ENABLE_SMEAR" : 1,
-								"ENABLE_UNDO_CMD" : 1
+								"ENABLE_UNDO_CMD" : 1,
+								"MODIFIED_CURSOR_POS" : 1
 							},
 							"constantshadervalues" : 
 							{
@@ -872,6 +907,11 @@
 								{
 									"script" : "'use strict';\n\nvar lastFrame;\nvar mouseDown;\n\n/**\n * @param {Number} value - for property 'Mouse Down'\n * @return {Number} - update current property value\n */\nexport function init(value) {\n\tlastFrame = 0;\n\tmouseDown = false;\n\tshared[\"cursorOnUi\"] = false;\n\treturn 0;\n}\n\n/**\n * @param {Vec2} value - for property 'Mouse Down (X = This Frame, Y = Last Frame)'\n * @return {Vec2} - update current property value\n */\nexport function update(value) {\n\tvar vec = new Vec2((mouseDown && !shared[\"cursorOnUi\"] && !shared[\"locked\"]) ? 1 : 0, lastFrame);\n\tlastFrame = vec.x;\n\treturn vec;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tmouseDown = false;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\tmouseDown = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tmouseDown = false;\n}\n",
 									"value" : "0.00000 0.00000"
+								},
+								"mousePos" : 
+								{
+									"script" : "'use strict';\n\nvar pPos = new Vec2(0,0);\n\n/**\n * @param {Vec4} value - for property 'mousePos'\n * @return {Vec4} - update current property value (XY = current, ZW = last frame)\n */\nexport function update(value) {\n\tvar pos = new Vec2(input.cursorWorldPosition).divide(engine.canvasSize).multiply(new Vec2(1,-1)).add(new Vec2(0, 1));\n\t\n\tvar val = new Vec4(pos.x, pos.y, pPos.x, pPos.y);\n\tpPos = pos;\n\n\treturn val;\n}\n",
+									"value" : "1.00000 1.00000 0.00000 0.00000"
 								}
 							},
 							"id" : 73,

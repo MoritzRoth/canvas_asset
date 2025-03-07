@@ -1,5 +1,6 @@
 // [COMBO] {"material":"Enable Connected Lines","combo":"ENABLE_LINE_INFLUENCE","type":"options","default":1}
 // [COMBO] {"material":"Enable blending with pattern texture","combo":"ENABLE_BLEND","type":"options","default":0}
+// [COMBO] {"material":"Use Modified Cursor Positions","combo":"MODIFIED_CURSOR_POS","type":"options","default":0}
 
 varying vec2 v_TexCoord;
 
@@ -32,6 +33,7 @@ uniform vec2 g_PointerPosition;
 uniform float u_drawMode; // {"material":"drawMode","label":"Draw Mode Duplicate","int":true,"default":0,"range":[0,4]}
 uniform vec3 u_drawColor; // {"material":"drawCol","label":"Draw Color","type":"color","default":"1 1 1"}
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
+uniform vec4 u_mousePos; // {"material":"mousePos","label":"Mouse Pos (XY = Current, ZW = Last Frame)","linked":false,"default":"0 0 0 0","range":[0,1]}
 uniform float u_strokeType; // {"material":"influenceMode","label":"Stroke Type (Stamp, Air Brush, Connected Line, Evenly Spaced, Straight Line)","int":true,"default":0,"range":[0,1]}
 uniform float u_brushPreview; // {"material":"brushPreview","label":"Preview (None, Outline, Full)","int":true,"default":0,"range":[0,2]}
 
@@ -57,6 +59,13 @@ float NOT(float v) {
 //        an outline preview.
 
 vec4 linePreview(vec4 canvas, vec2 uv) {
+#if MODIFIED_CURSOR_POS == 0
+	vec2 cursor = g_PointerPosition;
+#endif
+#if MODIFIED_CURSOR_POS == 1
+	vec2 cursor = u_mousePos.xy;
+#endif
+	
 	float lineInfluence = texSample2D(g_Texture1, uv).r;
 
 	vec4 brushColor = canvas;
@@ -73,7 +82,7 @@ vec4 linePreview(vec4 canvas, vec2 uv) {
 #endif
 #if ENABLE_CPY_BRUSH
 	if(isMode(u_drawMode, DRAW_MODE_COLOR_CPY)) {
-		brushColor = texSample2D(g_Texture0, g_PointerPosition);
+		brushColor = texSample2D(g_Texture0, cursor);
 	}
 #endif
 

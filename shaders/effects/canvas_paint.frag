@@ -4,6 +4,7 @@
 // [COMBO] {"material":"Enable blending with pattern texture","combo":"ENABLE_BLEND","type":"options","default":0}
 // [COMBO] {"material":"Enable Smearing","combo":"ENABLE_SMEAR","type":"options","default":0}
 // [COMBO] {"material":"Enable Color Copy Brush","combo":"ENABLE_CPY_BRUSH","type":"options","default":0}
+// [COMBO] {"material":"Use Modified Cursor Positions","combo":"MODIFIED_CURSOR_POS","type":"options","default":0}
 
 varying vec2 v_TexCoord;
 
@@ -54,8 +55,34 @@ uniform vec2 g_PointerPositionLast;
 uniform float g_Frametime;
 uniform float g_Time;
 
+// NOTE: If everything is enabled the entire unifrom budget (48 floats) is used.
+// Adding more uniforms would mean that not every feature can be enabled at the same time.
+// Below is a (currently incomplete table) listing all toggleable features and their raw uniform cost.
+// Note that some uniforms might only be required if two features are enabled simultaneously, so this list might not provide the whole picture.
+
+// +---------------------+--------------+-----------------------------------------------------------------------------+
+// | Feature             | Uniform Cost | Draw Calls | Texture Samples (while drawing) | Texture Samples (while idle) |
+// +---------------------+--------------+------------+---------------------------------+------------------------------+
+// | Baseline Canvas     |          ??? |        ??? |                             ??? |                          ??? |
+// | Brush Texture       |          ??? |        ??? | +up to 32 (max sample constant) |                          ??? |
+// | Pattern Texture     |          ??? |        ??? |                             ??? |                          ??? |
+// | Connected Lines     |          ??? |        ??? |                             ??? |                          ??? |
+// | Smearing            |          ??? |        ??? |                             ??? |                          ??? |
+// | Undo                |          ??? |        ??? |                             ??? |                          ??? |
+// | Modified Cursor Pos |            4 |         +0 |                              +0 |                           +0 |
+// +---------------------+--------------+-----------------------------------------------------------------------------+
+
+
+// It might be possible to squish some extra information into existing params.
+// Below is a list of params that already serve a double-purpose:
+
+// u_useTexturesAndFrameTime param squishes two params into one:
+// - Bool: Whether to use the procedural brush (negative sign) or sample a brush texture (positive sign)
+// - Unsigned Float: An override for the current frame time in seconds (if MODIFIED_CURSOR_POS is enabled)
+
 uniform float u_command; // {"material":"cmd","label":"Command (None, Reset, Undo, Blend)","int":true,"default":0,"range":[0,3]}
 uniform vec2 u_mouseDown; // {"material":"mouseDown","label":"Mouse Down (X = This Frame, Y = Last Frame)","linked":false,"default":"0 0","range":[0,1]}
+uniform vec4 u_mousePos; // {"material":"mousePos","label":"Mouse Pos (XY = Current, ZW = Last Frame)","linked":false,"default":"0 0 0 0","range":[0,1]}
 uniform float u_drawMode; // {"material":"drawMode","label":"Draw Mode (Erase, Brush, Smear, Color Copy, Blend)","int":true,"default":0,"range":[0,4]}
 uniform float u_strokeType; // {"material":"influenceMode","label":"Stroke Type (Stamp, Air Brush, Connected Line, Evenly Spaced, Straight Line)","int":true,"default":0,"range":[0,3]}
 
@@ -64,7 +91,7 @@ uniform float u_drawAlpha; // {"material": "drawAlpha","label":"Draw Alpha","def
 uniform float u_drawRadius; // {"material":"drawRadius","label":"Draw Radius","default":1,"range":[0,1]}
 uniform float u_drawHardness; // {"material":"drawHardness","label":"Draw Hardness","default":1,"range":[0,1]}
 
-uniform float u_useTextures;  // {"material":"brush0Texture","label":"Use Brush Texture","int":true,"default":1,"range":[0,1]}
+uniform float u_useTexturesAndFrameTime;  // {"material":"brush0Texture","label":"Use Brush Texture & Custom Frame Time","int":false,"default":1,"range":[-10,10]}
 uniform float u_brushSpacing; // {"material":"brush0Spacing","label":"Brush Spacing","default":0.125,"range":[0,1]}
 uniform vec2 u_brushProb; // {"material":"brush1Prob","label":"Brush Channel Frequency RGBA","default":"1 0","range":[0,1]}
 uniform vec2 u_brushInfluence; // {"material":"brush2Factor","label":"Brush Channel Influence","default":"1 1","range":[-2,2]}
@@ -196,7 +223,7 @@ float calcPointInfluence(float brushRadius, vec2 uv, vec2 center, vec2 velocity,
 
 	// sample brush texture & calc mask
 	float sample;
-	if(u_useTextures > 0.5) {
+	if(u_useTexturesAndFrameTime > 0) {
 		 sample = 1. - dot(texSample2D(g_Texture6, sampleSpot + CAST2(0.5)).rg, selectedChannel);
 	}else {
 		sample = smoothstep(1., min(u_drawHardness, IPSILON), length(sampleSpot) * 2.);
@@ -308,34 +335,35 @@ float calcStrokeInfluence(float radius, float spacingOffset, vec2 uv, vec2 curso
 /**
  * Calculates the corresponding brush influence for the selected stroke type
  * 
+ * Params:
+ * - fragment position
+ * - cursor position (XY = current, ZW = last frame)
+ * - ratio correction factor 
+ * - frameTime in seconds
+ *
  * Returns vec2:
  *   - X contains influence for current fragment.
  *   - Y is set to 0 if no fragment could have non-zero influence (i.e. draw calcs can be skipped). Otherwise Y is 1.
  */
-vec2 calcInfluence(vec2 fragPos) {
-
-	vec2 ratCorr = mix(
-		vec2(1., g_Texture0Resolution.y/g_Texture0Resolution.x),
-		vec2(g_Texture0Resolution.x/g_Texture0Resolution.y, 1.),
-		step(g_Texture0Resolution.x, g_Texture0Resolution.y)
-	);
+vec2 calcInfluence(vec2 fragPos, vec4 cursor, vec2 ratCorr, float frameTime) {
 	vec2 uv = fragPos * ratCorr;
-	vec2 cursor = g_PointerPosition * ratCorr;
-	vec2 pCursor = g_PointerPositionLast * ratCorr;
-	vec2 velocity = (cursor - pCursor) / g_Frametime;
+	vec2 cCursor = cursor.xy * ratCorr;
+	vec2 pCursor = cursor.zw * ratCorr;
+
+	vec2 velocity = (cCursor - pCursor) / frameTime;
 
 	float brushRadius = max(pow(u_drawRadius, 2.), EPSILON);
 
 	if(isMode(u_strokeType, INFLUENCE_STAMP)) {
 		if(u_mouseDown.x * NOT(u_mouseDown.y)) { // draws in an area around the cursor on mouse press
-			return vec2(clamp(calcPointInfluence(brushRadius, uv, cursor, velocity), 0., 1.), 1.);
+			return vec2(clamp(calcPointInfluence(brushRadius, uv, cCursor, velocity), 0., 1.), 1.);
 		}
 		return CAST2(0.);
 	}
 
 	if(isMode(u_strokeType, INFLUENCE_SPRAY)) {
 		if(u_mouseDown.x) { // draws while mouse down in an area around the cursor
-			return vec2(clamp(calcPointInfluence(brushRadius, uv, cursor, velocity), 0., 1.), 1.);
+			return vec2(clamp(calcPointInfluence(brushRadius, uv, cCursor, velocity), 0., 1.), 1.);
 		}
 		return CAST2(0.);
 	}
@@ -361,7 +389,7 @@ vec2 calcInfluence(vec2 fragPos) {
 			vec2 ppCursor = lastFrameInfo.zw * ratCorr;
 			vec2 pVelocity = (pCursor - ppCursor) / pFrametime;
 
-			return vec2(calcStrokeInfluence(brushRadius, brushSpacingOffset, uv, cursor, pCursor, velocity, pVelocity), 1.);
+			return vec2(calcStrokeInfluence(brushRadius, brushSpacingOffset, uv, cCursor, pCursor, velocity, pVelocity), 1.);
 		}
 		return CAST2(0.);
 	}
@@ -369,7 +397,7 @@ vec2 calcInfluence(vec2 fragPos) {
 	return CAST2(0.);
 }
 
-vec4 applyDrawMode(vec4 canvasAlbedo, float brushInfluence, vec2 fragPos) {
+vec4 applyDrawMode(vec4 canvasAlbedo, float brushInfluence, vec2 fragPos, vec4 cursor) {
 	vec4 brushColor = canvasAlbedo;
 
 	if(isMode(u_drawMode, DRAW_MODE_ERASE)) {
@@ -388,13 +416,13 @@ vec4 applyDrawMode(vec4 canvasAlbedo, float brushInfluence, vec2 fragPos) {
 
 #if ENABLE_SMEAR
 	if(isMode(u_drawMode, DRAW_MODE_SMEAR)) {
-		brushColor = texSample2D(g_Texture1, g_PointerPositionLast + (fragPos - g_PointerPosition));
+		brushColor = texSample2D(g_Texture1, cursor.zw + (fragPos - cursor.xy));
 	}
 #endif
 
 #if ENABLE_CPY_BRUSH
 	if(isMode(u_drawMode, DRAW_MODE_COLOR_CPY)) {
-		brushColor = texSample2D(g_Texture1, g_PointerPosition);
+		brushColor = texSample2D(g_Texture1, cursor.xy);
 	}
 #endif
 
@@ -410,11 +438,26 @@ void main() {
 #if ENABLE_BLEND
 	vec4 blendAlbedo = texSample2D(g_Texture4, v_TexCoord.xy);
 #endif
+
+	vec2 ratCorr = mix(
+	vec2(1., g_Texture0Resolution.y/g_Texture0Resolution.x),
+	vec2(g_Texture0Resolution.x/g_Texture0Resolution.y, 1.),
+	step(g_Texture0Resolution.x, g_Texture0Resolution.y)
+	);
+	
+#if MODIFIED_CURSOR_POS == 0
+	vec4 cursor = vec4(g_PointerPosition, g_PointerPositionLast);
+	float frameTime = g_Frametime;
+#endif
+#if MODIFIED_CURSOR_POS == 1
+	vec4 cursor = u_mousePos;
+	float frameTime = abs(u_useTexturesAndFrameTime);
+#endif
 	
 	vec4 nextAlbedo = canvasAlbedo;
-	vec2 brushInfluence = calcInfluence(v_TexCoord.xy);
+	vec2 brushInfluence = calcInfluence(v_TexCoord.xy, cursor, ratCorr, frameTime);
 	if(brushInfluence.y) {
-		nextAlbedo = applyDrawMode(nextAlbedo, brushInfluence.x, v_TexCoord.xy);
+		nextAlbedo = applyDrawMode(nextAlbedo, brushInfluence.x, v_TexCoord.xy, cursor);
 	}
 
 	// apply commands
