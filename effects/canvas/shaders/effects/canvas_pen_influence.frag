@@ -16,8 +16,10 @@ varying vec2 v_TexCoord;
 #define INFLUENCE_LINE 4
 
 uniform sampler2D g_Texture0; // {"hidden":true}
-// storage texture
+#define PREV_INFLUENCE_TEX g_Texture0
+
 uniform sampler2D g_Texture5; // {"hidden":true}
+#define STORAGE_TEX g_Texture5
 
 uniform vec4 g_Texture0Resolution;
 uniform vec2 g_PointerPosition;
@@ -194,12 +196,12 @@ void main() {
 	
 	float influence = 0.;
 	if(isMode(u_strokeType, INFLUENCE_CLINES)) {
-		vec4 lastFrameInfo = texSample2D(g_Texture5, sampleSpot(STORAGE_FRAMEINFO));
+		vec4 lastFrameInfo = texSample2D(STORAGE_TEX, sampleSpot(STORAGE_FRAMEINFO));
 		float pFrametime = lastFrameInfo.y;
 		vec2 ppCursor = lastFrameInfo.zw * ratCorr;
 		vec2 pVelocity = (pCursor - ppCursor) / pFrametime;
 
-		float previousInfluence = texSample2D(g_Texture0, v_TexCoord.xy).r;
+		float previousInfluence = texSample2D(PREV_INFLUENCE_TEX, v_TexCoord.xy).r;
 		
 		// only add to last influence if last frame the mouse was down
 		influence = mix(previousInfluence, 0., NOT(u_mouseDown.y));
@@ -217,7 +219,7 @@ void main() {
 	}
 
 	if(isMode(u_strokeType, INFLUENCE_LINE)) {
-		vec2 lineStart = texSample2D(g_Texture5, sampleSpot(STORAGE_MOUSE_EVENT_POS)).xy * ratCorr;
+		vec2 lineStart = texSample2D(STORAGE_TEX, sampleSpot(STORAGE_MOUSE_EVENT_POS)).xy * ratCorr;
 		lineStart = mix(cursor, lineStart, u_mouseDown.y);
 
 		influence = min(dot(u_mouseDown, CAST2(1.)), 1.) * calcLineInfluence(uv, penRadius, lineStart, cursor);

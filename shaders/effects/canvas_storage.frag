@@ -4,8 +4,9 @@ varying vec2 v_TexCoord;
 
 // painted canvas (just for tex resolution)
 uniform sampler2D g_Texture0; // {"hidden":true}
-// last frame storage
+
 uniform sampler2D g_Texture1; // {"hidden":true}
+#define PREV_STORAGE_TEX g_Texture1
 
 uniform vec4 g_Texture0Resolution;
 uniform vec2 g_PointerPosition;
@@ -91,12 +92,12 @@ void main() {
 
 	float penRadius = max(pow(u_drawRadius, 2.), EPSILON);
 
-	float previousOffset = texSample2D(g_Texture1, sampleSpot(STORAGE_FRAMEINFO)).r;
+	float previousOffset = texSample2D(PREV_STORAGE_TEX, sampleSpot(STORAGE_FRAMEINFO)).r;
 	float nextOffset = calcBrushSpacingOffset(penRadius, previousOffset, cursor * ratCorr, pCursor * ratCorr);
 	nextOffset = mix(1.,min(nextOffset, IPSILON), u_mouseDown.x);
 	vec4 frameInfo = vec4(nextOffset, frametime, pCursor);
 
-	vec2 pLastMouseDown = texSample2D(g_Texture1, sampleSpot(STORAGE_MOUSE_EVENT_POS)).xy;	// TODO only track this if needed to skip texture sample
+	vec2 pLastMouseDown = texSample2D(PREV_STORAGE_TEX, sampleSpot(STORAGE_MOUSE_EVENT_POS)).xy;
 	vec2 lastMouseDown = mix(pLastMouseDown, cursor, u_mouseDown.x * NOT(u_mouseDown.y));
 	vec4 mouseEventPos = vec4(lastMouseDown, CAST2(0.));
 	

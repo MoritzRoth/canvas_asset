@@ -1,9 +1,6 @@
 
 // [COMBO] {"material":"Enable Connected Lines","combo":"ENABLE_LINE_INFLUENCE","type":"options","default":1}
 // [COMBO] {"material":"Enable Undo Command","combo":"ENABLE_UNDO_CMD","type":"options","default":0}
-// [COMBO] {"material":"Enable blending with pattern texture","combo":"ENABLE_BLEND","type":"options","default":0}
-// [COMBO] {"material":"Enable Smearing","combo":"ENABLE_SMEAR","type":"options","default":0}
-// [COMBO] {"material":"Enable Color Copy Brush","combo":"ENABLE_CPY_BRUSH","type":"options","default":0}
 // [COMBO] {"material":"Use Modified Cursor Positions","combo":"MODIFIED_CURSOR_POS","type":"options","default":0}
 
 varying vec2 v_TexCoord;
@@ -35,18 +32,26 @@ varying vec2 v_TexCoord;
 
 #define MAX_BRUSH_SAMPLES_PER_PIXEL 32.
 
-// below texture
 uniform sampler2D g_Texture0; // {"hidden":true}
-// last frame canvas
+#define RESET_TEX g_Texture0
+
 uniform sampler2D g_Texture1; // {"hidden":true}
-// undo canvas
+#define PREV_CANVAS_TEX g_Texture1
+
 uniform sampler2D g_Texture2; // {"hidden":true}
-// line influence texture
+#define UNDO_TEX g_Texture2
+
 uniform sampler2D g_Texture3; // {"hidden":true}
+#define INFLUENCE_TEX g_Texture3
+
 uniform sampler2D g_Texture4; // {"material":"blendTex","label":"Pattern Texture", "default":"util/black"}
-// storage texture
+#define BLEND_TEX g_Texture4
+
 uniform sampler2D g_Texture5; // {"hidden":true}
+#define STORAGE_TEX g_Texture5
+
 uniform sampler2D g_Texture6; // {"material":"brushTex","label":"Brush Texture", "default":"util/black"}
+#define BRUSH_TEX g_Texture6
 
 uniform vec4 g_Texture0Resolution;
 uniform vec2 g_TexelSize;
@@ -60,17 +65,15 @@ uniform float g_Time;
 // Below is a (currently incomplete table) listing all toggleable features and their raw uniform cost.
 // Note that some uniforms might only be required if two features are enabled simultaneously, so this list might not provide the whole picture.
 
-// +---------------------+--------------+-----------------------------------------------------------------------------+
-// | Feature             | Uniform Cost | Draw Calls | Texture Samples (while drawing) | Texture Samples (while idle) |
-// +---------------------+--------------+------------+---------------------------------+------------------------------+
-// | Baseline Canvas     |          ??? |        ??? |                             ??? |                          ??? |
-// | Brush Texture       |          ??? |        ??? | +up to 32 (max sample constant) |                          ??? |
-// | Pattern Texture     |          ??? |        ??? |                             ??? |                          ??? |
-// | Connected Lines     |          ??? |        ??? |                             ??? |                          ??? |
-// | Smearing            |          ??? |        ??? |                             ??? |                          ??? |
-// | Undo                |          ??? |        ??? |                             ??? |                          ??? |
-// | Modified Cursor Pos |            4 |         +0 |                              +0 |                           +0 |
-// +---------------------+--------------+-----------------------------------------------------------------------------+
+// +---------------------+--------------+------------+------------+----------------------------+----------------------------------------+
+// | Feature             | Uniform Cost | Draw Calls | FBO Copies | Texture Samples while idle |   Extra Texture Samples while drawing  |
+// +---------------------+--------------+------------+------------+----------------------------+----------------------------------------+
+// | Baseline Canvas     |          ??? |          3 |          2 |                          4 |                              at most 1 |
+// | Brush Texture       |         +??? |         +0 |         +0 |                         +0 | +up to MAX_BRUSH_SAMPLES_PER_PIXEL + 1 |
+// | Connected Lines     |         +??? |         +1 |         +1 |                         +4 |                                     +1 |
+// | Undo                |           +0 |         +1 |         +1 |                         +1 |                                     +1 |
+// | Modified Cursor Pos |           +4 |         +0 |         +0 |                         +0 |                                     +0 |
+// +---------------------+--------------+------------+------------+----------------------------+----------------------------------------+
 
 
 // It might be possible to squish some extra information into existing params.
@@ -224,7 +227,7 @@ float calcPointInfluence(float brushRadius, vec2 uv, vec2 center, vec2 velocity,
 	// sample brush texture & calc mask
 	float sample;
 	if(u_useTexturesAndFrameTime > 0) {
-		 sample = 1. - dot(texSample2D(g_Texture6, sampleSpot + CAST2(0.5)).rg, selectedChannel);
+		 sample = 1. - dot(texSample2D(BRUSH_TEX, sampleSpot + CAST2(0.5)).rg, selectedChannel);
 	}else {
 		sample = smoothstep(1., min(u_drawHardness, IPSILON), length(sampleSpot) * 2.);
 	}
@@ -373,7 +376,7 @@ vec2 calcInfluence(vec2 fragPos, vec4 cursor, vec2 ratCorr, float frameTime) {
 	// This way we avoid stacking brush influence when drawing line segments.
 	if(isMode(u_strokeType, INFLUENCE_CLINES) || isMode(u_strokeType, INFLUENCE_LINE)) {
 		if(u_mouseDown.y * NOT(u_mouseDown.x)) { // draws entire stroke (connected lines) on mouse release
-			return vec2(texSample2D(g_Texture3, fragPos).g, 1.);
+			return vec2(texSample2D(INFLUENCE_TEX, fragPos).g, 1.);
 		}
 		return CAST2(0.);
 	}
@@ -382,7 +385,7 @@ vec2 calcInfluence(vec2 fragPos, vec4 cursor, vec2 ratCorr, float frameTime) {
 	if(isMode(u_strokeType, INFLUENCE_SPACED_DOTS)) {
 		if(u_mouseDown.x) { // draws evenly spaced dots while mouse down
 			
-			vec4 lastFrameInfo = texSample2D(g_Texture5, sampleSpot(STORAGE_FRAMEINFO));
+			vec4 lastFrameInfo = texSample2D(STORAGE_TEX, sampleSpot(STORAGE_FRAMEINFO));
 			float brushSpacingOffset = lastFrameInfo.x;
 			float pFrametime = lastFrameInfo.y;
 			
@@ -401,44 +404,29 @@ vec4 applyDrawMode(vec4 canvasAlbedo, float brushInfluence, vec2 fragPos, vec4 c
 	vec4 brushColor = canvasAlbedo;
 
 	if(isMode(u_drawMode, DRAW_MODE_ERASE)) {
-		brushColor = texSample2D(g_Texture0, fragPos);
+		brushColor = texSample2D(RESET_TEX, fragPos);
 	}
 
 	if(isMode(u_drawMode, DRAW_MODE_BRUSH)) {
 		brushColor = vec4(u_drawColor, 1.);
 	}
 
-#if ENABLE_BLEND
 	if(isMode(u_drawMode, DRAW_MODE_BLEND)) {
-		brushColor =  texSample2D(g_Texture4, fragPos);
+		brushColor =  texSample2D(BLEND_TEX, fragPos);
 	}
-#endif
 
-#if ENABLE_SMEAR
 	if(isMode(u_drawMode, DRAW_MODE_SMEAR)) {
-		brushColor = texSample2D(g_Texture1, cursor.zw + (fragPos - cursor.xy));
+		brushColor = texSample2D(PREV_CANVAS_TEX, cursor.zw + (fragPos - cursor.xy));
 	}
-#endif
 
-#if ENABLE_CPY_BRUSH
 	if(isMode(u_drawMode, DRAW_MODE_COLOR_CPY)) {
-		brushColor = texSample2D(g_Texture1, cursor.xy);
+		brushColor = texSample2D(PREV_CANVAS_TEX, cursor.xy);
 	}
-#endif
 
 	return mix(canvasAlbedo, brushColor, brushInfluence);
 }
 
 void main() {
-	vec4 defaultAlbedo = texSample2D(g_Texture0, v_TexCoord.xy);
-	vec4 canvasAlbedo = texSample2D(g_Texture1, v_TexCoord.xy);
-#if ENABLE_UNDO_CMD
-	vec4 undoAlbedo = texSample2D(g_Texture2, v_TexCoord.xy);
-#endif
-#if ENABLE_BLEND
-	vec4 blendAlbedo = texSample2D(g_Texture4, v_TexCoord.xy);
-#endif
-
 	vec2 ratCorr = mix(
 	vec2(1., g_Texture0Resolution.y/g_Texture0Resolution.x),
 	vec2(g_Texture0Resolution.x/g_Texture0Resolution.y, 1.),
@@ -454,20 +442,24 @@ void main() {
 	float frameTime = abs(u_useTexturesAndFrameTime);
 #endif
 	
-	vec4 nextAlbedo = canvasAlbedo;
+	vec4 nextAlbedo = texSample2D(PREV_CANVAS_TEX, v_TexCoord.xy);	// sample from last frame
 	vec2 brushInfluence = calcInfluence(v_TexCoord.xy, cursor, ratCorr, frameTime);
 	if(brushInfluence.y) {
 		nextAlbedo = applyDrawMode(nextAlbedo, brushInfluence.x, v_TexCoord.xy, cursor);
 	}
 
 	// apply commands
-	nextAlbedo = mix(nextAlbedo, defaultAlbedo, modeMatch(u_command, CMD_RESET));
+	if(isMode(u_command, CMD_RESET)) {
+		nextAlbedo = texSample2D(RESET_TEX, v_TexCoord.xy);
+	}
 #if ENABLE_UNDO_CMD
-	nextAlbedo = mix(nextAlbedo, undoAlbedo, modeMatch(u_command, CMD_UNDO));
+	if(isMode(u_command, CMD_UNDO)) {
+		nextAlbedo = texSample2D(UNDO_TEX, v_TexCoord.xy);
+	}
 #endif
-#if ENABLE_BLEND
-	nextAlbedo = mix(nextAlbedo, blendAlbedo, modeMatch(u_command, CMD_BLEND));
-#endif
+	if(isMode(u_command, CMD_BLEND)) {
+		nextAlbedo = texSample2D(BLEND_TEX, v_TexCoord.xy);
+	}
 
 	gl_FragColor = nextAlbedo;
 }
