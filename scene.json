@@ -51,6 +51,233 @@
 	[
 		{
 			"castshadow" : false,
+			"dependencies" : [ 16 ],
+			"effects" : 
+			[
+				{
+					"file" : "effects/blend/effect.json",
+					"id" : 476,
+					"name" : "Canvas Copy",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 0
+							},
+							"constantshadervalues" : 
+							{
+								"multiply" : 1.0
+							},
+							"id" : 477,
+							"textures" : [ null, "_rt_imageLayerComposite_16_a" ]
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/workshop/2906937488/procedural_noise/effect.json",
+					"id" : 643,
+					"name" : "Colored Noise",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"AB_TYPECOLOR" : 1,
+								"BLENDMODE" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"Color high" : 
+								{
+									"script" : "'use strict';\n\nimport * as WEColor from 'WEColor';\n\n/**\n * @param {Vec3} value - for property 'Color high'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tvar cb = shared.currentBrush;\n\treturn WEColor.hsv2rgb(new Vec3(cb.hue, cb.saturation, cb.value));\n}\n",
+									"value" : "1.00000 0.36078 0.36078"
+								},
+								"Color low" : "1 1 1",
+								"Exponent" : 1,
+								"Fractal influence" : 0.5,
+								"Fractal scaling" : 2.0,
+								"Fractals" : 4,
+								"Gradient" : 1.0,
+								"Offset" : "0.0 0.0",
+								"Opacity" : 1,
+								"Scale" : "1.0 1.0",
+								"Seed" : 0.0,
+								"Thresholds" : "0.0 1.0",
+								"Thresholds offset" : 0.0,
+								"animationspeed" : 1.0,
+								"scrollirection" : 0,
+								"scrollspeed" : 0.0
+							},
+							"id" : 645
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/motionblur/effect.json",
+					"id" : 785,
+					"name" : "Freeze while Painting",
+					"passes" : 
+					[
+						{
+							"constantshadervalues" : 
+							{
+								"rate" : 
+								{
+									"script" : "'use strict';\n\nvar accumulation = 1.;\nvar reset = false;\n\n/**\n * @param {Number} value - for property 'rate'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tvar ret = accumulation;\n\tif(reset) {\n\t\taccumulation = 1.;\n\t\treset = false;\n\t}\n\treturn ret;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\taccumulation = 0.;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\treset = true;\n}\n",
+									"value" : 0.80000001
+								}
+							},
+							"id" : 786
+						},
+						{
+							"id" : 12
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/blend/effect.json",
+					"id" : 649,
+					"name" : "Fabric Pattern",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 0,
+								"TRANSFORMREPEAT" : 1,
+								"TRANSFORMUV" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"blendangle" : 0.0,
+								"blendoffset" : "0 0",
+								"blendscale" : 1,
+								"multiply" : 1.0
+							},
+							"id" : 650,
+							"textures" : [ null, "Faded-Light-Maroon-Texture" ]
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/localcontrast/effect.json",
+					"id" : 601,
+					"name" : "Sharpen",
+					"passes" : 
+					[
+						{
+							"id" : 602
+						},
+						{
+							"constantshadervalues" : 
+							{
+								"scale" : "1 1"
+							},
+							"id" : 605
+						},
+						{
+							"combos" : 
+							{
+								"VERTICAL" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"scale" : "1 1"
+							},
+							"id" : 606
+						},
+						{
+							"constantshadervalues" : 
+							{
+								"strength" : 1.0
+							},
+							"id" : 607
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/blur/effect.json",
+					"id" : 517,
+					"name" : "Blur",
+					"passes" : 
+					[
+						{
+							"id" : 519
+						},
+						{
+							"constantshadervalues" : 
+							{
+								"scale" : "1 1"
+							},
+							"id" : 521
+						},
+						{
+							"combos" : 
+							{
+								"VERTICAL" : 1
+							},
+							"constantshadervalues" : 
+							{
+								"scale" : "1 1"
+							},
+							"id" : 523
+						},
+						{
+							"constantshadervalues" : 
+							{
+								"compositecolor" : "1 1 1"
+							},
+							"id" : 524
+						}
+					],
+					"visible" : false
+				},
+				{
+					"file" : "effects/tint/effect.json",
+					"id" : 725,
+					"name" : "Tint with Brush Color",
+					"passes" : 
+					[
+						{
+							"combos" : 
+							{
+								"BLENDMODE" : 28
+							},
+							"constantshadervalues" : 
+							{
+								"alpha" : 1.0,
+								"color" : 
+								{
+									"script" : "'use strict';\n\nimport * as WEColor from 'WEColor';\n\n/**\n * @param {Vec3} value - for property 'Color high'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tvar cb = shared.currentBrush;\n\treturn WEColor.hsv2rgb(new Vec3(cb.hue, cb.saturation, cb.value));\n}\n",
+									"value" : "1.00000 0.00000 0.00000"
+								}
+							},
+							"id" : 726
+						}
+					],
+					"visible" : true
+				}
+			],
+			"id" : 288,
+			"image" : "models/util/projectlayer.json",
+			"name" : "Pattern Texture",
+			"origin" : "1280.00000 720.00000 0.00000",
+			"parallaxDepth" : "0.00000 0.00000",
+			"size" : "2560.00000 1440.00000",
+			"visible" : 
+			{
+				"script" : "'use strict';\n\nvar effects = {};\nvar lastPat = [];\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tfor(var i = 0; i < thisLayer.getEffectCount(); i++) {\n\t\tvar e = thisLayer.getEffect(i);\n\t\teffects[e.name] = i;\n\t\te.visible = false;\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn value;\n}\n\nexport function refresh() {\n\tvar p = [];\n\n\tvar pat = shared.currentBrush.pat;\n\tif(typeof pat === \"undefined\") {\n\t\tfor(var i = 0; i < thisLayer.getEffectCount(); i++) {\n\t\t\tthisLayer.getEffect(i).visible = false;\n\t\t}\n\t\tlastPat = p;\n\t\treturn;\n\t}\n\n\tfor(var i = 0; i < pat.length; i++) {\n\t\tvar e = effects[pat[i]];\n\t\tif(typeof e !== \"undefined\") {\n\t\t\tp.push(e);\n\t\t\tthisLayer.getEffect(e).visible = true;\n\t\t}\n\t}\n\n\tfor(const l of lastPat) {\n\t\tif(p.indexOf(l) < 0) {\n\t\t\tthisLayer.getEffect(l).visible = false;\n\t\t}\n\t}\n\n\tlastPat = p;\n}",
+				"value" : true
+			}
+		},
+		{
+			"castshadow" : false,
 			"effects" : 
 			[
 				{
@@ -282,240 +509,13 @@
 		},
 		{
 			"castshadow" : false,
-			"dependencies" : [ 16 ],
-			"effects" : 
-			[
-				{
-					"file" : "effects/blend/effect.json",
-					"id" : 476,
-					"name" : "Canvas Copy",
-					"passes" : 
-					[
-						{
-							"combos" : 
-							{
-								"BLENDMODE" : 0
-							},
-							"constantshadervalues" : 
-							{
-								"multiply" : 1.0
-							},
-							"id" : 477,
-							"textures" : [ null, "_rt_imageLayerComposite_16_a" ]
-						}
-					],
-					"visible" : false
-				},
-				{
-					"file" : "effects/workshop/2906937488/procedural_noise/effect.json",
-					"id" : 643,
-					"name" : "Colored Noise",
-					"passes" : 
-					[
-						{
-							"combos" : 
-							{
-								"AB_TYPECOLOR" : 1,
-								"BLENDMODE" : 1
-							},
-							"constantshadervalues" : 
-							{
-								"Color high" : 
-								{
-									"script" : "'use strict';\n\nimport * as WEColor from 'WEColor';\n\n/**\n * @param {Vec3} value - for property 'Color high'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tvar cb = shared.currentBrush;\n\treturn WEColor.hsv2rgb(new Vec3(cb.hue, cb.saturation, cb.value));\n}\n",
-									"value" : "1.00000 0.36078 0.36078"
-								},
-								"Color low" : "1 1 1",
-								"Exponent" : 1,
-								"Fractal influence" : 0.5,
-								"Fractal scaling" : 2.0,
-								"Fractals" : 4,
-								"Gradient" : 1.0,
-								"Offset" : "0.0 0.0",
-								"Opacity" : 1,
-								"Scale" : "1.0 1.0",
-								"Seed" : 0.0,
-								"Thresholds" : "0.0 1.0",
-								"Thresholds offset" : 0.0,
-								"animationspeed" : 1.0,
-								"scrollirection" : 0,
-								"scrollspeed" : 0.0
-							},
-							"id" : 645
-						}
-					],
-					"visible" : false
-				},
-				{
-					"file" : "effects/motionblur/effect.json",
-					"id" : 785,
-					"name" : "Freeze while Painting",
-					"passes" : 
-					[
-						{
-							"constantshadervalues" : 
-							{
-								"rate" : 
-								{
-									"script" : "'use strict';\n\nvar accumulation = 1.;\nvar reset = false;\n\n/**\n * @param {Number} value - for property 'rate'\n * @return {Number} - update current property value\n */\nexport function update(value) {\n\tvar ret = accumulation;\n\tif(reset) {\n\t\taccumulation = 1.;\n\t\treset = false;\n\t}\n\treturn ret;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorDown(event) {\n\taccumulation = 0.;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\treset = true;\n}\n",
-									"value" : 0.80000001
-								}
-							},
-							"id" : 786
-						},
-						{
-							"id" : 94
-						}
-					],
-					"visible" : false
-				},
-				{
-					"file" : "effects/blend/effect.json",
-					"id" : 649,
-					"name" : "Fabric Pattern",
-					"passes" : 
-					[
-						{
-							"combos" : 
-							{
-								"BLENDMODE" : 0,
-								"TRANSFORMREPEAT" : 1,
-								"TRANSFORMUV" : 1
-							},
-							"constantshadervalues" : 
-							{
-								"blendangle" : 0.0,
-								"blendoffset" : "0 0",
-								"blendscale" : 1,
-								"multiply" : 1.0
-							},
-							"id" : 650,
-							"textures" : [ null, "Faded-Light-Maroon-Texture" ]
-						}
-					],
-					"visible" : false
-				},
-				{
-					"file" : "effects/localcontrast/effect.json",
-					"id" : 601,
-					"name" : "Sharpen",
-					"passes" : 
-					[
-						{
-							"id" : 602
-						},
-						{
-							"constantshadervalues" : 
-							{
-								"scale" : "1 1"
-							},
-							"id" : 605
-						},
-						{
-							"combos" : 
-							{
-								"VERTICAL" : 1
-							},
-							"constantshadervalues" : 
-							{
-								"scale" : "1 1"
-							},
-							"id" : 606
-						},
-						{
-							"constantshadervalues" : 
-							{
-								"strength" : 1.0
-							},
-							"id" : 607
-						}
-					],
-					"visible" : false
-				},
-				{
-					"file" : "effects/blur/effect.json",
-					"id" : 517,
-					"name" : "Blur",
-					"passes" : 
-					[
-						{
-							"id" : 519
-						},
-						{
-							"constantshadervalues" : 
-							{
-								"scale" : "1 1"
-							},
-							"id" : 521
-						},
-						{
-							"combos" : 
-							{
-								"VERTICAL" : 1
-							},
-							"constantshadervalues" : 
-							{
-								"scale" : "1 1"
-							},
-							"id" : 523
-						},
-						{
-							"constantshadervalues" : 
-							{
-								"compositecolor" : "1 1 1"
-							},
-							"id" : 524
-						}
-					],
-					"visible" : false
-				},
-				{
-					"file" : "effects/tint/effect.json",
-					"id" : 725,
-					"name" : "Tint with Brush Color",
-					"passes" : 
-					[
-						{
-							"combos" : 
-							{
-								"BLENDMODE" : 28
-							},
-							"constantshadervalues" : 
-							{
-								"alpha" : 1.0,
-								"color" : 
-								{
-									"script" : "'use strict';\n\nimport * as WEColor from 'WEColor';\n\n/**\n * @param {Vec3} value - for property 'Color high'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tvar cb = shared.currentBrush;\n\treturn WEColor.hsv2rgb(new Vec3(cb.hue, cb.saturation, cb.value));\n}\n",
-									"value" : "1.00000 0.00000 0.00000"
-								}
-							},
-							"id" : 726
-						}
-					],
-					"visible" : true
-				}
-			],
-			"id" : 288,
-			"image" : "models/util/projectlayer.json",
-			"name" : "Pattern Texture",
-			"origin" : "1280.00000 720.00000 0.00000",
-			"parallaxDepth" : "0.00000 0.00000",
-			"size" : "2560.00000 1440.00000",
-			"visible" : 
-			{
-				"script" : "'use strict';\n\nvar effects = {};\nvar lastPat = [];\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tfor(var i = 0; i < thisLayer.getEffectCount(); i++) {\n\t\tvar e = thisLayer.getEffect(i);\n\t\teffects[e.name] = i;\n\t\te.visible = false;\n\t}\n\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn value;\n}\n\nexport function refresh() {\n\tvar p = [];\n\n\tvar pat = shared.currentBrush.pat;\n\tif(typeof pat === \"undefined\") {\n\t\tfor(var i = 0; i < thisLayer.getEffectCount(); i++) {\n\t\t\tthisLayer.getEffect(i).visible = false;\n\t\t}\n\t\tlastPat = p;\n\t\treturn;\n\t}\n\n\tfor(var i = 0; i < pat.length; i++) {\n\t\tvar e = effects[pat[i]];\n\t\tif(typeof e !== \"undefined\") {\n\t\t\tp.push(e);\n\t\t\tthisLayer.getEffect(e).visible = true;\n\t\t}\n\t}\n\n\tfor(const l of lastPat) {\n\t\tif(p.indexOf(l) < 0) {\n\t\t\tthisLayer.getEffect(l).visible = false;\n\t\t}\n\t}\n\n\tlastPat = p;\n}",
-				"value" : true
-			}
-		},
-		{
-			"castshadow" : false,
 			"dependencies" : [ 288, 536 ],
 			"effects" : 
 			[
 				{
 					"file" : "effects/blend/effect.json",
 					"id" : 772,
-					"name" : "",
+					"name" : "Clear Canvas",
 					"passes" : 
 					[
 						{
@@ -541,7 +541,7 @@
 					},
 					"file" : "effects/canvas/effect.json",
 					"id" : 160,
-					"name" : "",
+					"name" : "Canvas Shader",
 					"passes" : 
 					[
 						{
@@ -919,7 +919,7 @@
 			"size" : "2560.00000 1440.00000",
 			"visible" : 
 			{
-				"script" : "'use strict';\n\n// SETUP & EVENT HANDLING SCRIPT\n\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'startBrush',\n\t\tlabel: 'Start Brush',\n\t\tvalue: 'Put json settings of the brush you want to start with here.'\n\t})\n\t.finish();\n\nfunction tryParseJSONObject (jsonString){\n    try {\t// https://stackoverflow.com/questions/3710204/how-to-check-if-a-string-is-a-valid-json-string\n        var o = JSON.parse(jsonString);\n        if (o && typeof o === \"object\") {\n            return o;\n        }\n    }\n    catch (e) { }\n\n    return false;\n};\n\n/**\n * @param {Boolean} value - for property 'visible'\n * @return {Boolean} - update current property value\n */\nexport function init(value) {\n\tshared['brushEditor'] = {\n\t\tvisible: false,\t\t// set true to make brush designer window visible\n\t\ttexEdit: false,\t\t// set true to make texture editor visible\n\t\tpatEdit: false,\t\t// set true to make pattern selection pop-out visible\n\t\tbrushId: 0,\t\t\t// currently edited brush\n\t\ttexCnt: 2,\t\t\t// number of textures that can be simulatneously assigned to a brush\n\t\ttexId : 0,\t\t\t// currently edited texture\n\t\ttexPage: 0,\t\t\t// currently open texture page in texture editor\n\t\ttexImgTotal: 0,\t\t// nr of available images that can be set as brush texture (set by the tex editor itself)\n\t\ttexPageSize: -1,\t// page size of the texture editor (set by the tex editor itself)\n\t\tchanged: true,\t\t// set to true to force a ui update next frame\n\t\thasChanged: false\t// if set to true ui shall update\n\t};\n\tshared['currentBrush'] = {\n\t\ttex: [{images:[]},{images:[]}]\n\t};\n\tfor(var i = 0; i < shared['brushEditor'].texCnt; i++) {\n\t\tshared['currentBrush']['tex'][i] = {images:[]};\n\t}\n\n\tshared['brushes'] = localStorage.get('brushes', localStorage.LOCATION_GLOBAL) || [];\n\n\t// this is used by the auto-draw script on the \"Paint Controls\" layer to allow drawing via script\n\tshared[\"autoDraw\"] = {\n\t\t\"cmdQueue\":[],\t\t\t\t// add draw cmds to the back of this list and the draw script will execute them sequentially (for cmd structure see script)\n\t\t\"cursorPos\": undefined,\t\t// overwrites the cursor position with a custom one. Either Vec4 (custom current & last frame cursor pos) or undefined (don't overwrite mouse pos).\n\t\t\"cursorDown\": undefined,\t// overwrites the mouse button status. Either Vec2 or undefined. (0/1 = mouse down/up; X = current frame, Y = last frame)\n\t\t\"frameTime\": undefined\t\t// overwrites the frameTime. Either positive float (custom frameTime in seconds) or undefined.\n\t};\n\n\treturn value;\n}\n\nexport function destroy() {\n\tlocalStorage.set('brushes', shared.brushes, localStorage.LOCATION_GLOBAL);\n}\nvar tryStartup = true;\n/**\n * @param {Boolean} value - for property 'visible'\n * @return {Boolean} - update current property value\n */\nexport function update(value) {\n\tif(tryStartup) {\n\t\tif(!Number.isFinite(shared.currentBrush[\"hue\"])) {\n\t\t\tvar sB = tryParseJSONObject(scriptProperties[\"startBrush\"]);\n\t\t\tif(sB === false) {\n\t\t\t\ttryStartup = false;\n\t\t\t}else {\n\t\t\t\tshared.currentBrush = sB;\n\t\t\t\tshared['brushEditor']['changed'] = true;\n\t\t\t}\n\t\t}else {\n\t\t\ttryStartup = false;\n\t\t}\n\t}\n\tif(shared['brushEditor']['changed']) {\n\t\tshared['brushEditor']['hasChanged'] = true;\n\t\tshared['brushEditor']['changed'] = false;\n\t}else {\n\t\tshared['brushEditor']['hasChanged'] = false;\n\t}\n\treturn value;\n}",
+				"script" : "'use strict';\n\n// SETUP & EVENT HANDLING SCRIPT\n\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'startBrush',\n\t\tlabel: 'Start Brush',\n\t\tvalue: 'Put json settings of the brush you want to start with here.'\n\t})\n\t.finish();\n\nfunction tryParseJSONObject (jsonString){\n    try {\t// https://stackoverflow.com/questions/3710204/how-to-check-if-a-string-is-a-valid-json-string\n        var o = JSON.parse(jsonString);\n        if (o && typeof o === \"object\") {\n            return o;\n        }\n    }\n    catch (e) { }\n\n    return false;\n};\n\n/**\n * @param {Boolean} value - for property 'visible'\n * @return {Boolean} - update current property value\n */\nexport function init(value) {\n\tshared['brushEditor'] = {\n\t\tvisible: false,\t\t// set true to make brush designer window visible\n\t\ttexEdit: false,\t\t// set true to make texture editor visible\n\t\tpatEdit: false,\t\t// set true to make pattern selection pop-out visible\n\t\tbrushId: 0,\t\t\t// currently edited brush\n\t\ttexCnt: 2,\t\t\t// number of textures that can be simulatneously assigned to a brush\n\t\ttexId : 0,\t\t\t// currently edited texture\n\t\ttexPage: 0,\t\t\t// currently open texture page in texture editor\n\t\ttexImgTotal: 0,\t\t// nr of available images that can be set as brush texture (set by the tex editor itself)\n\t\ttexPageSize: -1,\t// page size of the texture editor (set by the tex editor itself)\n\t\tchanged: true,\t\t// set to true to force a ui update next frame\n\t\thasChanged: false\t// if set to true ui shall update\n\t};\n\tshared['currentBrush'] = {\n\t\ttex: [{images:[]},{images:[]}]\n\t};\n\tfor(var i = 0; i < shared['brushEditor'].texCnt; i++) {\n\t\tshared['currentBrush']['tex'][i] = {images:[]};\n\t}\n\n\tshared['brushes'] = localStorage.get('brushes', localStorage.LOCATION_GLOBAL) || [];\n\n\t// this is used by the auto-draw script on the \"Paint Controls\" layer to allow drawing via script\n\tshared[\"autoDraw\"] = {\n\t\t\"cmdQueue\":[],\t\t\t\t// add draw cmds to the back of this list and the draw script will execute them sequentially (for cmd structure see script)\n\t\t\"cursorPos\": undefined,\t\t// overwrites the cursor position with a custom one. Either Vec4 (custom current & last frame cursor pos) or undefined (don't overwrite mouse pos).\n\t\t\"cursorDown\": undefined,\t// overwrites the mouse button status. Either Vec2 or undefined. (0/1 = mouse down/up; X = current frame, Y = last frame)\n\t\t\"frameTime\": undefined\t\t// overwrites the frameTime. Either positive float (custom frameTime in seconds) or undefined.\n\t};\n\n\tshared[\"cmd\"] = \"reset\";\t// we want to clear the canvas on startup so that the background doesn't shine through\n\t// (this needs to be repreated in first update loop so that the user can't undo this ^^)\n\n\treturn value;\n}\n\nexport function destroy() {\n\tlocalStorage.set('brushes', shared.brushes, localStorage.LOCATION_GLOBAL);\n}\nvar tryStartup = true;\n/**\n * @param {Boolean} value - for property 'visible'\n * @return {Boolean} - update current property value\n */\nexport function update(value) {\n\tif(tryStartup) {\n\t\tshared.cmd = 'reset';\n\t\tif(!Number.isFinite(shared.currentBrush[\"hue\"])) {\n\t\t\tvar sB = tryParseJSONObject(scriptProperties[\"startBrush\"]);\n\t\t\tif(sB === false) {\n\t\t\t\ttryStartup = false;\n\t\t\t}else {\n\t\t\t\tshared.currentBrush = sB;\n\t\t\t\tshared['brushEditor']['changed'] = true;\n\t\t\t}\n\t\t}else {\n\t\t\ttryStartup = false;\n\t\t}\n\t}\n\tif(shared['brushEditor']['changed']) {\n\t\tshared['brushEditor']['hasChanged'] = true;\n\t\tshared['brushEditor']['changed'] = false;\n\t}else {\n\t\tshared['brushEditor']['hasChanged'] = false;\n\t}\n\treturn value;\n}",
 				"scriptproperties" : 
 				{
 					"startBrush" : "{\"tex\":[{\"probability\":0.5054068565368652,\"influence\":0.18118762969970703,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0.26494312286376953,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":true,\"offset\":0.1698323567708333,\"offset_mirror\":1,\"offset_jitter\":0,\"offset_vel\":0,\"images\":[\"Sprinkles Jaggy\",\"Cloud\"]},{\"probability\":0.43509435653686523,\"influence\":0.8921256065368652,\"size\":1,\"size_jitter\":0,\"size_vel\":-0.20794391632080078,\"alpha_jitter\":1,\"alpha_vel\":-0.1845073699951172,\"scatter_jitter\":0.39384889602661133,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":false,\"offset\":0.32740737452651514,\"offset_mirror\":1,\"offset_jitter\":1,\"offset_vel\":0,\"images\":[\"Sprinkles\",\"Cloud\"]}],\"size\":0.2093242108821869,\"alpha\":0.5422885417938232,\"spacing\":0.1,\"hue\":0.5892025573430383,\"saturation\":1,\"value\":0.2784300148487091,\"hardness\":0.1,\"lo_vel\":0,\"hi_vel\":5,\"draw_mode\":\"paint\",\"stroke_type\":\"evenly_spaced\",\"brush_type\":\"textures\",\"pat\":[]}"
@@ -3928,11 +3928,12 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\tif(hovered && isVisible()) {\n\t\tshared['tooltip'] = scriptProperties['tooltip'];\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n\t\n}",
 				"scriptproperties" : 
 				{
 					"brush" : "{\"tex\":[{\"probability\":1,\"influence\":1,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":0,\"rot_lock\":true,\"offset\":0,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0},{\"probability\":1,\"influence\":1,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":0,\"rot_lock\":true,\"offset\":0,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0}],\"size\":0.021824121475219727,\"alpha\":1,\"spacing\":0.1,\"hue\":0,\"saturation\":0,\"value\":0,\"hardness\":0.9280746579170227,\"lo_vel\":0,\"hi_vel\":3.4476423263549805,\"draw_mode\":\"paint\",\"stroke_type\":\"connected_lines\",\"brush_type\":\"procedural\"}",
-					"ignored" : "[\"hue\",\"saturation\",\"value\",\"alpha\",\"size\"]"
+					"ignored" : "[\"hue\",\"saturation\",\"value\",\"alpha\",\"size\"]",
+					"tooltip" : "Pen"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -3949,11 +3950,12 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\tif(hovered && isVisible()) {\n\t\tshared['tooltip'] = scriptProperties['tooltip'];\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n\t\n}",
 				"scriptproperties" : 
 				{
 					"brush" : "{\"tex\":[{\"probability\":0.5054068565368652,\"influence\":0.18118762969970703,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0.26494312286376953,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":true,\"offset\":0.1698323567708333,\"offset_mirror\":1,\"offset_jitter\":0,\"offset_vel\":0,\"images\":[\"Sprinkles Jaggy\",\"Cloud\"]},{\"probability\":0.43509435653686523,\"influence\":0.8921256065368652,\"size\":1,\"size_jitter\":0,\"size_vel\":-0.20794391632080078,\"alpha_jitter\":1,\"alpha_vel\":-0.1845073699951172,\"scatter_jitter\":0.39384889602661133,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":false,\"offset\":0.32740737452651514,\"offset_mirror\":1,\"offset_jitter\":1,\"offset_vel\":0,\"images\":[\"Sprinkles\",\"Cloud\"]}],\"size\":0.2093242108821869,\"alpha\":0.5422885417938232,\"spacing\":0.1,\"hue\":0.5892025573430383,\"saturation\":1,\"value\":0.2784300148487091,\"hardness\":0.1,\"lo_vel\":0,\"hi_vel\":5,\"draw_mode\":\"paint\",\"stroke_type\":\"evenly_spaced\",\"brush_type\":\"textures\",\"pat\":[]}",
-					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]"
+					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]",
+					"tooltip" : "Paint Brush"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -3969,11 +3971,12 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\tif(hovered && isVisible()) {\n\t\tshared['tooltip'] = scriptProperties['tooltip'];\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n\t\n}",
 				"scriptproperties" : 
 				{
 					"brush" : "{\"tex\":[{\"probability\":1,\"influence\":1,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":0,\"rot_lock\":true,\"offset\":0,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0},{\"probability\":1,\"influence\":1,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":0,\"rot_lock\":true,\"offset\":0,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0}],\"size\":0.04916787147521973,\"alpha\":1,\"spacing\":0.1,\"hue\":0.5892025573430383,\"saturation\":1,\"value\":0.2784300148487091,\"hardness\":0.8772933483123779,\"lo_vel\":0,\"hi_vel\":3.4476423263549805,\"draw_mode\":\"paint\",\"stroke_type\":\"straight_line\",\"brush_type\":\"procedural\"}",
-					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]"
+					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]",
+					"tooltip" : "Line Tool"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -3990,11 +3993,12 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\tif(hovered && isVisible()) {\n\t\tshared['tooltip'] = scriptProperties['tooltip'];\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n\t\n}",
 				"scriptproperties" : 
 				{
 					"brush" : "{\"tex\":[{\"probability\":1,\"influence\":1,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":0,\"rot_lock\":true,\"offset\":0,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0},{\"probability\":1,\"influence\":1,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":0,\"rot_lock\":true,\"offset\":0,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0}],\"size\":0.1494196355342865,\"alpha\":1,\"spacing\":0.1,\"hue\":0.1,\"saturation\":0.1,\"value\":0.1,\"hardness\":0.8226058483123779,\"lo_vel\":0,\"hi_vel\":3.4476423263549805,\"draw_mode\":\"erase\",\"stroke_type\":\"connected_lines\",\"brush_type\":\"procedural\"}",
-					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\"]"
+					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\"]",
+					"tooltip" : "Eraser"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -4011,7 +4015,7 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tvar c = thisLayer.getChildren()[0];\n\tc.visible = !c.visible;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n}",
+				"script" : "'use strict';\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered && isVisible()) {\n\t\tshared[\"tooltip\"] = \"More...\";\n\t}\n\treturn value;\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tvar c = thisLayer.getChildren()[0];\n\tc.visible = !c.visible;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n}\n",
 				"value" : "1.00000 1.00000 1.00000"
 			},
 			"id" : 233,
@@ -4035,11 +4039,12 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\tif(hovered && isVisible()) {\n\t\tshared['tooltip'] = scriptProperties['tooltip'];\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n\t\n}",
 				"scriptproperties" : 
 				{
 					"brush" : "{\"tex\":[{\"probability\":1,\"influence\":1,\"size\":1,\"size_jitter\":0,\"size_vel\":-0.7391929626464844,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":0,\"rot_lock\":true,\"offset\":0,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0},{\"probability\":1,\"influence\":1,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0.39384889602661133,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":0,\"rot_lock\":true,\"offset\":0,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0}],\"size\":0.1,\"alpha\":1,\"spacing\":0.1,\"hue\":0.7288561761379242,\"saturation\":1,\"value\":0.2515006959438324,\"hardness\":1,\"lo_vel\":0,\"hi_vel\":3.4476423263549805,\"draw_mode\":\"paint\",\"stroke_type\":\"connected_lines\",\"brush_type\":\"procedural\"}",
-					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]"
+					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]",
+					"tooltip" : "Ink Pen"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -4055,11 +4060,12 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\tif(hovered && isVisible()) {\n\t\tshared['tooltip'] = scriptProperties['tooltip'];\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n\t\n}",
 				"scriptproperties" : 
 				{
 					"brush" : "{\"tex\":[{\"probability\":0.5054068565368652,\"influence\":0.6030631065368652,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0.26494312286376953,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":true,\"offset\":0.00013543331261844926,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0,\"images\":[\"Watercolor\"]},{\"probability\":0.43509435653686523,\"influence\":0.8921256065368652,\"size\":1,\"size_jitter\":0,\"size_vel\":-0.8095054626464844,\"alpha_jitter\":1,\"alpha_vel\":0,\"scatter_jitter\":0.39384889602661133,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":false,\"offset\":0.32740737452651514,\"offset_mirror\":1,\"offset_jitter\":1,\"offset_vel\":0,\"images\":[\"Sprinkles\"]}],\"size\":0.27734375,\"alpha\":0.9954135417938232,\"spacing\":0.060094356536865234,\"hue\":0.5892025573430383,\"saturation\":1,\"value\":0.2784300148487091,\"hardness\":0.40234375,\"lo_vel\":0,\"hi_vel\":5,\"draw_mode\":\"blend\",\"stroke_type\":\"evenly_spaced\",\"brush_type\":\"textures\",\"pat\":[\"Freeze while Painting\",\"Canvas Copy\",\"Colored Noise\"],\"blend_with_color\":true}",
-					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]"
+					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]",
+					"tooltip" : "Watercolor Brush"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -4075,11 +4081,12 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\tif(hovered && isVisible()) {\n\t\tshared['tooltip'] = scriptProperties['tooltip'];\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n\t\n}",
 				"scriptproperties" : 
 				{
 					"brush" : "{\"tex\":[{\"probability\":0,\"influence\":1,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0.26494312286376953,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":true,\"offset\":0,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0,\"images\":[]},{\"probability\":1,\"influence\":1,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":1,\"alpha_vel\":0,\"scatter_jitter\":0.39384889602661133,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":false,\"offset\":0.1801876183712121,\"offset_mirror\":1,\"offset_jitter\":1,\"offset_vel\":0,\"images\":[\"Sprinkles\"]}],\"size\":0.15000001,\"alpha\":0.5,\"spacing\":0.1,\"hue\":0.1,\"saturation\":0.1,\"value\":0.1,\"hardness\":0.1,\"lo_vel\":0,\"hi_vel\":5,\"draw_mode\":\"paint\",\"stroke_type\":\"spray_can\",\"brush_type\":\"textures\"}",
-					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]"
+					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]",
+					"tooltip" : "Spray Can"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -4095,11 +4102,12 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\tif(hovered && isVisible()) {\n\t\tshared['tooltip'] = scriptProperties['tooltip'];\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n\t\n}",
 				"scriptproperties" : 
 				{
 					"brush" : "{\"tex\":[{\"probability\":0.5054068565368652,\"influence\":0.6030631065368652,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0.26494312286376953,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":true,\"offset\":0.00013543331261844926,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0,\"images\":[\"Watercolor\"]},{\"probability\":0.43509435653686523,\"influence\":0.8921256065368652,\"size\":1,\"size_jitter\":0,\"size_vel\":-0.8095054626464844,\"alpha_jitter\":1,\"alpha_vel\":0,\"scatter_jitter\":0.39384889602661133,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":false,\"offset\":0.32740737452651514,\"offset_mirror\":1,\"offset_jitter\":1,\"offset_vel\":0,\"images\":[\"Sprinkles\"]}],\"size\":0.27734375,\"alpha\":0.9954135417938232,\"spacing\":0.060094356536865234,\"hue\":0.5892025573430383,\"saturation\":1,\"value\":0.2784300148487091,\"hardness\":0.40234375,\"lo_vel\":0,\"hi_vel\":5,\"draw_mode\":\"blend\",\"stroke_type\":\"evenly_spaced\",\"brush_type\":\"procedural\",\"pat\":[\"Fabric Pattern\",\"Tint with Brush Color\"],\"blend_with_color\":true}",
-					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]"
+					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]",
+					"tooltip" : "Pattern Brush"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -4115,11 +4123,12 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\tif(hovered && isVisible()) {\n\t\tshared['tooltip'] = scriptProperties['tooltip'];\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n\t\n}",
 				"scriptproperties" : 
 				{
 					"brush" : "{\"tex\":[{\"probability\":1,\"influence\":1,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":0,\"rot_lock\":true,\"offset\":0,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0},{\"probability\":1,\"influence\":1,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":0,\"rot_lock\":true,\"offset\":0,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0}],\"size\":0.2015114724636078,\"alpha\":0.5579133033752441,\"spacing\":0,\"hue\":0.7288561761379242,\"saturation\":1,\"value\":0.2515006959438324,\"hardness\":0,\"lo_vel\":0,\"hi_vel\":3.4476423263549805,\"draw_mode\":\"smear\",\"stroke_type\":\"spray_can\",\"brush_type\":\"procedural\"}",
-					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]"
+					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]",
+					"tooltip" : "Smear"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -4138,7 +4147,7 @@
 			"name" : "Toggle Brush Editor",
 			"origin" : 
 			{
-				"script" : "'use strict';\n\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushEditor.visible = !shared.brushEditor.visible;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'origin'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered && isVisible()) {\n\t\tshared['tooltip'] = \"Brush Editor\";\n\t}\n\treturn value;\n}\n\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorClick(event) {\n\tif(!isVisible()) {return;}\n\tshared.brushEditor.visible = !shared.brushEditor.visible;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n}\n",
 				"value" : "0.00000 0.00000 0.00000"
 			},
 			"parent" : 628,
@@ -4149,11 +4158,12 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\tif(hovered && isVisible()) {\n\t\tshared['tooltip'] = scriptProperties['tooltip'];\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n\t\n}",
 				"scriptproperties" : 
 				{
 					"brush" : "{\"tex\":[{\"probability\":0.5054068565368652,\"influence\":0.18118762969970703,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0.26494312286376953,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":true,\"offset\":0.00013543331261844926,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0,\"images\":[]},{\"probability\":0.43509435653686523,\"influence\":0.8921256065368652,\"size\":1,\"size_jitter\":0,\"size_vel\":-0.8095054626464844,\"alpha_jitter\":1,\"alpha_vel\":0,\"scatter_jitter\":0.39384889602661133,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":false,\"offset\":0.32740737452651514,\"offset_mirror\":1,\"offset_jitter\":1,\"offset_vel\":0,\"images\":[]}],\"size\":0.2093242108821869,\"alpha\":0.29228782653808594,\"spacing\":0.1,\"hue\":0.5892025573430383,\"saturation\":1,\"value\":0.2784300148487091,\"hardness\":0.40234375,\"lo_vel\":0,\"hi_vel\":5,\"draw_mode\":\"blend\",\"stroke_type\":\"spray_can\",\"brush_type\":\"procedural\",\"pat\":[\"Canvas Copy\",\"Blur\"]}",
-					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]"
+					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]",
+					"tooltip" : "Blur Brush"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -4169,10 +4179,11 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Effect Json',\n\t\tvalue: '{\"info\":\"Put the json-brush data of a brush using the same pattern-texture-setup, that you want to apply to the entire canvas, here.\"}'\n\t})\n\t.finish();\n\nconst State = Object.freeze({\n\tIdle: 0,\n\tPrepareBrush: 1,\n\tApplyEffect:2,\n\tReset:3\n});\n\nvar state = State.Idle;\nvar pattern;\nvar currPat;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tpattern = JSON.parse(scriptProperties[\"brush\"]).pat;\n\treturn value;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tswitch(state) {\n\t\tcase State.Idle:\n\t\t\tbreak;\n\t\tcase State.PrepareBrush:\n\t\t\tvar cb = shared.currentBrush;\n\t\t\tcurrPat = cb.pat;\n\t\t\tcb.pat = pattern;\n\t\t\tshared.brushEditor.changed = true;\n\t\t\tstate = State.ApplyEffect;\n\t\t\tbreak;\n\t\tcase State.ApplyEffect:\n\t\t\tshared.cmd = \"blend\";\n\t\t\tstate = State.Reset;\n\t\t\tbreak;\n\t\tcase State.Reset:\n\t\t\tshared.currentBrush.pat = currPat;\n\t\t\tshared.brushEditor.changed = true;\n\t\t\tstate = State.Idle;\n\t\t\tbreak;\n\t}\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible() || state !== State.Idle) {return;}\n\tstate = State.PrepareBrush;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}\n",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Effect Json',\n\t\tvalue: '{\"info\":\"Put the json-brush data of a brush using the same pattern-texture-setup, that you want to apply to the entire canvas, here.\"}'\n\t}).addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.finish();\n\nconst State = Object.freeze({\n\tIdle: 0,\n\tPrepareBrush: 1,\n\tApplyEffect:2,\n\tReset:3\n});\n\nvar state = State.Idle;\nvar pattern;\nvar currPat;\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tpattern = JSON.parse(scriptProperties[\"brush\"]).pat;\n\treturn value;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered && isVisible()) {\n\t\tshared[\"tooltip\"] = scriptProperties.tooltip;\n\t}\n\tswitch(state) {\n\t\tcase State.Idle:\n\t\t\tbreak;\n\t\tcase State.PrepareBrush:\n\t\t\tvar cb = shared.currentBrush;\n\t\t\tcurrPat = cb.pat;\n\t\t\tcb.pat = pattern;\n\t\t\tshared.brushEditor.changed = true;\n\t\t\tstate = State.ApplyEffect;\n\t\t\tbreak;\n\t\tcase State.ApplyEffect:\n\t\t\tshared.cmd = \"blend\";\n\t\t\tstate = State.Reset;\n\t\t\tbreak;\n\t\tcase State.Reset:\n\t\t\tshared.currentBrush.pat = currPat;\n\t\t\tshared.brushEditor.changed = true;\n\t\t\tstate = State.Idle;\n\t\t\tbreak;\n\t}\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible() || state !== State.Idle) {return;}\n\tstate = State.PrepareBrush;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n}\n",
 				"scriptproperties" : 
 				{
-					"brush" : "{\"tex\":[{\"probability\":0.5054068565368652,\"influence\":0.18118762969970703,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0.26494312286376953,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":true,\"offset\":0.00013543331261844926,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0,\"images\":[]},{\"probability\":0.43509435653686523,\"influence\":0.8921256065368652,\"size\":1,\"size_jitter\":0,\"size_vel\":-0.8095054626464844,\"alpha_jitter\":1,\"alpha_vel\":0,\"scatter_jitter\":0.39384889602661133,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":false,\"offset\":0.32740737452651514,\"offset_mirror\":1,\"offset_jitter\":1,\"offset_vel\":0,\"images\":[]}],\"size\":0.2093242108821869,\"alpha\":0.29228782653808594,\"spacing\":0.1,\"hue\":0.5892025573430383,\"saturation\":1,\"value\":0.2784300148487091,\"hardness\":0.40234375,\"lo_vel\":0,\"hi_vel\":5,\"draw_mode\":\"blend\",\"stroke_type\":\"spray_can\",\"brush_type\":\"procedural\",\"pat\":[\"Canvas Copy\",\"Blur\"]}"
+					"brush" : "{\"tex\":[{\"probability\":0.5054068565368652,\"influence\":0.18118762969970703,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0.26494312286376953,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":true,\"offset\":0.00013543331261844926,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0,\"images\":[]},{\"probability\":0.43509435653686523,\"influence\":0.8921256065368652,\"size\":1,\"size_jitter\":0,\"size_vel\":-0.8095054626464844,\"alpha_jitter\":1,\"alpha_vel\":0,\"scatter_jitter\":0.39384889602661133,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":false,\"offset\":0.32740737452651514,\"offset_mirror\":1,\"offset_jitter\":1,\"offset_vel\":0,\"images\":[]}],\"size\":0.2093242108821869,\"alpha\":0.29228782653808594,\"spacing\":0.1,\"hue\":0.5892025573430383,\"saturation\":1,\"value\":0.2784300148487091,\"hardness\":0.40234375,\"lo_vel\":0,\"hi_vel\":5,\"draw_mode\":\"blend\",\"stroke_type\":\"spray_can\",\"brush_type\":\"procedural\",\"pat\":[\"Canvas Copy\",\"Blur\"]}",
+					"tooltip" : "Blur Canvas"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -4188,11 +4199,12 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Brush Json',\n\t\tvalue: '{\"info\":\"Put the json output of a brush you designed with the brush designer here. The printer button in the designer logs the brushes json data so you can copy-paste it.\"}'\n\t})\n\t.addText({\n\t\tname: 'ignored',\n\t\tlabel: 'Ignored Fields',\n\t\tvalue: '[\"Here you can list brush properties that are allowed to change while the brush still counts as selected. Some examples follow:\",\"hue\",\"saturation\",\"value\",\"size\",\"alpha\",\"hardness\"]'\n\t})\n\t.addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.finish();\n\nvar selected = false;\nvar brush = {};\nvar isPartial = false;\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tbrush = JSON.parse(scriptProperties.brush);\n\tfor(const param of JSON.parse(scriptProperties.ignored)) {\n\t\tdelete brush[param];\n\t}\n\tisPartial = JSON.parse(scriptProperties.ignored.length) > 0;\n\trefresh();\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(shared.brushEditor.hasChanged) {\n\t\trefresh();\n\t}\n\tif(hovered && isVisible()) {\n\t\tshared['tooltip'] = scriptProperties['tooltip'];\n\t}\n\treturn selected ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nfunction deepEqual(obj1, obj2) {\n    if (obj1 === obj2) {\n        return true;\n    }\n\n    if (obj1 == null || typeof obj1 !== \"object\" || obj2 == null || typeof obj2 !== \"object\") {\n        return false;\n    }\n\n    let keys1 = Object.keys(obj1);\n    let keys2 = Object.keys(obj2);\n\n    if (keys1.length !== keys2.length) {\n        return false;\n    }\n\n    for (let key of keys1) {\n        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {\n            return false;\n        }\n    }\n\n    return true;\n}\n\nexport function refresh() {\n\tvar cb = shared.currentBrush;\n\tselected = true;\n\tfor(const [key, val] of Object.entries(brush)) {\n\t\tif(!deepEqual(cb[key], val)) {\n\t\t\tselected = false;\n\t\t\treturn;\n\t\t}\n\t}\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tif(isPartial) {\n\t\tfor(var [key, val] of Object.entries(brush)) {\n\t\t\tshared.currentBrush[key] = JSON.parse(JSON.stringify(val));\n\t\t}\n\t}else {\n\t\tshared.currentBrush = JSON.parse(JSON.stringify(brush));\n\t}\n\tshared.brushEditor.changed = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n\t\n}",
 				"scriptproperties" : 
 				{
 					"brush" : "{\"tex\":[{\"probability\":0.5054068565368652,\"influence\":0.18118762969970703,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0.26494312286376953,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":true,\"offset\":0.00013543331261844926,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0,\"images\":[]},{\"probability\":0.43509435653686523,\"influence\":0.8921256065368652,\"size\":1,\"size_jitter\":0,\"size_vel\":-0.8095054626464844,\"alpha_jitter\":1,\"alpha_vel\":0,\"scatter_jitter\":0.39384889602661133,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":false,\"offset\":0.32740737452651514,\"offset_mirror\":1,\"offset_jitter\":1,\"offset_vel\":0,\"images\":[]}],\"size\":0.2093242108821869,\"alpha\":0.29228782653808594,\"spacing\":0.1,\"hue\":0.5892025573430383,\"saturation\":1,\"value\":0.2784300148487091,\"hardness\":0.40234375,\"lo_vel\":0,\"hi_vel\":5,\"draw_mode\":\"blend\",\"stroke_type\":\"spray_can\",\"brush_type\":\"procedural\",\"pat\":[\"Canvas Copy\",\"Sharpen\"]}",
-					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]"
+					"ignored" : "[\"hue\",\"saturation\",\"value\",\"size\",\"alpha\"]",
+					"tooltip" : "Sharpen Brush"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -4208,10 +4220,11 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Effect Json',\n\t\tvalue: '{\"info\":\"Put the json-brush data of a brush using the same pattern-texture-setup, that you want to apply to the entire canvas, here.\"}'\n\t})\n\t.finish();\n\nconst State = Object.freeze({\n\tIdle: 0,\n\tPrepareBrush: 1,\n\tApplyEffect:2,\n\tReset:3\n});\n\nvar state = State.Idle;\nvar pattern;\nvar currPat;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tpattern = JSON.parse(scriptProperties[\"brush\"]).pat;\n\treturn value;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tswitch(state) {\n\t\tcase State.Idle:\n\t\t\tbreak;\n\t\tcase State.PrepareBrush:\n\t\t\tvar cb = shared.currentBrush;\n\t\t\tcurrPat = cb.pat;\n\t\t\tcb.pat = pattern;\n\t\t\tshared.brushEditor.changed = true;\n\t\t\tstate = State.ApplyEffect;\n\t\t\tbreak;\n\t\tcase State.ApplyEffect:\n\t\t\tshared.cmd = \"blend\";\n\t\t\tstate = State.Reset;\n\t\t\tbreak;\n\t\tcase State.Reset:\n\t\t\tshared.currentBrush.pat = currPat;\n\t\t\tshared.brushEditor.changed = true;\n\t\t\tstate = State.Idle;\n\t\t\tbreak;\n\t}\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible() || state !== State.Idle) {return;}\n\tstate = State.PrepareBrush;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\t\n}\n",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'brush',\n\t\tlabel: 'Effect Json',\n\t\tvalue: '{\"info\":\"Put the json-brush data of a brush using the same pattern-texture-setup, that you want to apply to the entire canvas, here.\"}'\n\t}).addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.finish();\n\nconst State = Object.freeze({\n\tIdle: 0,\n\tPrepareBrush: 1,\n\tApplyEffect:2,\n\tReset:3\n});\n\nvar state = State.Idle;\nvar pattern;\nvar currPat;\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tpattern = JSON.parse(scriptProperties[\"brush\"]).pat;\n\treturn value;\n}\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered && isVisible()) {\n\t\tshared[\"tooltip\"] = scriptProperties.tooltip;\n\t}\n\tswitch(state) {\n\t\tcase State.Idle:\n\t\t\tbreak;\n\t\tcase State.PrepareBrush:\n\t\t\tvar cb = shared.currentBrush;\n\t\t\tcurrPat = cb.pat;\n\t\t\tcb.pat = pattern;\n\t\t\tshared.brushEditor.changed = true;\n\t\t\tstate = State.ApplyEffect;\n\t\t\tbreak;\n\t\tcase State.ApplyEffect:\n\t\t\tshared.cmd = \"blend\";\n\t\t\tstate = State.Reset;\n\t\t\tbreak;\n\t\tcase State.Reset:\n\t\t\tshared.currentBrush.pat = currPat;\n\t\t\tshared.brushEditor.changed = true;\n\t\t\tstate = State.Idle;\n\t\t\tbreak;\n\t}\n\treturn value;\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible() || state !== State.Idle) {return;}\n\tstate = State.PrepareBrush;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n}\n",
 				"scriptproperties" : 
 				{
-					"brush" : "{\"tex\":[{\"probability\":0.5054068565368652,\"influence\":0.18118762969970703,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0.26494312286376953,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":true,\"offset\":0.00013543331261844926,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0,\"images\":[]},{\"probability\":0.43509435653686523,\"influence\":0.8921256065368652,\"size\":1,\"size_jitter\":0,\"size_vel\":-0.8095054626464844,\"alpha_jitter\":1,\"alpha_vel\":0,\"scatter_jitter\":0.39384889602661133,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":false,\"offset\":0.32740737452651514,\"offset_mirror\":1,\"offset_jitter\":1,\"offset_vel\":0,\"images\":[]}],\"size\":0.2093242108821869,\"alpha\":0.29228782653808594,\"spacing\":0.1,\"hue\":0.5892025573430383,\"saturation\":1,\"value\":0.2784300148487091,\"hardness\":0.40234375,\"lo_vel\":0,\"hi_vel\":5,\"draw_mode\":\"blend\",\"stroke_type\":\"spray_can\",\"brush_type\":\"procedural\",\"pat\":[\"Canvas Copy\",\"Sharpen\"]}"
+					"brush" : "{\"tex\":[{\"probability\":0.5054068565368652,\"influence\":0.18118762969970703,\"size\":1,\"size_jitter\":0,\"size_vel\":0,\"alpha_jitter\":0,\"alpha_vel\":0,\"scatter_jitter\":0.26494312286376953,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":true,\"offset\":0.00013543331261844926,\"offset_mirror\":0,\"offset_jitter\":0,\"offset_vel\":0,\"images\":[]},{\"probability\":0.43509435653686523,\"influence\":0.8921256065368652,\"size\":1,\"size_jitter\":0,\"size_vel\":-0.8095054626464844,\"alpha_jitter\":1,\"alpha_vel\":0,\"scatter_jitter\":0.39384889602661133,\"scatter_vel\":0,\"rot\":0,\"rot_jitter\":1,\"rot_lock\":false,\"offset\":0.32740737452651514,\"offset_mirror\":1,\"offset_jitter\":1,\"offset_vel\":0,\"images\":[]}],\"size\":0.2093242108821869,\"alpha\":0.29228782653808594,\"spacing\":0.1,\"hue\":0.5892025573430383,\"saturation\":1,\"value\":0.2784300148487091,\"hardness\":0.40234375,\"lo_vel\":0,\"hi_vel\":5,\"draw_mode\":\"blend\",\"stroke_type\":\"spray_can\",\"brush_type\":\"procedural\",\"pat\":[\"Canvas Copy\",\"Sharpen\"]}",
+					"tooltip" : "Sharpen Canvas"
 				},
 				"value" : "1.00000 1.00000 1.00000"
 			},
@@ -4227,15 +4240,14 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tvar rez = engine.canvasSize;\n\tvar center = rez.divide(2);\n\tvar pts = []\n\tfor(var i = 0; i < 2.25; i+=0.01) {\n\t\tpts.push(center.add(new Vec2(Math.cos(i * Math.PI * 2.), Math.sin(i * Math.PI * 2)).multiply((i/3) * center.y)))\n\t}\n\tshared.autoDraw.cmdQueue.push({\n\t\t'cmd':'stroke',\n\t\t'pts': pts,\n\t\t'penVelocity': [10,10000]\n\t});\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n}",
+				"script" : "'use strict';\n\nimport * as WEMath from 'WEMath';\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered && isVisible()) {\n\t\tshared[\"tooltip\"] = \"Showcase drawing via script\";\n\t}\n\treturn value;\n}\n\nfunction enqueueDrawSpiralCmd() {\n\tvar rez = engine.canvasSize;\n\tvar center = rez.divide(2);\n\tvar pts = [];\n\tvar vel = [];\n\tfor(var i = 0; i < 2.25; i+=0.01) {\n\t\tpts.push(center.add(new Vec2(Math.cos(i * Math.PI * 2.), Math.sin(i * Math.PI * 2)).multiply((i/3) * center.y)))\n\t\tvel.push(WEMath.mix(10, 5000, Math.pow(Math.sin(i*Math.PI*4),2)));\n\t}\n\tshared.autoDraw.cmdQueue.push({\n\t\t'cmd':'stroke',\n\t\t'pts': pts,\n\t\t'penVelocity': vel\n\t});\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tenqueueDrawSpiralCmd();\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n}\n",
 				"value" : "1.00000 1.00000 1.00000"
 			},
 			"id" : 862,
-			"image" : "models/More@0.5x.json",
-			"name" : "More",
-			"origin" : "-1434.76453 -771.34924 0.00000",
-			"parent" : 171,
-			"scale" : "0.50000 0.50000 1.00000",
+			"image" : "models/Spiral@0.5x.json",
+			"name" : "Spiral",
+			"origin" : "-350.00000 400.00000 0.00000",
+			"parent" : 628,
 			"size" : "256.00000 256.00000"
 		},
 		{
@@ -4243,11 +4255,12 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.addCheckbox({\n\t\tname: 'isDefault',\n\t\tlabel: 'Default Option on Startup',\n\t\tvalue: false\n\t})\n\t.finish();\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tif(scriptProperties[\"isDefault\"]) {\n\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t}\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties[\"key\"]] == scriptProperties[\"val\"] ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.addCheckbox({\n\t\tname: 'isDefault',\n\t\tlabel: 'Default Option on Startup',\n\t\tvalue: false\n\t})\n\t.finish();\n\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tif(scriptProperties[\"isDefault\"]) {\n\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t}\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered && isVisible()) {\n\t\tshared['tooltip'] = scriptProperties.tooltip;\n\t}\n\treturn shared[scriptProperties[\"key\"]] == scriptProperties[\"val\"] ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n}",
 				"scriptproperties" : 
 				{
 					"isDefault" : false,
 					"key" : "cmd",
+					"tooltip" : "Undo",
 					"val" : "undo"
 				},
 				"value" : "1.00000 1.00000 1.00000"
@@ -4265,11 +4278,12 @@
 			"castshadow" : false,
 			"color" : 
 			{
-				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.addCheckbox({\n\t\tname: 'isDefault',\n\t\tlabel: 'Default Option on Startup',\n\t\tvalue: false\n\t})\n\t.finish();\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tif(scriptProperties[\"isDefault\"]) {\n\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t}\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\treturn shared[scriptProperties[\"key\"]] == scriptProperties[\"val\"] ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n}",
+				"script" : "'use strict';\n\nexport var scriptProperties = createScriptProperties()\n\t.addText({\n\t\tname: 'key',\n\t\tlabel: 'Property',\n\t\tvalue: 'foo'\n\t})\n\t.addText({\n\t\tname: 'val',\n\t\tlabel: 'Value',\n\t\tvalue: 'bar'\n\t})\n\t.addText({\n\t\tname: 'tooltip',\n\t\tlabel: 'Tooltip',\n\t\tvalue: ''\n\t})\n\t.addCheckbox({\n\t\tname: 'isDefault',\n\t\tlabel: 'Default Option on Startup',\n\t\tvalue: false\n\t})\n\t.finish();\n\nvar hovered = false;\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function init(value) {\n\tif(scriptProperties[\"isDefault\"]) {\n\t\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n\t}\n\treturn value;\n}\n\n\n/**\n * @param {Vec3} value - for property 'color'\n * @return {Vec3} - update current property value\n */\nexport function update(value) {\n\tif(hovered && isVisible()) {\n\t\tshared['tooltip'] = scriptProperties.tooltip;\n\t}\n\treturn shared[scriptProperties[\"key\"]] == scriptProperties[\"val\"] ? new Vec3(0., 1., 0.) : new Vec3(1., 1., 1.);\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorUp(event) {\n\tif(!isVisible()) {return;}\n\tshared[scriptProperties[\"key\"]] = scriptProperties[\"val\"];\n}\n\nfunction isVisible() {\n\tvar layer = thisLayer;\n\twhile(typeof layer !== \"undefined\" && layer != null) {\n\t\tif(!layer.visible) {\n\t\t\treturn false;\n\t\t}\n\t\tlayer = layer.getParent();\n\t}\n\treturn true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorEnter(event) {\n\t// seems like on startup the visibility check doesn't work reliably\n\t// in case the cursor starts on top of the element we don't want to set cursorOnUi\n\tif(!isVisible() || engine.runtime < 1.) {return;}\n\tshared[\"cursorOnUi\"] = true;\n\thovered = true;\n}\n\n/**\n * @param {CursorEvent} event\n */\nexport function cursorLeave(event) {\n\tif(!isVisible()) {return;}\n\tshared[\"cursorOnUi\"] = false;\n\thovered = false;\n}",
 				"scriptproperties" : 
 				{
-					"isDefault" : true,
+					"isDefault" : false,
 					"key" : "cmd",
+					"tooltip" : "Clear Canvas",
 					"val" : "reset"
 				},
 				"value" : "1.00000 1.00000 1.00000"
