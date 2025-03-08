@@ -5,7 +5,7 @@
 // [COMBO] {"material":"Enable Brush Texture Alpha","combo":"ENABLE_BRUSH_TEX_ALPHA","type":"options","default":1}
 // [COMBO] {"material":"Enable Brush Texture Offset","combo":"ENABLE_BRUSH_TEX_OFFSET","type":"options","default":1}
 // [COMBO] {"material":"Enable Brush Texture Rotation","combo":"ENABLE_BRUSH_TEX_ROT","type":"options","default":1}
-// [COMBO] {"material":"Use Modified Cursor Positions","combo":"MODIFIED_CURSOR_POS","type":"options","default":0}
+// [COMBO] {"material":"Use Modified Cursor Positions","combo":"MODIFIED_CURSOR_POS","type":"options","default":1}
 // [COMBO] {"material":"Max Brush Samples Per Px","combo":"MAX_BRUSH_SAMPLES_PER_PIXEL","type":"options","default":16,"options":{"4":4,"8":8,"16":16,"32":32,"64":64}}
 
 varying vec2 v_TexCoord;
@@ -64,7 +64,8 @@ uniform float g_Frametime;
 uniform float g_Time;
 
 // NOTE: If everything is enabled the entire unifrom budget (48 floats) is used.
-// Adding more uniforms would mean that not every feature can be enabled at the same time.
+// Adding more parameters would mean that not every feature can be enabled at the same time.
+// So if you want to modify the shader and add other features, consider turning off some features that are less relevant to you.
 // Below is a table listing all toggleable features, their raw uniform cost and some other general performance costs.
 
 // +----------------------+--------------+------------+------------+----------------------------+-------------------------------------------+
@@ -85,7 +86,12 @@ uniform float g_Time;
 // (*) We only use that many samples if a brush texture is used with the "evenly spaced" stroke type and "spacing" is low.
 //     If we use no brush texture, or a stroke type other than "evenly spaced" at most two extra samples are made while drawing.
 
-// It might be possible to squish some extra information into existing params.
+// If you'd like to keep all features mentioned above there might be some other tradeoff that can be made (changing this will be more involved though):
+// - The shader currently supports parameters for two Brush Textures. If you restrict to using only one texture for every brush you can halve the
+//   uniform cost of all "Brush Texture *" features.
+// - You could disable all jitter parameters or all velocity modifier parameters.
+// - It might be possible to squish some extra information into existing params.
+
 // Below is a list of params that already serve a double-purpose:
 
 // u_useTexturesAndFrameTime param squishes two params into one:

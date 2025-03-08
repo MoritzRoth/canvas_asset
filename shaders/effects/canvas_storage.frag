@@ -1,4 +1,4 @@
-// [COMBO] {"material":"Use Modified Cursor Positions","combo":"MODIFIED_CURSOR_POS","type":"options","default":0}
+// [COMBO] {"material":"Use Modified Cursor Positions","combo":"MODIFIED_CURSOR_POS","type":"options","default":1}
 // [COMBO] {"material":"Max Brush Samples Per Px","combo":"MAX_BRUSH_SAMPLES_PER_PIXEL","type":"options","default":16,"options":{"4":4,"8":8,"16":16,"32":32,"64":64}}
 
 varying vec2 v_TexCoord;

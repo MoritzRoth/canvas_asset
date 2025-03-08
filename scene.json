@@ -561,10 +561,6 @@
 							"id" : 161
 						},
 						{
-							"combos" : 
-							{
-								"MODIFIED_CURSOR_POS" : 1
-							},
 							"constantshadervalues" : 
 							{
 								"brush0Texture" : 
@@ -660,8 +656,7 @@
 								"ENABLE_BLEND" : 1,
 								"ENABLE_CPY_BRUSH" : 1,
 								"ENABLE_SMEAR" : 1,
-								"ENABLE_UNDO_CMD" : 1,
-								"MODIFIED_CURSOR_POS" : 1
+								"ENABLE_UNDO_CMD" : 1
 							},
 							"constantshadervalues" : 
 							{
@@ -839,10 +834,6 @@
 							]
 						},
 						{
-							"combos" : 
-							{
-								"MODIFIED_CURSOR_POS" : 1
-							},
 							"constantshadervalues" : 
 							{
 								"brush0Spacing" : 
@@ -883,8 +874,7 @@
 								"ENABLE_BLEND" : 1,
 								"ENABLE_CPY_BRUSH" : 1,
 								"ENABLE_SMEAR" : 1,
-								"ENABLE_UNDO_CMD" : 1,
-								"MODIFIED_CURSOR_POS" : 1
+								"ENABLE_UNDO_CMD" : 1
 							},
 							"constantshadervalues" : 
 							{

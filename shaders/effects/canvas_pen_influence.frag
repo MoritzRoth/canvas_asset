@@ -1,4 +1,4 @@
-// [COMBO] {"material":"Use Modified Cursor Positions","combo":"MODIFIED_CURSOR_POS","type":"options","default":0}
+// [COMBO] {"material":"Use Modified Cursor Positions","combo":"MODIFIED_CURSOR_POS","type":"options","default":1}
 // [COMBO] {"material":"Enable Brush Texture Size","combo":"ENABLE_BRUSH_TEX_SIZE","type":"options","default":1}
 // [COMBO] {"material":"Enable Brush Texture Alpha","combo":"ENABLE_BRUSH_TEX_ALPHA","type":"options","default":1}
 // [COMBO] {"material":"Enable Brush Texture Offset","combo":"ENABLE_BRUSH_TEX_OFFSET","type":"options","default":1}
