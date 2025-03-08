@@ -1,4 +1,5 @@
 // [COMBO] {"material":"Use Modified Cursor Positions","combo":"MODIFIED_CURSOR_POS","type":"options","default":0}
+// [COMBO] {"material":"Max Brush Samples Per Px","combo":"MAX_BRUSH_SAMPLES_PER_PIXEL","type":"options","default":16,"options":{"4":4,"8":8,"16":16,"32":32,"64":64}}
 
 varying vec2 v_TexCoord;
 
@@ -21,7 +22,6 @@ uniform float u_drawRadius; // {"material":"drawRadius","label":"Draw Radius","d
 
 #define EPSILON 0.00001
 #define IPSILON 1. - EPSILON
-#define MAX_BRUSH_SAMPLES_PER_PIXEL 32.
 
 #define STORAGE_FRAMEINFO 0.		// X: brush spacing offset, Y: prev frametime, ZW: pprev cursor pos
 #define STORAGE_MOUSE_EVENT_POS 1.	// XY: pos of last cursor down, ZW: unused

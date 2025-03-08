@@ -1,7 +1,12 @@
 
 // [COMBO] {"material":"Enable Connected Lines","combo":"ENABLE_LINE_INFLUENCE","type":"options","default":1}
 // [COMBO] {"material":"Enable Undo Command","combo":"ENABLE_UNDO_CMD","type":"options","default":0}
+// [COMBO] {"material":"Enable Brush Texture Size","combo":"ENABLE_BRUSH_TEX_SIZE","type":"options","default":1}
+// [COMBO] {"material":"Enable Brush Texture Alpha","combo":"ENABLE_BRUSH_TEX_ALPHA","type":"options","default":1}
+// [COMBO] {"material":"Enable Brush Texture Offset","combo":"ENABLE_BRUSH_TEX_OFFSET","type":"options","default":1}
+// [COMBO] {"material":"Enable Brush Texture Rotation","combo":"ENABLE_BRUSH_TEX_ROT","type":"options","default":1}
 // [COMBO] {"material":"Use Modified Cursor Positions","combo":"MODIFIED_CURSOR_POS","type":"options","default":0}
+// [COMBO] {"material":"Max Brush Samples Per Px","combo":"MAX_BRUSH_SAMPLES_PER_PIXEL","type":"options","default":16,"options":{"4":4,"8":8,"16":16,"32":32,"64":64}}
 
 varying vec2 v_TexCoord;
 
@@ -29,8 +34,6 @@ varying vec2 v_TexCoord;
 #define OFFSET_ONE_DIR 0
 #define OFFSET_BOTH_DIR 1
 #define OFFSET_MIRROR 2
-
-#define MAX_BRUSH_SAMPLES_PER_PIXEL 32.
 
 uniform sampler2D g_Texture0; // {"hidden":true}
 #define RESET_TEX g_Texture0
@@ -62,19 +65,25 @@ uniform float g_Time;
 
 // NOTE: If everything is enabled the entire unifrom budget (48 floats) is used.
 // Adding more uniforms would mean that not every feature can be enabled at the same time.
-// Below is a (currently incomplete table) listing all toggleable features and their raw uniform cost.
-// Note that some uniforms might only be required if two features are enabled simultaneously, so this list might not provide the whole picture.
+// Below is a table listing all toggleable features, their raw uniform cost and some other general performance costs.
 
-// +---------------------+--------------+------------+------------+----------------------------+----------------------------------------+
-// | Feature             | Uniform Cost | Draw Calls | FBO Copies | Texture Samples while idle |   Extra Texture Samples while drawing  |
-// +---------------------+--------------+------------+------------+----------------------------+----------------------------------------+
-// | Baseline Canvas     |          ??? |          3 |          2 |                          4 |                              at most 1 |
-// | Brush Texture       |         +??? |         +0 |         +0 |                         +0 | +up to MAX_BRUSH_SAMPLES_PER_PIXEL + 1 |
-// | Connected Lines     |         +??? |         +1 |         +1 |                         +4 |                                     +1 |
-// | Undo                |           +0 |         +1 |         +1 |                         +1 |                                     +1 |
-// | Modified Cursor Pos |           +4 |         +0 |         +0 |                         +0 |                                     +0 |
-// +---------------------+--------------+------------+------------+----------------------------+----------------------------------------+
+// +----------------------+--------------+------------+------------+----------------------------+-------------------------------------------+
+// | Feature              | Uniform Cost | Draw Calls | FBO Copies | Texture Samples while idle |    Extra Texture Samples while drawing    |
+// +----------------------+--------------+------------+------------+----------------------------+-------------------------------------------+
+// | Baseline Canvas      |           20 |          3 |          2 |                          4 | up to (MAX_BRUSH_SAMPLES_PER_PIXEL + 1) * |
+// +----------------------+--------------+------------+------------+----------------------------+-------------------------------------------+
+// | Connected Lines      |           +0 |         +1 |         +1 |                         +4 |                                        +1 |
+// | Undo                 |           +0 |         +1 |         +1 |                         +1 |                                        +1 |
+// +----------------------+--------------+------------+------------+----------------------------+-------------------------------------------+
+// | Brush Texture Size   |           +6 |         +0 |         +0 |                         +0 |                                        +0 |
+// | Brush Texture Alpha  |           +4 |         +0 |         +0 |                         +0 |                                        +0 |
+// | Brush Texture Offset |           +8 |         +0 |         +0 |                         +0 |                                        +0 |
+// | Brush Texture Rot    |           +6 |         +0 |         +0 |                         +0 |                                        +0 |
+// | Modified Cursor Pos  |           +4 |         +0 |         +0 |                         +0 |                                        +0 |
+// +----------------------+--------------+------------+------------+----------------------------+-------------------------------------------+
 
+// (*) We only use that many samples if a brush texture is used with the "evenly spaced" stroke type and "spacing" is low.
+//     If we use no brush texture, or a stroke type other than "evenly spaced" at most two extra samples are made while drawing.
 
 // It might be possible to squish some extra information into existing params.
 // Below is a list of params that already serve a double-purpose:
@@ -187,17 +196,32 @@ float calcPointInfluence(float brushRadius, vec2 uv, vec2 center, vec2 velocity,
 	vec2 selectedChannel = step(cThreshMin, CAST2(rnd.x)) * step(CAST2(rnd.x), cThreshMax);
 
 	// calc brush rotation
+#if ENABLE_BRUSH_TEX_ROT == 1
 	float rot = dot(u_brushRotOffset, selectedChannel) * M_PI;	// baseline rotation
 	rot += dot(u_brushRotLock, selectedChannel) * (atan2(velocity.x, velocity.y) - M_PI / 2.);	// rotation due to storke direction lock
 	rot += (rnd.y * 2. - 1.) * dot(u_brushRotJitter, selectedChannel) * M_PI; // rotation jitter
+#endif
+#if ENABLE_BRUSH_TEX_ROT == 0
+	const float rot = 0.;
+#endif
 
 	// calc brush size jitter & velocity variation
+#if ENABLE_BRUSH_TEX_SIZE == 1
 	float sizeModifier = dot(u_brushSizeFactor, selectedChannel) * jitter(dot(u_brushSizeJitter, selectedChannel), rnd.z);
 	sizeModifier *= velMod(dot(u_brushVelSizeMod, selectedChannel), velR);
+#endif
+#if ENABLE_BRUSH_TEX_SIZE == 0
+	const float sizeModifier = 1.;
+#endif
 
 	// calc alpha jitter & velocity variation
+#if ENABLE_BRUSH_TEX_ALPHA == 1
 	float alpha = u_drawAlpha * jitter(dot(u_brushAlphaJitter, selectedChannel), rnd.w);
 	alpha *= velMod(dot(u_brushVelAlphaMod, selectedChannel), velR);
+#endif
+#if ENABLE_BRUSH_TEX_ALPHA == 0
+	const float alpha = 1.;
+#endif
 
 	// get influence factor
 	float influence = dot(u_brushInfluence, selectedChannel);
@@ -205,6 +229,7 @@ float calcPointInfluence(float brushRadius, vec2 uv, vec2 center, vec2 velocity,
 	// calc pos offset (only in perpendicular fashion to the brush stroke direction)
 	vec2 offset = CAST2(0.);
 	float mirrorSample = 0.;
+#if ENABLE_BRUSH_TEX_OFFSET == 1
 	if(length(velocity) > 0.) {
 		vec2 offsetDir  = normalize(velocity).yx * vec2(1.,-1.);
 		float offsetDist = 2. * brushRadius * sizeModifier * dot(u_brushOffset, selectedChannel);
@@ -217,7 +242,7 @@ float calcPointInfluence(float brushRadius, vec2 uv, vec2 center, vec2 velocity,
 				+ modeMatch(offsetMode, OFFSET_MIRROR) * mix(-1., 1., shouldMirror);
 		mirrorSample = modeMatch(offsetMode, OFFSET_MIRROR) * shouldMirror;
 	}
-
+#endif
 
 	vec2 sampleSpot = (uv - (center + offset)) / (brushRadius * 2.);
 	vec2 sP = velocity * dot(sampleSpot, velocity) / dot(velocity,velocity);
@@ -231,6 +256,7 @@ float calcPointInfluence(float brushRadius, vec2 uv, vec2 center, vec2 velocity,
 	}else {
 		sample = smoothstep(1., min(u_drawHardness, IPSILON), length(sampleSpot) * 2.);
 	}
+
 	float sampleMask = step(length(sampleSpot) * 2., 1.);
 
 	return alpha * influence * sample * sampleMask;

@@ -1,4 +1,7 @@
 // [COMBO] {"material":"Use Modified Cursor Positions","combo":"MODIFIED_CURSOR_POS","type":"options","default":0}
+// [COMBO] {"material":"Enable Brush Texture Size","combo":"ENABLE_BRUSH_TEX_SIZE","type":"options","default":1}
+// [COMBO] {"material":"Enable Brush Texture Alpha","combo":"ENABLE_BRUSH_TEX_ALPHA","type":"options","default":1}
+// [COMBO] {"material":"Enable Brush Texture Offset","combo":"ENABLE_BRUSH_TEX_OFFSET","type":"options","default":1}
 
 varying vec2 v_TexCoord;
 
@@ -141,23 +144,36 @@ float calcSegmentInfluence(vec2 uv, float penRadius, vec4 pos, vec4 vel, vec2 fr
 	float velT = mix(pVelRat, velRat, t);
 
 	// calc brush size jitter & velocity variation
+#if ENABLE_BRUSH_TEX_SIZE == 1
 	float velSizeMod = min(u_brushVelSizeMod.x, IPSILON);
 	float sizeModifier = smoothJitter(u_brushSizeJitter.x, vec2(pRnd.x, rnd.x), t) * velMod(velSizeMod, velT);
 	float sizeMod0 = jitter(u_brushSizeJitter.x, pRnd.x) * velMod(velSizeMod, pVelRat);
 	float sizeMod1 = jitter(u_brushSizeJitter.x, rnd.x) * velMod(velSizeMod, velRat);
+#endif
+#if ENABLE_BRUSH_TEX_SIZE == 0
+	float sizeModifier = 1.;
+	float sizeMod0 = 1.;
+	float sizeMod1 = 1.;
+#endif
 
 	// calc alpha jitter & velocity variation
+#if ENABLE_BRUSH_TEX_ALPHA == 1
 	float alpha = u_drawAlpha * smoothJitter(u_brushAlphaJitter.x, vec2(pRnd.y, rnd.y), t);
 	alpha *= velMod(u_brushVelAlphaMod.x, velT);
+#endif
+#if ENABLE_BRUSH_TEX_ALPHA == 0
+	const float alpha = 1.;
+#endif
 
 	// calc pos offset (only in perpendicular fashion to the brush stroke direction)
 	vec2 pOffset = CAST2(0.);
 	vec2 offset = CAST2(0.);
-	float mirrorSample = 0.;
+#if ENABLE_BRUSH_TEX_OFFSET == 1
 	if(length(vel.xy) > 0.) {
 		pOffset = calcOffset(vel.zw, pRnd.zw, pVelRat, penRadius * sizeMod0, uv, pos.zw);
 		offset = calcOffset(vel.xy, rnd.zw, velRat, penRadius * sizeMod1, uv, pos.xy);
 	}
+#endif
 
 	penRadius *= sizeModifier;
 	float penSmoothRadius = penRadius * min(u_drawHardness, IPSILON);
