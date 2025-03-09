@@ -3775,11 +3775,11 @@
 			"parent" : 775,
 			"pointsize" : 8.0,
 			"scale" : "0.24144 4.25508 1.66667",
-			"size" : "379.00000 38.00000",
+			"size" : "413.00000 38.00000",
 			"text" : 
 			{
-				"script" : "'use strict';\n\n/**\n * @param {String} value - for property 'text'\n * @return {String} - update current property value\n */\nexport function update(value) {\n\tlet be = shared.brushEditor;\n\treturn `Edit Texture ${be.texId + 1} | Page ${be.texPage + 1} / ${Math.ceil(be.texImgTotal / be.texPageSize)}`;\n}\n",
-				"value" : "Edit Texture X | Page Y / Z"
+				"script" : "'use strict';\n\n/**\n * @param {String} value - for property 'text'\n * @return {String} - update current property value\n */\nexport function update(value) {\n\tlet be = shared.brushEditor;\n\treturn `Select Texture ${be.texId + 1} | Page ${be.texPage + 1} / ${Math.ceil(be.texImgTotal / be.texPageSize)}`;\n}\n",
+				"value" : "Select Texture X | Page Y / Z"
 			},
 			"verticalalign" : "center"
 		},
